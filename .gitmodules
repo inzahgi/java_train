@@ -1,3 +1,0 @@
-[submodule "netty_test"]
-	path = netty_test
-	url = ./netty_test/
