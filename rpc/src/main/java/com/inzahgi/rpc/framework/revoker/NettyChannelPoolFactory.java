@@ -9,6 +9,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,6 @@ public class NettyChannelPoolFactory {
 
 
     public Channel registerChannel(final InetSocketAddress socketAddress){
-        final ByteBuf delimiter = Unpooled.copiedBuffer("\n".getBytes());
 
         try{
             EventLoopGroup group = new NioEventLoopGroup();
@@ -48,7 +48,7 @@ public class NettyChannelPoolFactory {
                         @Override
                         public void initChannel(SocketChannel socketChannel) throws Exception {
                             ChannelPipeline cp = socketChannel.pipeline();
-                            //cp.addLast(new DelimiterBasedFrameDecoder(1024, delimiter));
+                            cp.addLast(new LineBasedFrameDecoder(1024));
                             cp.addLast(new StringDecoder());
                             cp.addLast(new NettyClientInvokeHandler());
                         }

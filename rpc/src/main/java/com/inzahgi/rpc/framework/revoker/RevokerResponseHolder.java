@@ -32,8 +32,9 @@ public class RevokerResponseHolder {
     }
 
     public static void putResultValue(String responseStr){
-        String[] strArray = responseStr.split("\n");
-        responseMap.put(strArray[0], strArray[1]);
+        System.out.println("get res response: " + responseStr);
+        String[] ar = responseStr.split("\t");
+        responseMap.put(ar[0], ar[1]);
     }
 
     public static String getValue(String request){

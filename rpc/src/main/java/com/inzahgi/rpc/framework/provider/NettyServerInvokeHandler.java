@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ChannelHandler.Sharable
-public class NettyServerInvokeHandler extends SimpleChannelInboundHandler<Object> {
+public class NettyServerInvokeHandler extends SimpleChannelInboundHandler<String> {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyServerInvokeHandler.class);
 
@@ -20,7 +20,12 @@ public class NettyServerInvokeHandler extends SimpleChannelInboundHandler<Object
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("active!!!!!");
+//        System.out.println("active!!!!!");
+//        ByteBuf firstMessage = Unpooled.buffer(1024);
+//        firstMessage.writeBytes("hello world".getBytes());
+//        firstMessage.writeByte('\n');
+//        ctx.writeAndFlush(firstMessage);
+        //firstMessage.release();
     }
 
     @Override
@@ -34,9 +39,10 @@ public class NettyServerInvokeHandler extends SimpleChannelInboundHandler<Object
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object s) throws Exception {
-        System.out.println(s + "line = 26");
-        ctx.writeAndFlush(Unpooled.copiedBuffer((ByteBuf) s));
+    protected void channelRead0(ChannelHandlerContext ctx, String s) throws Exception {
+        System.out.println(s + "\t line = 26");
+        ByteBuf temp = Unpooled.copiedBuffer((new String(s+ "\thello world from server\n")).getBytes());
+        ctx.writeAndFlush(temp);
     }
 
     @Override

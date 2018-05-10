@@ -1,5 +1,6 @@
 package com.inzahgi.rpc.framework.revoker;
 
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import org.slf4j.Logger;
@@ -31,9 +32,12 @@ public class RevokerServiceCallable implements Callable<String> {
 
         try{
             channel = NettyChannelPoolFactory.channelPoolFactoryInstance().registerChannel(socketAddress);
-
-            ChannelFuture channelFuture = channel.writeAndFlush(requestStr);
+            System.out.println("send to server : " + requestStr);
+            ChannelFuture channelFuture = channel.writeAndFlush(
+                            Unpooled.copiedBuffer((requestStr + "\n").getBytes()));
             channelFuture.syncUninterruptibly();
+
+            return RevokerResponseHolder.getValue(requestStr);
         }catch (Exception e){
             e.printStackTrace();
         }finally {

@@ -24,7 +24,6 @@ public class NettyServer {
     private EventLoopGroup workerGroup;
 
     public void start(final int port) {
-        final ByteBuf delimiter = Unpooled.copiedBuffer("\n".getBytes());
 
         synchronized (NettyServer.class) {
             if (bossGroup != null || workerGroup != null) {
@@ -46,8 +45,8 @@ public class NettyServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline p = ch.pipeline();
-                            //p.addLast(new DelimiterBasedFrameDecoder(1024, delimiter));
-                            //p.addLast(new StringDecoder());
+                            p.addLast(new LineBasedFrameDecoder(1024));
+                            p.addLast(new StringDecoder());
                             p.addLast(new NettyServerInvokeHandler());
                         }
                     });
