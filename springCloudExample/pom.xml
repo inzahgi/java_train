@@ -24,6 +24,9 @@
         <module>microServiceProviderUserMyMetadata</module>
         <module>microServiceConsumerMovie_understandingMetadata</module>
         <module>microServiceConsumerMovieRibbon</module>
+        <module>microServiceConsumerMovieFeign</module>
+        <module>microServiceProviderUserWithAuth</module>
+        <module>microServiceConsumerMovieFeignManual</module>
     </modules>
 
 
