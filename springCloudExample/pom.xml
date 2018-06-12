@@ -8,8 +8,22 @@
     <artifactId>springCloudExample</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.9.RELEASE</version>
+    </parent>
+    
     <modules>
         <module>microservicesimpleprovideruser</module>
+        <module>microservicesimpleconsumermovie</module>
+        <module>microServiceDiscoveryEureka</module>
+        <module>microServiceProviderUser</module>
+        <module>microServiceConsumerMovie</module>
+        <module>microServiceProviderUserMyMetadata</module>
+        <module>microServiceConsumerMovie_understandingMetadata</module>
+        <module>microServiceConsumerMovieRibbon</module>
     </modules>
 
 
