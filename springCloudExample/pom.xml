@@ -27,6 +27,11 @@
         <module>microServiceConsumerMovieFeign</module>
         <module>microServiceProviderUserWithAuth</module>
         <module>microServiceConsumerMovieFeignManual</module>
+        <module>microServiceConsumerMovieRibbonHystrix</module>
+        <module>microServiceGatewayZuul</module>
+        <module>microServiceGatewayZuulFilter</module>
+        <module>microServiceHystrixDashboard</module>
+        <module>microServiceGatewayZuulFallback</module>
     </modules>
 
 
