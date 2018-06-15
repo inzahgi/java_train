@@ -32,6 +32,8 @@
         <module>microServiceGatewayZuulFilter</module>
         <module>microServiceHystrixDashboard</module>
         <module>microServiceGatewayZuulFallback</module>
+        <module>microServiceConfigServer</module>
+        <module>microServiceConfigClient</module>
     </modules>
 
 
