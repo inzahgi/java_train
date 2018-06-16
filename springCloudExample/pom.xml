@@ -34,6 +34,7 @@
         <module>microServiceGatewayZuulFallback</module>
         <module>microServiceConfigServer</module>
         <module>microServiceConfigClient</module>
+        <module>microServiceSimpleProviderUserTrace</module>
     </modules>
 
 
