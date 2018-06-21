@@ -23,15 +23,9 @@ public class CustomerServiceTest {
     }
 
     @BeforeAll
-    public void init() throws Exception{
-        String file = "sql/customer_init.sql";
-        InputStream is = Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream(file);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        String sql;
-        while((sql=reader.readLine()) != null){
-            DatabaseHelper.executeUpdate(sql);
-        }
+    public static void init() throws Exception{
+        DatabaseHelper.executeSqlFile("sql/create_table.sql");
+        DatabaseHelper.executeSqlFile("sql/insert.sql");
     }
 
     @Test
