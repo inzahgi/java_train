@@ -6,6 +6,7 @@ import com.tcl.mie.util.PropsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.activation.DataHandler;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
@@ -19,32 +20,24 @@ public class CustomerService {
 
 
     public List<Customer> getCustomerList(){
-        Connection conn = DatabaseHelper.getConnection();
-        try{
-            String sql="SELECT * FROM customer";
-            return DatabaseHelper.queryEntityList(Customer.class, conn, sql);
-        }finally {
-            DatabaseHelper.closeConnection(conn);
-        }
+        String sql = "SELECT * FROM customer";
+        return DatabaseHelper.queryEntityList(Customer.class, sql);
     }
 
     public Customer getCustomer(long id){
-        // TODO
-        return null;
+        String sql = "SELECT * FROM customer WHERE id = ?";
+        return DatabaseHelper.queryEntity(Customer.class, sql, id);
     }
 
     public boolean createCustomer(Map<String, Object> fieldMap){
-        // TODO
-        return false;
+        return DatabaseHelper.insertEntity(Customer.class, fieldMap);
     }
 
-    public boolean updateCustomer(long id, Map<String, Object> foeldMap){
-        // TODO
-        return false;
+    public boolean updateCustomer(long id, Map<String, Object> fieldMap){
+        return DatabaseHelper.updateEntity(Customer.class, id, fieldMap);
     }
 
     public boolean deleteCustomer(long id){
-        // TODO
-        return false;
+        return DatabaseHelper.deleteEntity(Customer.class, id);
     }
 }
