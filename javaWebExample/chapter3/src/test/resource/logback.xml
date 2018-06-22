@@ -22,12 +22,14 @@
             <pattern>%d{HH:mm:ss,SSS} %p %c (%L) - %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${user.home}/logs/book.log.%d{'_'yyyyMMdd}</fileNamePattern>
+            <fileNamePattern>${user.home}/logs/book.log.%d{yyyyMMdd}</fileNamePattern>
         </rollingPolicy>
     </appender>
     <logger name="org.smart4j" level="DEBUG"/>
     <root level="ERROR">
         <appender-ref ref="console"/>
+        <!--
         <appender-ref ref="file"/>
+        -->
     </root>
 </configuration>

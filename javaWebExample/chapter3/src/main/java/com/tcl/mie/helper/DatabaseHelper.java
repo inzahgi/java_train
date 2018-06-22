@@ -1,7 +1,6 @@
 package com.tcl.mie.helper;
 
 import com.tcl.mie.util.CollectionUtil;
-import com.tcl.mie.util.PropsUtil;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -14,7 +13,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +34,7 @@ public final class DatabaseHelper {
 
         QUERY_RUNNER = new QueryRunner();
 
-        Properties conf = PropsUtil.loadProps("config.properties");
+        Properties conf = PropsUtil.loadProps("myFramework.properties");
         String driver = conf.getProperty("jdbc.driver");
         String url = conf.getProperty("jdbc.url");
         String username = conf.getProperty("jdbc.username");
@@ -109,7 +107,7 @@ public final class DatabaseHelper {
         T entity;
         try{
             Connection conn = getConnection();
-            entity = QUERY_RUNNER.query(conn, sql, new BeanHandler<T>(entityClass));
+            entity = QUERY_RUNNER.query(conn, sql, new BeanHandler<T>(entityClass), params);
         }catch (SQLException e){
             LOGGER.error("query entity failure", e);
             throw new RuntimeException(e);

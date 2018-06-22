@@ -5,7 +5,7 @@ public class Customer {
 
     private String name;
 
-    private String contract;
+    private String contact;
 
     private String telephone;
 
@@ -29,12 +29,12 @@ public class Customer {
         this.name = name;
     }
 
-    public String getContract() {
-        return contract;
+    public String getContact() {
+        return contact;
     }
 
-    public void setContract(String contract) {
-        this.contract = contract;
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public String getTelephone() {
