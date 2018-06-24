@@ -1,4 +1,4 @@
-package com.tcl.mie.util;
+package com.tcl.mie.framework.util;
 
 
 public final class CastUtil {

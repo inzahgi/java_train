@@ -1,6 +1,5 @@
 package com.tcl.mie.framework.util;
 
-import com.tcl.mie.util.CastUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

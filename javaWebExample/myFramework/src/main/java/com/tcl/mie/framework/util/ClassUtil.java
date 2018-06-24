@@ -1,6 +1,5 @@
 package com.tcl.mie.framework.util;
 
-import com.tcl.mie.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +29,10 @@ public final class ClassUtil {
             throw new RuntimeException(e);
         }
         return cls;
+    }
+
+    public static Class<?> loadClass(String className){
+        return loadClass(className, true);
     }
 
     public static Set<Class<?>> getClassSet(String packageName){

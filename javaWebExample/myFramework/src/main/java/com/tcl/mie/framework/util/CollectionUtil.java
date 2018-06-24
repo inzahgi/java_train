@@ -1,4 +1,4 @@
-package com.tcl.mie.util;
+package com.tcl.mie.framework.util;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;

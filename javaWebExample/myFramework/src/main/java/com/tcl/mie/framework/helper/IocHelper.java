@@ -3,7 +3,7 @@ package com.tcl.mie.framework.helper;
 import com.tcl.mie.framework.annotation.Inject;
 import com.tcl.mie.framework.util.ArrayUtil;
 import com.tcl.mie.framework.util.ReflectionUtil;
-import com.tcl.mie.util.CollectionUtil;
+import com.tcl.mie.framework.util.CollectionUtil;
 
 import java.lang.reflect.Field;
 import java.util.Map;

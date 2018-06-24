@@ -1,6 +1,7 @@
 package com.tcl.mie.helper;
 
-import com.tcl.mie.util.CollectionUtil;
+import com.tcl.mie.framework.util.CollectionUtil;
+import com.tcl.mie.framework.util.PropsUtil;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
