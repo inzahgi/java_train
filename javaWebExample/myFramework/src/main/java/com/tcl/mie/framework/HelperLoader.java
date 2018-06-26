@@ -1,5 +1,6 @@
 package com.tcl.mie.framework;
 
+import com.tcl.mie.framework.helper.AopHelper;
 import com.tcl.mie.framework.helper.BeanHelper;
 import com.tcl.mie.framework.helper.ClassHelper;
 import com.tcl.mie.framework.helper.ControllerHelper;
@@ -11,6 +12,7 @@ public final class HelperLoader {
         Class<?>[] classList = {
                 ClassHelper.class,
                 BeanHelper.class,
+                AopHelper.class,
                 IocHelper.class,
                 ControllerHelper.class
         };
