@@ -11,7 +11,7 @@ public class ControllerAspect extends AspectProxy {
 
     private long begin;
 
-    @Override
+
     public void begin(Class<?> cls, Method method, Object[] params) throws Throwable {
         LOGGER.debug("----------- begin ------------");
         LOGGER.debug(String.format(String.format("class: %s", cls.getName())));
@@ -19,6 +19,7 @@ public class ControllerAspect extends AspectProxy {
         begin = System.currentTimeMillis();
     }
 
+    @Override
     public void after(Class<?> cls, Method method, Object[] params, Object result)
     throws Throwable{
         LOGGER.debug(String.format("time: %dms", System.currentTimeMillis() - begin));

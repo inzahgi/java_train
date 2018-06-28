@@ -1,5 +1,6 @@
 package com.tcl.mie.service;
 
+import com.tcl.mie.framework.annotation.Transaction;
 import com.tcl.mie.helper.DatabaseHelper;
 import com.tcl.mie.model.Customer;
 import org.slf4j.Logger;
@@ -25,14 +26,17 @@ public class CustomerService {
         return DatabaseHelper.queryEntity(Customer.class, sql, id);
     }
 
+    @Transaction
     public boolean createCustomer(Map<String, Object> fieldMap){
         return DatabaseHelper.insertEntity(Customer.class, fieldMap);
     }
 
+    @Transaction
     public boolean updateCustomer(long id, Map<String, Object> fieldMap){
         return DatabaseHelper.updateEntity(Customer.class, id, fieldMap);
     }
 
+    @Transaction
     public boolean deleteCustomer(long id){
         return DatabaseHelper.deleteEntity(Customer.class, id);
     }
