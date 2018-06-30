@@ -1,6 +1,6 @@
 package com.tcl.mie.listener;
 
-import com.tcl.mie.helper.DatabaseHelper;
+import com.tcl.mie.framework.helper.DatabaseHelper;
 import org.h2.tools.Server;
 
 import javax.servlet.ServletContextEvent;

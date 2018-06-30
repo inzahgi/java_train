@@ -1,4 +1,4 @@
-package com.tcl.mie.helper;
+package com.tcl.mie.framework.helper;
 
 import com.tcl.mie.framework.util.CollectionUtil;
 import com.tcl.mie.framework.util.PropsUtil;
@@ -175,7 +175,7 @@ public final class DatabaseHelper {
         }
         sql += columns.substring(0, columns.lastIndexOf(", ")) + " WHERE id=?";
 
-        List<Object> paramList = new ArrayList<>();
+        List<Object> paramList = new ArrayList<Object>();
         paramList.addAll(fieldMap.values());
         paramList.add(id);
         Object[] params = paramList.toArray();

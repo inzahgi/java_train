@@ -1,5 +1,7 @@
 package com.tcl.mie.framework.proxy;
 
+import net.sf.cglib.proxy.MethodProxy;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.List;
 public class ProxyChain {
 
     private final Class<?> targetClass;
-    private final Class<?> targetObject;
+    private final Object targetObject;
     private final Method targetMethod;
     private final MethodProxy methodProxy;
     private final Object[] methodParams;
@@ -15,7 +17,7 @@ public class ProxyChain {
     private List<Proxy> proxyList = new ArrayList<Proxy>();
     private int proxyIndex = 0;
 
-    public ProxyChain(Class<?> targetClass, Class<?> targetObject, Method targetMethod,
+    public ProxyChain(Class<?> targetClass, Object targetObject, Method targetMethod,
                       MethodProxy methodProxy, Object[] methodParams, List<Proxy> proxyList) {
         this.targetClass = targetClass;
         this.targetObject = targetObject;

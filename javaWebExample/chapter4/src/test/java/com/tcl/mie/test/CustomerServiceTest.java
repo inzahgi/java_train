@@ -1,15 +1,12 @@
 package com.tcl.mie.test;
 
-import com.tcl.mie.helper.DatabaseHelper;
+import com.tcl.mie.framework.helper.DatabaseHelper;
 import com.tcl.mie.model.Customer;
 import com.tcl.mie.service.CustomerService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
