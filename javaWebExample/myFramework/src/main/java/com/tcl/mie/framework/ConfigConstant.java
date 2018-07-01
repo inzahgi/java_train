@@ -13,4 +13,6 @@ public interface ConfigConstant {
     String APP_JSP_PATH = "com.tcl.mie.framework.app.jsp_path";
     String APP_ASSET_PATH = "com.tcl.mie.framework.app.asset_path";
 
+    String APP_UPLOAD_LIMIT = "com.tcl.mie.framework.app.upload_limit";
+
 }

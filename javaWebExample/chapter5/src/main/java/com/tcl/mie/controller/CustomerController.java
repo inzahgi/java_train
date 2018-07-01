@@ -41,7 +41,8 @@ public class CustomerController {
     @Action("post:/customer_create")
     public Data createSubmit(Param param){
         Map<String, Object> fieldMap = param.getMap();
-        boolean result = customerService.createCustomer(fieldMap);
+        FileParam fileParam = param.getFile("photo");
+        boolean result = customerService.createCustomer(fieldMap, fileParam);
         return new Data(result);
     }
 
