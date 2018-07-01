@@ -1,6 +1,7 @@
 package com.tcl.mie.framework.bean;
 
 import com.tcl.mie.framework.util.CastUtil;
+import com.tcl.mie.framework.util.CollectionUtil;
 
 import java.util.Map;
 
@@ -17,5 +18,9 @@ public class Param {
 
     public Map<String, Object> getMap(){
         return paramMap;
+    }
+
+    public boolean isEmpty(){
+        return CollectionUtil.isEmpty(paramMap);
     }
 }
