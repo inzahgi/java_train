@@ -8,6 +8,7 @@ import com.tcl.mie.framework.helper.BeanHelper;
 import com.tcl.mie.framework.helper.ConfigHelper;
 import com.tcl.mie.framework.helper.ControllerHelper;
 import com.tcl.mie.framework.helper.RequestHelper;
+import com.tcl.mie.framework.helper.ServletHelper;
 import com.tcl.mie.framework.helper.UploadHelper;
 import com.tcl.mie.framework.util.ArrayUtil;
 import com.tcl.mie.framework.util.CodecUtil;
@@ -50,34 +51,39 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws
             ServletException, IOException {
-        String requestMethod = req.getMethod().toLowerCase();
-        String requestPath = req.getPathInfo();
+        ServletHelper.init(req, resp);
+        try {
+            String requestMethod = req.getMethod().toLowerCase();
+            String requestPath = req.getPathInfo();
 
-        Handler handler = ControllerHelper.getHandler(requestMethod, requestPath);
-        if (handler != null) {
-            Class<?> controllerClass = handler.getControllerClass();
-            Object controllerBean = BeanHelper.getBean(controllerClass);
+            Handler handler = ControllerHelper.getHandler(requestMethod, requestPath);
+            if (handler != null) {
+                Class<?> controllerClass = handler.getControllerClass();
+                Object controllerBean = BeanHelper.getBean(controllerClass);
 
-            Param param;
-            if (UploadHelper.isMultipart(req)) {
-                param = UploadHelper.createParam(req);
-            } else {
-                param = RequestHelper.createParam(req);
+                Param param;
+                if (UploadHelper.isMultipart(req)) {
+                    param = UploadHelper.createParam(req);
+                } else {
+                    param = RequestHelper.createParam(req);
+                }
+
+                Object result;
+                Method actionMethod = handler.getActionMethod();
+                if (param.isEmpty()) {
+                    result = ReflectionUtil.invokeMethod(controllerBean, actionMethod);
+                } else {
+                    result = ReflectionUtil.invokeMethod(controllerBean, actionMethod, param);
+                }
+
+                if (result instanceof View) {
+                    handleViewResult((View) result, req, resp);
+                } else {
+                    handleDataResult((Data) result, resp);
+                }
             }
-
-            Object result;
-            Method actionMethod = handler.getActionMethod();
-            if (param.isEmpty()) {
-                result = ReflectionUtil.invokeMethod(controllerBean, actionMethod);
-            } else {
-                result = ReflectionUtil.invokeMethod(controllerBean, actionMethod, param);
-            }
-
-            if (result instanceof View) {
-                handleViewResult((View) result, req, resp);
-            } else if {
-                handleDataResult((Data) result, resp);
-            }
+        }finally {
+            ServletHelper.destory();
         }
     }
 
