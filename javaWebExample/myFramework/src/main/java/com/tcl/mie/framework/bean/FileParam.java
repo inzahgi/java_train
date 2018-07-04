@@ -2,6 +2,9 @@ package com.tcl.mie.framework.bean;
 
 import java.io.InputStream;
 
+/**
+ * 上传文件参数
+ */
 public class FileParam {
 
     private String fieldName;

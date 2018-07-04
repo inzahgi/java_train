@@ -1,5 +1,8 @@
 package com.tcl.mie.framework.bean;
 
+/**
+ * 表单参数
+ */
 public class FormParam {
 
     private String fieldName;

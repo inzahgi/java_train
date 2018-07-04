@@ -2,6 +2,9 @@ package com.tcl.mie.framework.bean;
 
 import java.lang.reflect.Method;
 
+/**
+ * 需要处理的url对应处理方法的注册类
+ */
 public class Handler {
     private Class<?> ControllerClass;
 
