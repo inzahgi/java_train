@@ -9,10 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 封装所有的请求参数
+ */
 public class Param {
-
+    //表单参数
     private List<FormParam> formParamList;
-
+    //文件上传参数
     private List<FileParam> fileParamList;
 
     public Param(List<FormParam> formParamList){
@@ -24,6 +27,10 @@ public class Param {
         this.fileParamList = fileParamList;
     }
 
+    /**
+     * 获取表单参数键值对
+     * @return
+     */
     public Map<String, Object> getFieldMap(){
         Map<String, Object> fieldMap = new HashMap<String, Object>();
         if(CollectionUtil.isNotEmpty(formParamList)){
@@ -40,19 +47,25 @@ public class Param {
         return fieldMap;
     }
 
+    /**
+     * 获取文件参数键值对  key  filedName   value  List<FileParam>
+     * @return
+     */
     public Map<String, List<FileParam>> getFileMap(){
         Map<String, List<FileParam>> fileMap = new HashMap<String, List<FileParam>>();
         if(CollectionUtil.isNotEmpty(fileParamList)){
             for(FileParam fileParam : fileParamList){
                 String fieldName = fileParam.getFieldName();
-                List<FileParam> fileParamList;
+                //List<FileParam> fileParamList;
+                // file param temp list
+                List<FileParam> fPTList;
                 if(fileMap.containsKey(fieldName)){
-                    fileParamList = fileMap.get(fieldName);
+                    fPTList = fileMap.get(fieldName);
                 }else{
-                    fileParamList = new ArrayList<FileParam>();
+                    fPTList = new ArrayList<FileParam>();
                 }
-                fileParamList.add(fileParam);
-                fileMap.put(fieldName, fileParamList);
+                fPTList.add(fileParam);
+                fileMap.put(fieldName, fPTList);
             }
         }
         return fileMap;
