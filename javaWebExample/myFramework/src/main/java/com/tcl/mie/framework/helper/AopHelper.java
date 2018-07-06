@@ -17,10 +17,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 方法拦截实现类
+ */
 public final class AopHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AopHelper.class);
 
+    //
     static{
         try{
             Map<Class<?>, Set<Class<?>>> proxyMap = createProxyMap();
