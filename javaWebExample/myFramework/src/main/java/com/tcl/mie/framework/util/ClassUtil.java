@@ -16,10 +16,12 @@ import java.util.jar.JarFile;
 public final class ClassUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassUtil.class);
 
+    //获取当前线程的类加载器
     public static ClassLoader getClassLoader(){
         return Thread.currentThread().getContextClassLoader();
     }
 
+    //加载类
     public static Class<?> loadClass(String className, boolean isInitialized){
         Class<?> cls;
         try{
@@ -35,17 +37,26 @@ public final class ClassUtil {
         return loadClass(className, true);
     }
 
+    /**
+     *
+     * @param packageName
+     * @return
+     */
     public static Set<Class<?>> getClassSet(String packageName){
         Set<Class<?>> classSet = new HashSet<Class<?>>();
 
         try{
+            //通过类加载器获取需要的资源
             Enumeration<URL> urls = getClassLoader().getResources(packageName.replace(".","/"));
             while(urls.hasMoreElements()){
                 URL url = urls.nextElement();
                 if(url != null){
                     String protocol = url.getProtocol();
+                    //如果是协议是文件
                     if(protocol.equals("file")){
+                        //获取文件路径
                         String packagePath = url.getPath().replaceAll("%20", " ");
+
                         addClass(classSet, packagePath, packageName);
                     }else if(protocol.equals("jar")){
                         JarURLConnection jarURLConnection = (JarURLConnection)url.openConnection();
@@ -77,6 +88,7 @@ public final class ClassUtil {
 
 
     private static void addClass(Set<Class<?>> classSet, String packagePath, String packageName){
+        //查找需要加载的文件
         File[] files = new File(packagePath).listFiles(new FileFilter() {
             public boolean accept(File file) {
                 return (file.isFile() && file.getName().endsWith(".class")) || file.isDirectory();

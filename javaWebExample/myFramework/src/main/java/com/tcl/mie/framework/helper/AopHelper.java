@@ -84,7 +84,7 @@ public final class AopHelper {
 
     }
 
-
+    //
     private static Map<Class<?>, Set<Class<?>>> createProxyMap() throws Exception{
         Map<Class<?>, Set<Class<?>>> proxyMap = new HashMap<Class<?>, Set<Class<?>>>();
         addAspectProxy(proxyMap);
@@ -92,6 +92,7 @@ public final class AopHelper {
         return proxyMap;
     }
 
+    //获取需要切面的类
     private static void addAspectProxy(Map<Class<?>, Set<Class<?>>> proxyMap) throws Exception{
         Set<Class<?>> proxyClassSet = ClassHelper.getClassSetBySuper(AspectProxy.class);
         for(Class<?> proxyClass : proxyClassSet){

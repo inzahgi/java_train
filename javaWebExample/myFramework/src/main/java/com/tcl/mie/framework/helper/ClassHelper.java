@@ -8,11 +8,18 @@ import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * 类型帮助类
+ */
 public final class ClassHelper {
+    //全局集合
     private static final Set<Class<?>> CLASS_SET;
 
+    //初始化
     static {
+        //获取需要扫描的包名
         String basePackage = ConfigHelper.getAppBasePackage();
+        //
         CLASS_SET = ClassUtil.getClassSet(basePackage);
     }
 
