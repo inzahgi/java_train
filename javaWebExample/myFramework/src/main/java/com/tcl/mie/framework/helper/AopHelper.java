@@ -40,6 +40,7 @@ public final class AopHelper {
         }
     }
 
+    //获取指定注解的类型类集合
     private static Set<Class<?>> createTargetClassSet(Aspect aspect) throws Exception{
         Set<Class<?>> targetClassSet = new HashSet<Class<?>>();
         Class<? extends Annotation> annotation = aspect.value();
@@ -84,10 +85,12 @@ public final class AopHelper {
 
     }
 
-    //
+    //获取所有需要生成的代理类
     private static Map<Class<?>, Set<Class<?>>> createProxyMap() throws Exception{
         Map<Class<?>, Set<Class<?>>> proxyMap = new HashMap<Class<?>, Set<Class<?>>>();
+        //需要切面的类
         addAspectProxy(proxyMap);
+        //需要实现事务的类
         addTransactionProxy(proxyMap);
         return proxyMap;
     }
@@ -102,6 +105,7 @@ public final class AopHelper {
         }
     }
 
+    //获取需要添加注释的类
     private static void addTransactionProxy(Map<Class<?>, Set<Class<?>>> proxyMap){
         Set<Class<?>> serviceClassSet = ClassHelper.getClassSetByAnnotation(Service.class);
         proxyMap.put(TransactionProxy.class, serviceClassSet);

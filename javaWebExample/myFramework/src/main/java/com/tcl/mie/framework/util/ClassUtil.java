@@ -56,14 +56,17 @@ public final class ClassUtil {
                     if(protocol.equals("file")){
                         //获取文件路径
                         String packagePath = url.getPath().replaceAll("%20", " ");
-
+                        //加载类 并保存类型类到集合
                         addClass(classSet, packagePath, packageName);
                     }else if(protocol.equals("jar")){
+                        //如果是jar文件地址
+                        //打开jar文件
                         JarURLConnection jarURLConnection = (JarURLConnection)url.openConnection();
                         if(jarURLConnection != null){
                             JarFile jarFile = jarURLConnection.getJarFile();
                             if(jarFile != null){
                                 Enumeration<JarEntry> jarEntries = jarFile.entries();
+                                //遍历jar文件 获取类名 加载类 并保存到set集合
                                 while (jarEntries.hasMoreElements()){
                                     JarEntry jarEntry = jarEntries.nextElement();
                                     String jarEntryName = jarEntry.getName();
@@ -94,15 +97,20 @@ public final class ClassUtil {
                 return (file.isFile() && file.getName().endsWith(".class")) || file.isDirectory();
             }
         });
+        //遍历files数组 加载相关类
         for(File file : files){
             String fileName = file.getName();
+            //如果是类文件 获取类名 直接加载
             if(file.isFile()){
                 String className = fileName.substring(0, fileName.lastIndexOf("."));
                 if(StringUtil.isNotEmpty(packageName)){
                     className = packageName + "." + className;
                 }
+                //加载类 并将该类型类保存到set集合
                 doAddClass(classSet, className);
             }else {
+                //如果是目录 递归的继续加载类文件
+                //当前文件名为二级目录
                 String subPackagePath = fileName;
                 if(StringUtil.isNotEmpty(packagePath)){
                     subPackagePath = packagePath + "/" + subPackagePath;
@@ -111,11 +119,12 @@ public final class ClassUtil {
                 if(StringUtil.isNotEmpty(packageName)){
                     subPackageName = packageName + "." + subPackageName;
                 }
+                //递归 加载类
                 addClass(classSet, subPackagePath, subPackageName);
             }
         }
     }
-
+    //加载类文件保存到set中
     private static void doAddClass(Set<Class<?>> classSet, String className){
         Class<?> cls = loadClass(className, false);
         classSet.add(cls);

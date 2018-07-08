@@ -19,7 +19,7 @@ public final class ClassHelper {
     static {
         //获取需要扫描的包名
         String basePackage = ConfigHelper.getAppBasePackage();
-        //
+        //加载所有包名下的类
         CLASS_SET = ClassUtil.getClassSet(basePackage);
     }
 
@@ -27,6 +27,10 @@ public final class ClassHelper {
         return CLASS_SET;
     }
 
+    /**
+     *  获取所有注解为service的类型类集合
+     * @return
+     */
     public static Set<Class<?>> getServiceClassSet(){
         Set<Class<?>> classSet = new HashSet<Class<?>>();
         for (Class<?> cls : CLASS_SET){
@@ -37,6 +41,10 @@ public final class ClassHelper {
         return classSet;
     }
 
+    /**
+     * 获取所有注解为controller的集合
+     * @return
+     */
     public static Set<Class<?>> getControllerClassSet(){
         Set<Class<?>> classSet = new HashSet<Class<?>>();
         for (Class<?> cls : CLASS_SET){
@@ -47,6 +55,10 @@ public final class ClassHelper {
         return classSet;
     }
 
+    /**
+     * 获取所有类型类
+     * @return
+     */
     public static Set<Class<?>> getBeanClassSet(){
         Set<Class<?>> beanClassSet = new HashSet<Class<?>>();
         beanClassSet.addAll(getServiceClassSet());
@@ -54,6 +66,11 @@ public final class ClassHelper {
         return beanClassSet;
     }
 
+    /**
+     * 获取相同基类或接口类型的类型类
+     * @param superClass
+     * @return
+     */
     public static Set<Class<?>> getClassSetBySuper(Class<?> superClass){
         Set<Class<?>> classSet = new HashSet<Class<?>>();
         for(Class<?> cls : CLASS_SET) {
@@ -64,6 +81,11 @@ public final class ClassHelper {
         return classSet;
     }
 
+    /**
+     * 按注解获取类型类
+     * @param annotationClass
+     * @return
+     */
     public static Set<Class<?>> getClassSetByAnnotation(Class<? extends Annotation> annotationClass) {
         Set<Class<?>> classSet = new HashSet<Class<?>>();
         for(Class<?> cls : CLASS_SET){
