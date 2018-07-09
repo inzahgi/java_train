@@ -6,6 +6,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 代理链
+ */
 public class ProxyChain {
 
     private final Class<?> targetClass;
@@ -19,11 +22,17 @@ public class ProxyChain {
 
     public ProxyChain(Class<?> targetClass, Object targetObject, Method targetMethod,
                       MethodProxy methodProxy, Object[] methodParams, List<Proxy> proxyList) {
+        //目标类型
         this.targetClass = targetClass;
+        //目标类
         this.targetObject = targetObject;
+        //目标类方法
         this.targetMethod = targetMethod;
+        //Java method类的代理类
         this.methodProxy = methodProxy;
+        //参数
         this.methodParams = methodParams;
+        //代理类列表
         this.proxyList = proxyList;
     }
 
@@ -39,6 +48,7 @@ public class ProxyChain {
         return methodParams;
     }
 
+    //执行代理链
     public Object doProxyChain() throws Throwable{
         Object methodResult;
         if(proxyIndex < proxyList.size()){

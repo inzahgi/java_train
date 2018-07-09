@@ -27,7 +27,9 @@ public final class AopHelper {
     //
     static{
         try{
+            //获取需要生成代理的类类型
             Map<Class<?>, Set<Class<?>>> proxyMap = createProxyMap();
+            //生成代理类
             Map<Class<?>, List<Proxy>> targetMap = createTargetMap(proxyMap);
             for(Map.Entry<Class<?>, List<Proxy>> targetEntry : targetMap.entrySet()){
                 Class<?> targetClass = targetEntry.getKey();
@@ -64,6 +66,7 @@ public final class AopHelper {
 //        return proxyMap;
 //    }
 
+    //按照类类型生成代理类
     private static Map<Class<?>, List<Proxy>> createTargetMap(Map<Class<?>, Set<Class<?>>>proxyMap)
         throws Exception{
         Map<Class<?>, List<Proxy>> targetMap = new HashMap<Class<?>, List<Proxy>>();
@@ -71,10 +74,13 @@ public final class AopHelper {
             Class<?> proxyClass = proxyEntry.getKey();
             Set<Class<?>> targetClassSet = proxyEntry.getValue();
             for(Class<?> targetClass : targetClassSet) {
+                //生成代理类
                 Proxy proxy = (Proxy) proxyClass.newInstance();
+                //保存到现有的set集合中
                 if(targetMap.containsKey(targetClass)){
                     targetMap.get(targetClass).add(proxy);
                 }else{
+                    //保存到新建的集合中
                     List<Proxy> proxyList = new ArrayList<Proxy>();
                     proxyList.add(proxy);
                     targetMap.put(targetClass, proxyList);
@@ -82,7 +88,6 @@ public final class AopHelper {
             }
         }
         return targetMap;
-
     }
 
     //获取所有需要生成的代理类
