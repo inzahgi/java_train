@@ -5,6 +5,9 @@ import com.tcl.mie.framework.util.PropsUtil;
 
 import java.util.Properties;
 
+/**
+ * 读取配置文件
+ */
 public final class ConfigHelper {
 
     private static final Properties CONFIG_PROPS = PropsUtil.loadProps(ConfigConstant.CONFIG_FILE);

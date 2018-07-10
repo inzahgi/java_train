@@ -6,10 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 初始化和缓存所有生成的Java bean
+ */
 public final class BeanHelper {
 
     private static final Map<Class<?>, Object> BEAN_MAP = new HashMap<Class<?>, Object>();
 
+    // 把所有类类型 初始化Java bean
     static{
         Set<Class<?>> beanClassSet = ClassHelper.getBeanClassSet();
         for(Class<?> beanClass : beanClassSet) {
@@ -22,6 +26,7 @@ public final class BeanHelper {
         return BEAN_MAP;
     }
 
+    //获取Java bean
     @SuppressWarnings("unchecked")
     public static <T> T getBean(Class<T> cls){
         if(!BEAN_MAP.containsKey(cls)){
@@ -30,6 +35,7 @@ public final class BeanHelper {
         return (T)BEAN_MAP.get(cls);
     }
 
+    //保存生成的Java bean
     public static void setBean(Class<?> cls, Object obj){
         BEAN_MAP.put(cls, obj);
     }

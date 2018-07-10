@@ -24,7 +24,7 @@ public final class AopHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AopHelper.class);
 
-    //
+    //生成代理类并缓存
     static{
         try{
             //获取需要生成代理的类类型

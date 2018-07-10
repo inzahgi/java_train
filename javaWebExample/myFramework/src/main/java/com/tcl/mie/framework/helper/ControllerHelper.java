@@ -14,6 +14,7 @@ import java.util.Set;
 public final class ControllerHelper {
     private static final Map<Request, Handler> ACTION_MAP = new HashMap<Request, Handler>();
 
+    // 初始化
     static{
         Set<Class<?>> controllerClassSet = ClassHelper.getControllerClassSet();
         if(CollectionUtil.isNotEmpty(controllerClassSet)){
@@ -41,6 +42,7 @@ public final class ControllerHelper {
         }
     }
 
+    // 根据请求参数 查找映射的处理 handler
     public static Handler getHandler(String requestMethod, String requestPath){
         Request request = new Request(requestMethod, requestPath);
         return ACTION_MAP.get(request);

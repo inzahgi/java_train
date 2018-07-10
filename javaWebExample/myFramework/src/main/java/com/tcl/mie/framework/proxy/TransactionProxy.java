@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 public class TransactionProxy implements Proxy {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionProxy.class);
-
+    //当前线程持有事务标志
     private static final ThreadLocal<Boolean> FLAG_HOLDER = new ThreadLocal<Boolean>(){
         @Override
         protected Boolean initialValue(){
@@ -19,10 +19,12 @@ public class TransactionProxy implements Proxy {
     };
 
 
+    //代理类处理事务
     public Object doProxy(ProxyChain proxyChain) throws Throwable {
         Object result;
         boolean flag = FLAG_HOLDER.get();
         Method method = proxyChain.getTargetMethod();
+        //开启事务方法
         if(!flag && method.isAnnotationPresent(Transaction.class)){
             FLAG_HOLDER.set(true);
             try{
@@ -39,6 +41,7 @@ public class TransactionProxy implements Proxy {
                 FLAG_HOLDER.remove();
             }
         }else{
+            //已经在事务中 直接运行代理链
             result = proxyChain.doProxyChain();
         }
         return result;

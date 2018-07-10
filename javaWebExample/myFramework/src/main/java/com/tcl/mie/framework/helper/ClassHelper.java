@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 类型帮助类
+ *  初始化和保存 所有 类类型
  */
 public final class ClassHelper {
     //全局集合

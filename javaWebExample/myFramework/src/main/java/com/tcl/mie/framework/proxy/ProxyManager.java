@@ -9,6 +9,13 @@ import java.util.List;
 
 public class ProxyManager {
 
+    /**
+     * cglib 生成代理类
+     * @param targetClass
+     * @param proxyList
+     * @param <T>
+     * @return
+     */
     @SuppressWarnings("unckecked")
     public static <T> T createProxy(final Class<?> targetClass, final List<Proxy> proxyList){
         return (T) Enhancer.create(targetClass, new MethodInterceptor() {
