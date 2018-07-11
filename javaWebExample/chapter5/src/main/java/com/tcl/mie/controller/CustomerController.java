@@ -4,6 +4,7 @@ import com.tcl.mie.framework.annotation.Action;
 import com.tcl.mie.framework.annotation.Controller;
 import com.tcl.mie.framework.annotation.Inject;
 import com.tcl.mie.framework.bean.Data;
+import com.tcl.mie.framework.bean.FileParam;
 import com.tcl.mie.framework.bean.Param;
 import com.tcl.mie.framework.bean.View;
 import com.tcl.mie.model.Customer;
@@ -40,7 +41,7 @@ public class CustomerController {
 
     @Action("post:/customer_create")
     public Data createSubmit(Param param){
-        Map<String, Object> fieldMap = param.getMap();
+        Map<String, Object> fieldMap = param.getFieldMap();
         FileParam fileParam = param.getFile("photo");
         boolean result = customerService.createCustomer(fieldMap, fileParam);
         return new Data(result);
@@ -49,7 +50,7 @@ public class CustomerController {
     @Action("put:/customer_edit")
     public Data editSubmit(Param param) {
         long id = param.getLong("id");
-        Map<String, Object> fieldMap = param.getMap();
+        Map<String, Object> fieldMap = param.getFieldMap();
         boolean result = customerService.updateCustomer(id, fieldMap);
         return new Data(result);
     }

@@ -14,17 +14,22 @@ import java.util.Set;
 public final class ControllerHelper {
     private static final Map<Request, Handler> ACTION_MAP = new HashMap<Request, Handler>();
 
-    // 初始化
+    // 初始化 controller相关类的映射
     static{
+        //获取所有controller 注解类类型
         Set<Class<?>> controllerClassSet = ClassHelper.getControllerClassSet();
         if(CollectionUtil.isNotEmpty(controllerClassSet)){
+            //遍历所有controller 注解类型
             for(Class<?> controllerClass : controllerClassSet){
+                //获取所有实现的方法
                 Method[] methods = controllerClass.getDeclaredMethods();
                 if(ArrayUtil.isNotEmpty(methods)){
+                    //遍历controller类中的方法 当其有action注解时 保存其请求参数和该封装handler的映射
                     for(Method method : methods){
                         if(method.isAnnotationPresent(Action.class)){
                             Action action = method.getAnnotation(Action.class);
                             String mapping = action.value();
+                            //正则表达式  匹配映射地址 get:/customer_create
                             if(mapping.matches("\\w+:/\\w*")){
                                 String[] array = mapping.split(":");
                                 if(ArrayUtil.isNotEmpty(array) && array.length == 2){

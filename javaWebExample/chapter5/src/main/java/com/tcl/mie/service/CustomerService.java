@@ -1,7 +1,9 @@
 package com.tcl.mie.service;
 
 import com.tcl.mie.framework.annotation.Transaction;
+import com.tcl.mie.framework.bean.FileParam;
 import com.tcl.mie.framework.helper.DatabaseHelper;
+import com.tcl.mie.framework.helper.UploadHelper;
 import com.tcl.mie.model.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
