@@ -7,6 +7,11 @@ import com.tcl.mie.framework.helper.ControllerHelper;
 import com.tcl.mie.framework.helper.IocHelper;
 import com.tcl.mie.framework.util.ClassUtil;
 
+/**
+*
+* 初始化加载类  加载所有预设功能
+*
+*/
 public final class HelperLoader {
     public static void init(){
         Class<?>[] classList = {
