@@ -24,12 +24,16 @@ public final class DatabaseHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseHelper.class);
 
+    // 每个线程保存连接
     private static final ThreadLocal<Connection> CONNECTION_HOLDER ;
 
+    // 执行sql结果
     private static final QueryRunner QUERY_RUNNER;
 
+    // 数据源
     private static final BasicDataSource DATA_SOURCE;
 
+    // 初始化 jdbc连接池
     static {
         CONNECTION_HOLDER = new ThreadLocal<Connection>();
 
@@ -49,6 +53,7 @@ public final class DatabaseHelper {
 
     }
 
+    // 获取jdbc连接
     public static Connection getConnection(){
         Connection conn = CONNECTION_HOLDER.get();
         if(conn == null) {
@@ -77,6 +82,7 @@ public final class DatabaseHelper {
 //        }
 //    }
 
+    // 执行SQL本地脚本
     public static void executeSqlFile(String filePath) {
         InputStream is = Thread.currentThread().getContextClassLoader()
                 .getResourceAsStream(filePath);
@@ -89,9 +95,16 @@ public final class DatabaseHelper {
         }catch (Exception e){
             LOGGER.error("execute sql file failure ", e);
             throw new RuntimeException(e);
+        }finally {
+            try {
+                is.close();
+            }catch (java.io.IOException e){
+                e.printStackTrace();
+            }
         }
     }
 
+    //执行批量查询
     public static <T> List<T> queryEntityList(Class<T> entityClass, String sql, Object...  params){
         List<T>  entityList;
         try{

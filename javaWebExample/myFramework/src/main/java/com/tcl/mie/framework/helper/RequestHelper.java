@@ -13,8 +13,12 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+/**
+ * 封装请求参数 工具类
+ */
 public final class RequestHelper {
 
+    // 封装servlet Request请求 方便统一分发 controller
     public static Param createParam(HttpServletRequest request) throws IOException {
         List<FormParam> formParamList = new ArrayList<FormParam>();
         formParamList.addAll(parseParameterNames(request));
@@ -22,6 +26,7 @@ public final class RequestHelper {
         return new Param(formParamList);
     }
 
+    // 封装表单数据 方便解析  get
     private static List<FormParam> parseParameterNames(HttpServletRequest request){
         List<FormParam> formParamList = new ArrayList<FormParam>();
         Enumeration<String> paramNames = request.getParameterNames();
@@ -30,9 +35,12 @@ public final class RequestHelper {
             String[] fieldValues = request.getParameterValues(fieldName);
             if(ArrayUtil.isNotEmpty(fieldValues)){
                 Object fieldValue;
+                //如果只有一个值 直接赋值
                 if(fieldValues.length == 1){
                     fieldValue = fieldValues[0];
                 }else{
+                    //多个值 时拼接成字符串
+                    // todo  考虑生成数组？？？
                     StringBuilder sb = new StringBuilder("");
                     for(int i = 0; i < fieldValues.length; i++){
                         sb.append(fieldValues[i]);
@@ -48,6 +56,7 @@ public final class RequestHelper {
         return formParamList;
     }
 
+    //封装流的输入方式 生成表单  post
     private static List<FormParam> parseInputStream(HttpServletRequest request) throws IOException{
         List<FormParam> formParamList = new ArrayList<FormParam>();
         String body = CodecUtil.decodeURL(StreamUtil.getString(request.getInputStream()));
