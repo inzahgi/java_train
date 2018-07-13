@@ -61,10 +61,13 @@ public final class RequestHelper {
         List<FormParam> formParamList = new ArrayList<FormParam>();
         String body = CodecUtil.decodeURL(StreamUtil.getString(request.getInputStream()));
         if(StringUtil.isNotEmpty(body)){
+            //按照 & 分割参数
             String[] kvs = StringUtil.splitString(body, "&");
             if(ArrayUtil.isNotEmpty(kvs)){
                 for(String kv : kvs){
+                    // 再按照 = 分割 键值对
                     String[] array = StringUtil.splitString(kv, "=");
+                    // 仅当键值对同时存在时 添加进list
                     if(ArrayUtil.isNotEmpty(array) && array.length == 2){
                         String fieldname = array[0];
                         String fieldValue = array[1];
