@@ -4,6 +4,7 @@ import com.tcl.mie.framework.bean.FileParam;
 import com.tcl.mie.framework.bean.FormParam;
 import com.tcl.mie.framework.bean.Param;
 import com.tcl.mie.framework.util.CollectionUtil;
+import com.tcl.mie.framework.util.FileUtil;
 import com.tcl.mie.framework.util.StreamUtil;
 import com.tcl.mie.framework.util.StringUtil;
 import org.apache.commons.fileupload.FileItem;
@@ -26,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *  上传文件操作类
+ */
 public final class UploadHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadHelper.class);
@@ -43,6 +47,7 @@ public final class UploadHelper {
         }
     }
 
+    //判断是否有多个
     public static boolean isMultipart(HttpServletRequest request){
         return ServletFileUpload.isMultipartContent(request);
     }
@@ -52,7 +57,7 @@ public final class UploadHelper {
         List<FileParam> fileParamList = new ArrayList<FileParam>();
         try{
             Map<String, List<FileItem>> fileItemListMap = servletFileUpload.
-                    parseParametermap(request);
+                    parseParameterMap(request);
             if(CollectionUtil.isNotEmpty(fileItemListMap)){
                 for(Map.Entry<String, List<FileItem>> fileItemListEntry : fileItemListMap.entrySet()){
                     String fieldName = fileItemListEntry.getKey();

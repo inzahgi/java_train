@@ -9,10 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ *  封装servlet 操作类结果
+ */
 public final class ServletHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServletHelper.class);
 
+    // 每个线程保存单独的结
     private static final ThreadLocal<ServletHelper> SERVLET_HELPER_HOLDER = new ThreadLocal<ServletHelper>();
 
     private HttpServletRequest request;
