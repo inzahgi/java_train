@@ -47,11 +47,12 @@ public final class UploadHelper {
         }
     }
 
-    //判断是否有多个
+    //判断是否属于上传文件类型
     public static boolean isMultipart(HttpServletRequest request){
         return ServletFileUpload.isMultipartContent(request);
     }
 
+    // 封装请求参数
     public static Param createParam(HttpServletRequest request) throws IOException {
         List<FormParam> formParamList = new ArrayList<FormParam>();
         List<FileParam> fileParamList = new ArrayList<FileParam>();
@@ -89,6 +90,7 @@ public final class UploadHelper {
         return new Param(formParamList, fileParamList);
     }
 
+    //上传文件工具类
     public static void uploadFile(String basePath, FileParam fileParam){
         try{
             if(fileParam != null){
@@ -104,6 +106,7 @@ public final class UploadHelper {
         }
     }
 
+    //批量上传文件
     public static void uploadFile(String basePath, List<FileParam> fileParamList){
         try{
             if(CollectionUtil.isNotEmpty(fileParamList)){
