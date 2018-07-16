@@ -20,6 +20,7 @@ public class ProxyChain {
     private List<Proxy> proxyList = new ArrayList<Proxy>();
     private int proxyIndex = 0;
 
+    //代理链
     public ProxyChain(Class<?> targetClass, Object targetObject, Method targetMethod,
                       MethodProxy methodProxy, Object[] methodParams, List<Proxy> proxyList) {
         //目标类型

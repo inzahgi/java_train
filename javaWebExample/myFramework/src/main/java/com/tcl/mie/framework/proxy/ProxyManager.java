@@ -7,6 +7,9 @@ import net.sf.cglib.proxy.MethodProxy;
 import java.lang.reflect.Method;
 import java.util.List;
 
+/**
+ * 代理管理类
+ */
 public class ProxyManager {
 
     /**
