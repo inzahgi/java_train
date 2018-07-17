@@ -13,6 +13,9 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+/**
+ * class加载工具类
+ */
 public final class ClassUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassUtil.class);
 
