@@ -1,11 +1,7 @@
 package com.tcl.mie.framework.util;
 
 /**
-<<<<<<< HEAD
- * 异常类型转换
-=======
  * 类型转换工具类
->>>>>>> 5092dd46c311f161f2ebc8b545c51f15cd1317f7
  */
 public final class CastUtil {
 
