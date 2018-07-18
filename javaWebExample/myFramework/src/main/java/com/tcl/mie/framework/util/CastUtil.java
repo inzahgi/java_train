@@ -1,6 +1,8 @@
 package com.tcl.mie.framework.util;
 
-
+/**
+ * 异常类型转换
+ */
 public final class CastUtil {
 
     public static String castString(Object obj){
