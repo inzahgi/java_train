@@ -36,12 +36,13 @@ public final class ClassUtil {
         return cls;
     }
 
+    // 按类名加载
     public static Class<?> loadClass(String className){
         return loadClass(className, true);
     }
 
     /**
-     *
+     *  按包名加载
      * @param packageName
      * @return
      */
@@ -92,7 +93,7 @@ public final class ClassUtil {
         return classSet;
     }
 
-
+    // 
     private static void addClass(Set<Class<?>> classSet, String packagePath, String packageName){
         //查找需要加载的文件
         File[] files = new File(packagePath).listFiles(new FileFilter() {
