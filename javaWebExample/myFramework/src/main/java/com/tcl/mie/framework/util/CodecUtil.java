@@ -6,9 +6,13 @@ import org.slf4j.LoggerFactory;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
+/**
+ * 编码工具类
+ */
 public final class CodecUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(CodecUtil.class);
 
+    //url编码
     public static String encodeUrl(String source){
         String target;
         try{
@@ -20,6 +24,7 @@ public final class CodecUtil {
         return target;
     }
 
+    //url解码
     public static String decodeURL(String source){
         String target;
         try{

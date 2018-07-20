@@ -7,13 +7,18 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+/**
+ * 文件工具类
+ */
 public final class FileUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileUtil.class);
 
+    //获取文件真实文件名
     public static String getRealFileName(String fileName){
         return FilenameUtils.getName(fileName);
     }
 
+    //创建文件
     public static File createFile(String filePath){
         File file;
         try{
