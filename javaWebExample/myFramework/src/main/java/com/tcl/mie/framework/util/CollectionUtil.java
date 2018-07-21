@@ -6,6 +6,9 @@ import org.apache.commons.collections4.MapUtils;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * 集合工具类 判断是否为空
+ */
 public final class CollectionUtil {
 
     public static boolean isEmpty(Collection<?> collection){

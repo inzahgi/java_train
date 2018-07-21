@@ -8,13 +8,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * 参数工具类
+ */
 public final class PropsUtil {
     private static final Logger LOGGER= LoggerFactory.getLogger(PropsUtil.class);
 
+    //加载配置文件
     public static Properties loadProps(String fileName) {
         Properties props=null;
         InputStream is=null;
         try{
+            //当前线程的类加载器读取指定资源文件
             is=Thread.currentThread().getContextClassLoader()
                     .getResourceAsStream(fileName);
             if(is == null){
@@ -36,10 +41,12 @@ public final class PropsUtil {
         return props;
     }
 
+    //按照属性名称获取值
     public static String getString(Properties props, String key){
         return getString(props, key, "");
     }
 
+    //按照属性名称获取值  设置默认值
     public static String getString(Properties props, String key, String defaultValue){
         String value = defaultValue;
         if(props.containsKey(key)){
