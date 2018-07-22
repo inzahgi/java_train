@@ -6,9 +6,13 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+/**
+ * 反射代理类
+ */
 public final class ReflectionUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReflectionUtil.class);
 
+    //实例化类类型
     public static Object newInstance(Class<?> cls){
         Object instance;
         try{
@@ -20,6 +24,7 @@ public final class ReflectionUtil {
         return instance;
     }
 
+    //反射执行特定方法
     public static Object invokeMethod(Object obj, Method method, Object... args){
         Object result;
         try{
@@ -32,6 +37,7 @@ public final class ReflectionUtil {
         return result;
     }
 
+    //设置类属性
     public static void setField(Object obj, Field field, Object value){
         try{
             field.setAccessible(true);

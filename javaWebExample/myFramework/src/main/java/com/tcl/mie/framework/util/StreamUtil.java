@@ -8,9 +8,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+/**
+ * 流工具  转字符串或复制拷贝
+ */
 public final class StreamUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(StreamUtil.class);
 
+    //转字符串
     public static String getString(InputStream is){
         StringBuilder sb = new StringBuilder();
         try {
@@ -26,6 +30,7 @@ public final class StreamUtil {
         return sb.toString();
     }
 
+    //复制流输出
     public static void copyStream(InputStream inputStream, OutputStream outputStream){
         try{
             int length;
