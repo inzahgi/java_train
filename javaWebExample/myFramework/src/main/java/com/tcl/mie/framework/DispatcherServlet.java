@@ -32,13 +32,18 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * url地址分发
+ */
 @WebServlet(urlPatterns = "/*", loadOnStartup = 0)
 public class DispatcherServlet extends HttpServlet {
 
+    //初始化servlet配置
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
+        //初始化加载相关ioc容器
         HelperLoader.init();
+        //获取servlet上下文地址
         ServletContext servletContext = servletConfig.getServletContext();
         ServletRegistration jspServlet = servletContext.getServletRegistration("jsp");
         jspServlet.addMapping(ConfigHelper.getAppJspPath() + "*");

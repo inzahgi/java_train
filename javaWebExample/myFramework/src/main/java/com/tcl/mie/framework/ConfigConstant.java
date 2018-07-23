@@ -1,5 +1,8 @@
 package com.tcl.mie.framework;
 
+/**
+ * 常用的工具配置参数
+ */
 public interface ConfigConstant {
 
     String CONFIG_FILE = "myFramework.properties";
