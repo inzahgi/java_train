@@ -53,17 +53,22 @@ public class DispatcherServlet extends HttpServlet {
         UploadHelper.init(servletContext);
     }
 
+    //主要的服务接口
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws
             ServletException, IOException {
         ServletHelper.init(req, resp);
         try {
+            //请求方式
             String requestMethod = req.getMethod().toLowerCase();
+            //请求路径
             String requestPath = req.getPathInfo();
-
+            //查找对应的注册的handler方法
             Handler handler = ControllerHelper.getHandler(requestMethod, requestPath);
             if (handler != null) {
+                //查找对应的controller的类型
                 Class<?> controllerClass = handler.getControllerClass();
+                //从ioc容器中获取该bean
                 Object controllerBean = BeanHelper.getBean(controllerClass);
 
                 Param param;
@@ -92,6 +97,7 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
+    //处理返回视图
     private void handleViewResult(View view, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException{
         String path = view.getPath();
@@ -108,6 +114,7 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
+    //处理数据返回
     private void handleDataResult(Data data, HttpServletResponse response) throws IOException{
         Object model = data.getModel();
         if(model != null){
