@@ -45,11 +45,14 @@ public class DispatcherServlet extends HttpServlet {
         HelperLoader.init();
         //获取servlet上下文地址
         ServletContext servletContext = servletConfig.getServletContext();
+        //生成servlet注册类
         ServletRegistration jspServlet = servletContext.getServletRegistration("jsp");
+        //添加jsp路径 生成对应的servlet类
         jspServlet.addMapping(ConfigHelper.getAppJspPath() + "*");
+        //生成默认的注册类
         ServletRegistration defaultServlet = servletContext.getServletRegistration("default");
         defaultServlet.addMapping(ConfigHelper.getAppAssetPath() + "*");
-
+        //初始化上传操作
         UploadHelper.init(servletContext);
     }
 
