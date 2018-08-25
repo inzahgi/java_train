@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.fwpt.mapper.task.GroupRuleMapper">
+  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.task.GroupRuleEntity">
+    <id column="rid" jdbcType="VARCHAR" property="rid" />
+    <result column="tid" jdbcType="VARCHAR" property="tid" />
+    <result column="gid" jdbcType="VARCHAR" property="gid" />
+    <result column="rule_type" jdbcType="VARCHAR" property="ruleType" />
+    <result column="is_intersection" jdbcType="VARCHAR" property="isIntersection" />
+    <result column="rule_info_xml" jdbcType="LONGVARCHAR" property="ruleInfoXml" />
+    <result column="rule_param" jdbcType="LONGVARCHAR" property="ruleParam" />
+    <result column="area_info" jdbcType="LONGVARCHAR" property="areaInfo" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    rid, tid, gid, rule_type, is_intersection, rule_info_xml, rule_param, area_info,
+    create_user, create_time, update_time
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_group_rule
+    where rid = #{rid,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_group_rule
+    where rid = #{rid,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.iflytek.fwpt.model.task.GroupRuleEntity" >
+    insert into tbl_group_rule (rid, tid, gid, rule_type,
+      is_intersection, create_user, create_time, 
+      update_time, rule_info_xml, rule_param, 
+      area_info)
+    values (#{rid,jdbcType=VARCHAR}, #{tid,jdbcType=VARCHAR}, #{gid,jdbcType=VARCHAR}, #{ruleType,jdbcType=VARCHAR},
+      #{isIntersection,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{ruleInfoXml,jdbcType=LONGVARCHAR}, #{ruleParam,jdbcType=LONGVARCHAR}, 
+      #{areaInfo,jdbcType=LONGVARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.iflytek.fwpt.model.task.GroupRuleEntity" >
+    insert into tbl_group_rule
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rid != null">
+        rid,
+      </if>
+      <if test="tid != null">
+        tid,
+      </if>
+      <if test="gid != null">
+        gid,
+      </if>
+      <if test="ruleType != null">
+        rule_type,
+      </if>
+      <if test="isIntersection != null">
+        is_intersection,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="ruleInfoXml != null">
+        rule_info_xml,
+      </if>
+      <if test="ruleParam != null">
+        rule_param,
+      </if>
+      <if test="areaInfo != null">
+        area_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rid != null">
+        #{rid,jdbcType=VARCHAR},
+      </if>
+      <if test="tid != null">
+        #{tid,jdbcType=VARCHAR},
+      </if>
+      <if test="gid != null">
+        #{gid,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleType != null">
+        #{ruleType,jdbcType=VARCHAR},
+      </if>
+      <if test="isIntersection != null">
+        #{isIntersection,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ruleInfoXml != null">
+        #{ruleInfoXml,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="ruleParam != null">
+        #{ruleParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="areaInfo != null">
+        #{areaInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.task.GroupRuleEntity">
+    update tbl_group_rule
+    <set>
+      <if test="tid != null">
+        tid = #{tid,jdbcType=VARCHAR},
+      </if>
+      <if test="gid != null">
+        gid = #{gid,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleType != null">
+        rule_type = #{ruleType,jdbcType=VARCHAR},
+      </if>
+      <if test="isIntersection != null">
+        is_intersection = #{isIntersection,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ruleInfoXml != null">
+        rule_info_xml = #{ruleInfoXml,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="ruleParam != null">
+        rule_param = #{ruleParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="areaInfo != null">
+        area_info = #{areaInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where rid = #{rid,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.task.GroupRuleEntity">
+    update tbl_group_rule
+    set tid = #{tid,jdbcType=VARCHAR},
+      gid = #{gid,jdbcType=VARCHAR},
+      rule_type = #{ruleType,jdbcType=VARCHAR},
+      is_intersection = #{isIntersection,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      rule_info_xml = #{ruleInfoXml,jdbcType=LONGVARCHAR},
+      rule_param = #{ruleParam,jdbcType=LONGVARCHAR},
+      area_info = #{areaInfo,jdbcType=LONGVARCHAR}
+    where rid = #{rid,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

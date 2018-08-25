@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iflytek.fwpt.mapper.group.GroupMapper">
+
+
+	<resultMap id="groupMap" type="com.iflytek.fwpt.model.group.GroupEntity">
+		<id column="gid" property="id" jdbcType="VARCHAR" />
+		<result column="gname" property="name" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="getGroupPage" resultMap="groupMap">
+		SELECT
+			gid,
+			gname,
+			DATE_FORMAT(
+				g.create_time,
+				'%Y-%m-%d %H:%i:%s'
+			) AS create_time
+		FROM
+			tbl_group g
+	<if test="criteria.policeId !=null and criteria.policeId !='' "  >
+        ,
+		(
+			SELECT DISTINCT
+				p.group_id
+			FROM
+				tbl_key_person p
+			WHERE
+				p.busi_police = #{criteria.policeId}
+		) a
+    </if>
+		WHERE
+			isdel =0
+	<if test="criteria.policeId !=null and criteria.policeId !='' "  >
+		and a.group_id = g.gid
+    </if>
+	<if test="criteria.startTime !=null and criteria.startTime !='' ">
+		<!--
+        <![CDATA[   AND DATE_FORMAT(g.create_time, '%Y-%m-%d %H:%m:%s')>=  DATE_FORMAT(#{criteria.startTime}, '%Y-%m-%d %H:%m:%s')   ]]>
+        -->
+		<![CDATA[   AND g.create_time >=  DATE_FORMAT(#{criteria.startTime}, '%Y-%m-%d %H:%i:%s')   ]]>
+
+	</if>
+    <if test="criteria.endTime !=null and criteria.endTime !='' "  >
+		<!--
+         <![CDATA[   AND DATE_FORMAT(g.create_time, '%Y-%m-%d %H:%m:%s')<=  DATE_FORMAT(#{criteria.endTime}, '%Y-%m-%d %H:%m:%s')   ]]>
+         -->
+		<![CDATA[   AND g.create_time <=  DATE_FORMAT(#{criteria.endTime}, '%Y-%m-%d %H:%i:%s')   ]]>
+	</if>
+    <if test="criteria.name !=null and criteria.name !='' "  >
+        AND g.gname LIKE concat(concat('%',#{criteria.name}),'%')
+    </if>
+     <if test="criteria.userId !=null and criteria.userId !='' "  >
+        AND g.create_user =#{criteria.userId}  
+    </if>
+     
+     ORDER BY
+			g.create_time DESC
+	</select>
+	
+	<select id="getGroupsByUserId" resultMap="groupMap">
+		select
+		gid,gname
+		from tbl_group
+		where isdel =0
+		<if test="userId != null and  userId != ''">
+			AND create_user =#{userId}
+		</if>
+	</select>
+	
+
+	<select id="getGroupByName" resultMap="groupMap">
+		select
+		gid,gname
+		from tbl_group
+		where isdel =0
+		<if test="name != null and  name != ''">
+			AND gname =#{name}
+		</if>
+	</select>
+	
+	<select id="getGroupsByNames" resultMap="groupMap">
+		select
+		gid,gname
+		from tbl_group
+		where gname in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="getGroupById" resultMap="groupMap">
+		select
+		id,name
+		from tbl_group
+		where isdel =0
+		<if test="id != null and  id != ''">
+			AND name =#{id}
+		</if>
+	</select>
+	
+	<select id="getGroupsByPoliceId" resultMap="groupMap">
+		SELECT
+				g.gid,
+				g.gname
+			FROM
+				tbl_group g
+			LEFT JOIN tbl_key_person p ON p.group_id = g.gid
+		where isdel =0
+		<if test="policeId != null and  policeId != ''">
+			AND  p.busi_police =#{policeId}
+		</if>
+	</select>
+	
+
+	<insert id="save" >
+		INSERT INTO tbl_group (
+				gid,
+				gname,
+				isDel,
+				create_user,
+				up_time,
+				create_time
+			)
+			VALUES
+				(
+					#{id},
+					#{name},
+					0,
+					#{userId},
+					now(),
+					now()
+				)
+	</insert>
+	
+	<insert id="bathSave" >
+		INSERT INTO tbl_group (
+				gid,
+				gname,
+				isDel,
+				create_user,
+				up_time,
+				create_time
+			)
+			VALUES
+			<foreach collection ="list" item="item" index= "index" separator =",">
+				(
+					#{item.id},
+					#{item.name},
+					0,
+					#{item.userId},
+					now(),
+					now()
+				)
+			</foreach>
+	</insert>
+	
+	
+	<update id="update" >
+		update 
+				tbl_group 
+		set    
+				gname=#{name},
+				create_user=#{userId},
+				create_time=now()
+		where 
+		        gid=#{id}
+	</update>
+
+	<delete id="bathDelete" parameterType="java.lang.String">
+		update
+		tbl_group
+		set
+		isDel=1
+		where gid in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+</mapper>
+
+
+
+
+
+
+
+

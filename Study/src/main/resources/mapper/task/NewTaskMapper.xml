@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.fwpt.mapper.task.NewTaskMapper">
+  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.task.NewTaskEntity">
+    <id column="tid" jdbcType="VARCHAR" property="tid" />
+    <result column="task_name" jdbcType="VARCHAR" property="taskName" />
+    <result column="task_type" jdbcType="VARCHAR" property="taskType" />
+    <result column="approval_type" jdbcType="VARCHAR" property="approvalType" />
+    <result column="aid" jdbcType="VARCHAR" property="aid" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="task_status" jdbcType="VARCHAR" property="taskStatus" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="arg0" jdbcType="VARCHAR" property="arg0" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    tid, task_name, task_type, approval_type, aid, start_time, end_time, task_status, 
+    create_user, update_time, create_time, arg0
+  </sql>
+
+  <select id="selectByPage" parameterType="com.iflytek.fwpt.model.task.NewTaskEntity" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tbl_task
+    <where>
+      <if test="taskName != null and taskName != ''">
+        task_name = #{taskName,jdbcType=VARCHAR}
+      </if>
+      <if test="startTime != null and startTime != ''">
+        AND start_time >= #{startTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        <![CDATA[  AND end_time <= #{endTime,jdbcType=TIMESTAMP} ]]>
+      </if>
+    </where>
+
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_task
+    where tid = #{tid,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_task
+    where tid = #{tid,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.iflytek.fwpt.model.task.NewTaskEntity" >
+    insert into tbl_task (tid, task_name, task_type, approval_type,
+      aid, start_time, end_time, task_status, create_user,  arg0)
+    values (#{tid,jdbcType=VARCHAR}, #{taskName,jdbcType=VARCHAR}, #{taskType,jdbcType=VARCHAR}, #{approvalType,jdbcType=VARCHAR},
+      #{aid,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{taskStatus,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{arg0,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" keyColumn="tid" keyProperty="tid" parameterType="com.iflytek.fwpt.model.task.NewTaskEntity" useGeneratedKeys="true">
+    insert into tbl_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tid != null">
+        tid,
+      </if>
+      <if test="taskName != null">
+        task_name,
+      </if>
+      <if test="taskType != null">
+        task_type,
+      </if>
+      <if test="approvalType != null">
+        approval_type,
+      </if>
+      <if test="aid != null">
+        aid,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="taskStatus != null">
+        task_status,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="arg0 != null">
+        arg0,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tid != null">
+        #{tid,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null">
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskType != null">
+        #{taskType,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalType != null">
+        #{approvalType,jdbcType=VARCHAR},
+      </if>
+      <if test="aid != null">
+        #{aid,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskStatus != null">
+        #{taskStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arg0 != null">
+        #{arg0,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.task.NewTaskEntity">
+    update tbl_task
+    <set>
+      <if test="taskName != null">
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskType != null">
+        task_type = #{taskType,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalType != null">
+        approval_type = #{approvalType,jdbcType=VARCHAR},
+      </if>
+      <if test="aid != null">
+        aid = #{aid,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskStatus != null">
+        task_status = #{taskStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arg0 != null">
+        arg0 = #{arg0,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tid = #{tid,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.task.NewTaskEntity">
+    update tbl_task
+    set task_name = #{taskName,jdbcType=VARCHAR},
+      task_type = #{taskType,jdbcType=VARCHAR},
+      approval_type = #{approvalType,jdbcType=VARCHAR},
+      aid = #{aid,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      task_status = #{taskStatus,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      arg0 = #{arg0,jdbcType=VARCHAR}
+    where tid = #{tid,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

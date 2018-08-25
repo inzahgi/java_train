@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.fwpt.mapper.area.AreaMapper">
+
+	<resultMap id="areaMap" type="com.iflytek.fwpt.model.area.AreaEntity">
+		<result column="aid" property="id" jdbcType="INTEGER" />
+		<result column="area_name" property="name" jdbcType="VARCHAR" />
+		<result column="area_label_id" property="labelId" jdbcType="VARCHAR" />
+		<result column="area_sation_nums" property="stationNum" jdbcType="VARCHAR" />
+		<result column="boundanies" property="boundanies" jdbcType="VARCHAR" />
+		<result column="create_user" property="userId" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="getAreaPage" resultMap="areaMap" >
+		SELECT
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s')as create_time,
+			DATE_FORMAT(a.up_time,'%Y-%m-%d %H:%i:%s')as updateTime,
+			a.aid,
+			a.create_user,
+			a.boundanies,
+			a.area_sation_nums,
+			a.area_name,
+			a.area_label_id
+		FROM
+			tbl_area a
+		where a.isDel=0
+    <if test="criteria.startTime !=null and criteria.startTime !='' ">
+		<!--
+        <![CDATA[   AND DATE_FORMAT(a.create_time, '%Y-%m-%d %H:%m:%s')>=  DATE_FORMAT(#{criteria.startTime}, '%Y-%m-%d %H:%m:%s')   ]]>
+        -->
+		<![CDATA[   AND a.create_time >=  DATE_FORMAT(#{criteria.startTime}, '%Y-%m-%d %H:%i:%s')   ]]>
+
+	</if>
+    <if test="criteria.endTime !=null and criteria.endTime !='' "  >
+		<!--
+         <![CDATA[   AND DATE_FORMAT(a.create_time, '%Y-%m-%d %H:%m:%s') <=  DATE_FORMAT(#{criteria.endTime}, '%Y-%m-%d %H:%m:%s')   ]]>
+         -->
+		<![CDATA[   AND a.create_time <=  DATE_FORMAT(#{criteria.endTime}, '%Y-%m-%d %H:%i:%s')   ]]>
+
+	</if>
+    <if test="criteria.userId !=null and criteria.userId !='' "  >
+        AND a.create_user = #{criteria.userId}
+    </if>
+      <if test="criteria.lable !=null and criteria.lable != '' "  >
+        AND a.area_label_id = #{criteria.lable}
+    </if>
+     <if test="criteria.name !=null and criteria.name != '' "  >
+        AND a.area_name LIKE concat(concat('%',#{criteria.name}),'%') 
+    </if>
+    ORDER BY
+			a.create_time DESC
+	</select>
+	
+	<select id="getAreaByUserId" resultMap="areaMap" >
+		SELECT
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s')as create_time,
+			DATE_FORMAT(a.up_time,'%Y-%m-%d %H:%i:%s')as updateTime,
+			a.aid,
+			a.create_user,
+			a.boundanies,
+			a.area_sation_nums,
+			a.area_name,
+			a.area_label_id
+		FROM
+			tbl_area a
+		where a.isDel=0
+        and   a.create_user=#{userId}
+      
+	</select>
+	
+	<select id="getAreaById" resultMap="areaMap" >
+		SELECT
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s')as create_time,
+			DATE_FORMAT(a.up_time,'%Y-%m-%d %H:%i:%s')as updateTime,
+			a.aid,
+			a.create_user,
+			a.boundanies,
+			a.area_sation_nums,
+			a.area_name,
+			a.area_label_id
+		FROM
+			tbl_area a
+		where a.isDel=0
+        and   a.aid=#{id}
+	</select>
+	
+	<select id="getAreaByIds" resultMap="areaMap" >
+		SELECT
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s')as create_time,
+			DATE_FORMAT(a.up_time,'%Y-%m-%d %H:%i:%s')as updateTime,
+			a.aid,
+			a.create_user,
+			a.boundanies,
+			a.area_sation_nums,
+			a.area_name,
+			a.area_label_id
+		FROM
+			tbl_area a
+		where a.isDel=0
+        and   a.aid in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	
+	
+	<insert id="save">
+		INSERT INTO tbl_area (
+			aid,
+			area_name,
+			area_label_id,
+			area_sation_nums,
+			boundanies,
+			create_user,
+			create_time,
+			isdel
+		)
+		VALUES
+			(
+				#{id},
+				#{name},
+				#{labelId},
+				#{stationNum},
+				#{boundanies},
+				#{userId},
+				now(),
+				0
+			)
+	</insert>
+	
+	<update id="update">
+		UPDATE  
+				tbl_area 
+		SET	
+				area_name =#{name},
+				area_label_id =#{labelId},
+				area_sation_nums =#{stationNum},
+				boundanies =#{boundanies},
+				create_user =#{userId},
+				up_time =now()
+		where 
+				aid =#{id}
+	</update>
+	
+	<delete id="bathDelete">
+		update
+			tbl_area
+		set
+		  isDel=1
+		where aid in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="getAreaIdByRuleId" resultType="java.lang.String" >
+		SELECT
+			t.area_id
+		FROM
+			tbl_task_rule t
+		WHERE
+			t.rid = #{ruleId}
+	</select>
+	
+	<select id="getAreaIdByTaskId" resultType="java.lang.String" >
+		SELECT
+			group_concat(t.area_id)
+		FROM
+			tbl_task_rule t
+		WHERE
+			t.tid = #{taskId}
+	</select>
+
+	<select id="findSameNameAndLabelByUser" resultType="java.lang.Integer" >
+		SELECT
+			count(1)
+		FROM
+			tbl_area
+		WHERE
+			isDel = 0
+		AND
+			 area_name = #{name}
+		AND
+			area_label_id = #{labelId}
+		AND
+			create_user = #{userId}
+
+	</select>
+	
+	
+
+</mapper>

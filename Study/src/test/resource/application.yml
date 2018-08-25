@@ -1,0 +1,16 @@
+server:
+  port: 8009
+  
+spring:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://172.16.23.12:3306/fwpt2?useUnicode=true&characterEncoding=utf-8&useSSL=false&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: root
+    password: Iflytek@123
+ 
+  
+mybatis:
+    type-aliases-package: com.iflytek.fwpt.model.*
+    mapperLocations: classpath:mapper/*/*.xml
+###    config-location: classpath:mybatis.xml
+

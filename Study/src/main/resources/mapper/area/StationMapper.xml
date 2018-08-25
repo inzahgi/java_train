@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.fwpt.mapper.area.StationMapper">
+
+	<resultMap id="stationMap" type="com.iflytek.fwpt.model.area.StationEntity">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="cityName" property="cityName" jdbcType="VARCHAR" />
+		<result column="city_name" property="areaCode" jdbcType="VARCHAR" />
+		<result column="area_name" property="areaName" jdbcType="VARCHAR" />
+		<result column="customer_id" property="customerId" jdbcType="VARCHAR" />
+		<result column="lac_code" property="lacCode" jdbcType="INTEGER" />
+		<result column="lac_name" property="lacName" jdbcType="INTEGER" />
+		<result column="ci_code" property="ciCode" jdbcType="VARCHAR" />
+		<result column="ci_name" property="ciName" jdbcType="VARCHAR" />
+		<result column="ci_lng" property="ciLng" jdbcType="VARCHAR" />
+		<result column="ci_lat" property="ciLat" jdbcType="VARCHAR" />
+		<result column="ci_address" property="ciAddress" jdbcType="VARCHAR" />
+		<result column="cgi" property="cgi" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	
+	<select id="getStationsByLngAndLat" resultMap="stationMap" >
+			SELECT
+					id,
+					city_name,
+					area_code,
+					area_name,
+					customer_id,
+					lac_code,
+					lac_name,
+					ci_code,
+					ci_name,
+					ci_lng,
+					ci_lat,
+					ci_address,
+					create_time,
+					up_time,
+					cgi
+			FROM
+					tbl_station
+			WHERE
+					isDel = 0
+	    <if test="minLng !=null and minLng !='' ">
+	       and <![CDATA[ #{minLng} <= ci_lng   ]]>
+	    </if>
+		<if test="minLat !=null and minLat !='' ">
+	      and  <![CDATA[ #{minLat} <= ci_lat   ]]>
+	    </if>
+	    <if test="minLng !=null and minLng !='' ">
+	       and <![CDATA[  ci_lat <=  #{maxLat}  ]]>
+	    </if>
+		<if test="minLng !=null and minLng !='' ">
+	       and <![CDATA[  ci_lng <=  #{maxLng}  ]]>
+	    </if>
+	</select>
+	
+	<insert id="bathSave" >
+		INSERT INTO tbl_station (
+				id,
+				city_name,
+				area_code,
+				area_name,
+				customer_id,
+				lac_code,
+				lac_name,
+				ci_code,
+				ci_name,
+				ci_lng,
+				ci_lat,
+				ci_address,
+				create_time,
+				up_time,
+				isdel,
+				cgi
+			)
+			VALUES
+			<foreach collection ="list" item="item" index= "index" separator =",">
+				(
+					#{item.id},
+					#{item.cityName},
+					#{item.areaCode},
+					#{item.areaName},
+					#{item.customerId},
+					#{item.lacCode},
+					#{item.lacName},
+					#{item.ciCode},
+					#{item.ciName},
+					#{item.ciLng},
+					#{item.ciLat},
+					#{item.ciAddress},
+					now(),
+					now(),
+					0,
+					#{item.cgi}
+				)
+			</foreach>
+	</insert>
+	
+	<delete id='delete'>
+	 delete from tbl_station 
+	</delete>
+
+</mapper>

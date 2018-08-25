@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.fwpt.mapper.task.WarnTaskMapper">
+  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.task.WarnTaskEntity">
+    <id column="tid" jdbcType="VARCHAR" property="tid" />
+    <result column="warn_type_id" jdbcType="VARCHAR" property="warnTypeId" />
+    <result column="task_name" jdbcType="VARCHAR" property="taskName" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="task_status" jdbcType="INTEGER" property="taskStatus" />
+    <result column="is_realtime_warn" jdbcType="TINYINT" property="isRealTimeWarn" />
+    <result column="is_message_warn" jdbcType="TINYINT" property="isMessageWarn" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="up_time" jdbcType="TIMESTAMP" property="upTime" />
+    <result column="isDel" jdbcType="TINYINT" property="isDel" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    tid, warn_type_id, task_name, start_time, end_time, task_status, is_realtime_warn,
+    is_message_warn, create_user, create_time, up_time, isDel
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_warn_task
+    where tid = #{tid,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_warn_task
+    where tid = #{tid,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.iflytek.fwpt.model.task.WarnTaskEntity" >
+    insert into tbl_warn_task (tid, warn_type_id, task_name, start_time,
+      end_time, task_status, is_realtime_warn,
+      is_message_warn, create_user, create_time,
+      up_time, isDel)
+    values (#{tid,jdbcType=VARCHAR}, #{warnTypeId,jdbcType=VARCHAR}, #{taskName,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP},
+      #{endTime,jdbcType=TIMESTAMP}, #{taskStatus,jdbcType=INTEGER}, #{isRealTimeWarn,jdbcType=TINYINT},
+      #{isMessageWarn,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, NOW(),  Now(), #{isDel,jdbcType=TINYINT})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.iflytek.fwpt.model.task.WarnTaskEntity" >
+    insert into tbl_warn_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tid != null">
+        tid,
+      </if>
+      <if test="warnTypeId != null">
+        warn_type_id,
+      </if>
+      <if test="taskName != null">
+        task_name,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="taskStatus != null">
+        task_status,
+      </if>
+      <if test="isRealTimeWarn != null">
+        is_realtime_warn,
+      </if>
+      <if test="isMessageWarn != null">
+        is_message_warn,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="upTime != null">
+        up_time,
+      </if>
+      <if test="isDel != null">
+        isDel,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tid != null">
+        #{tid,jdbcType=VARCHAR},
+      </if>
+      <if test="warnTypeId != null">
+        #{warnTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null">
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskStatus != null">
+        #{taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="isRealTimeWarn != null">
+        #{isRealTimeWarn,jdbcType=TINYINT},
+      </if>
+      <if test="isMessageWarn != null">
+        #{isMessageWarn,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="upTime != null">
+        #{upTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.task.WarnTaskEntity">
+    update tbl_warn_task
+    <set>
+      <if test="warnTypeId != null">
+        warn_type_id = #{warnTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null">
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskStatus != null">
+        task_status = #{taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="isRealTimeWarn != null">
+        is_realtime_warn = #{isRealTimeWarn,jdbcType=TINYINT},
+      </if>
+      <if test="isMessageWarn != null">
+        is_message_warn = #{isMessageWarn,jdbcType=TINYINT},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="upTime != null">
+        up_time = #{upTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        isDel = #{isDel,jdbcType=TINYINT},
+      </if>
+    </set>
+    where tid = #{tid,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.task.WarnTaskEntity">
+    update tbl_warn_task
+    set warn_type_id = #{warnTypeId,jdbcType=VARCHAR},
+      task_name = #{taskName,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      task_status = #{taskStatus,jdbcType=INTEGER},
+      is_realtime_warn = #{isRealTimeWarn,jdbcType=TINYINT},
+      is_message_warn = #{isMessageWarn,jdbcType=TINYINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      up_time = #{upTime,jdbcType=TIMESTAMP},
+      isDel = #{isDel,jdbcType=TINYINT}
+    where tid = #{tid,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

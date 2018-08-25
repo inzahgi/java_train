@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.fwpt.mapper.taskShow.WarningMessageMapper">
+
+
+	<resultMap id="warningMessage"
+		type="com.iflytek.fwpt.model.taskShow.WarningMessage">
+		<result column="warningTime" property="warningTime" jdbcType="VARCHAR" />
+		<result column="taskType" property="taskType" jdbcType="VARCHAR" />
+		<result column="memberInfo" property="memberInfo" jdbcType="VARCHAR" />
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="isReaded" property="isReaded" jdbcType="VARCHAR" />
+		<result column="taskId" property="taskId" jdbcType="VARCHAR" />
+		<result column="ruleId" property="ruleId" jdbcType="VARCHAR" />
+		
+	</resultMap>
+
+	<resultMap id="trajectoryVo"
+		type="com.iflytek.fwpt.model.taskShow.vo.TrajectoryVo">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="taskId" property="taskId" jdbcType="VARCHAR" />
+		<result column="warningTime" property="warningTime" jdbcType="VARCHAR" />
+		<result column="lng" property="lng" jdbcType="VARCHAR" />
+		<result column="lat" property="lat" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="idcard" property="idcard" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="taskTypeName" property="taskTypeName" jdbcType="VARCHAR" />
+		<result column="groupName" property="group" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="taskVo" type="com.iflytek.fwpt.model.taskShow.vo.TaskVo">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="prsonVo" type="com.iflytek.fwpt.model.taskShow.vo.PersonVo">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="account" property="phone" jdbcType="VARCHAR" />
+		<result column="teskType" property="teskType" jdbcType="VARCHAR" />
+		<result column="taskId" property="taskId" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<select id="getWarningMessagePageByTime" resultMap="warningMessage">
+		SELECT
+		a.account_json AS memberInfo,
+		a.task_type AS taskType,
+		a.warning_time AS warningTime,
+		a.ruleInfo
+		FROM
+		(
+		SELECT
+		a1.account_json,
+		a1.task_type,
+		a1.warning_time,
+		a1.receiver AS ruleInfo
+		FROM
+		tbl_gkmbtl_result a1
+		WHERE
+		a1.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		UNION ALL
+		SELECT
+		a2.account_json,
+		a2.task_type,
+		a2.warning_time,
+		a2.account AS ruleInfo
+		FROM
+		tbl_hjhk_result a2
+		WHERE
+		a2.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		UNION ALL
+		SELECT
+		a3.account_json,
+		a3.task_type,
+		a3.warning_time,
+		a3.account AS ruleInfo
+		FROM
+		tbl_jczdqy_result a3
+		WHERE
+		a3.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		UNION ALL
+		SELECT
+		a4.account_json,
+		a4.task_type,
+		a4.warning_time,
+		a4.location AS ruleInfo
+		FROM
+		tbl_jm_result a4
+		WHERE
+		a4.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		UNION ALL
+		SELECT
+		a5.account_json,
+		a5.task_type,
+		a5.warning_time,
+		a5.`event` AS ruleInfo
+		FROM
+		tbl_kgj_result a5
+		WHERE
+		a5.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		UNION ALL
+		SELECT
+		a6.account_json,
+		a6.task_type,
+		a6.warning_time,
+		a6.account AS ruleInfo
+		FROM
+		tbl_hjhk_result a6
+		WHERE
+		a6.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		UNION ALL
+		SELECT
+		a7.account_json,
+		a7.task_type,
+		a7.warning_time,
+		a7.old_area_id AS ruleInfo
+		FROM
+		tbl_ljyj_result a7
+		WHERE
+		a7.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		UNION ALL
+		SELECT
+		a9.account_json,
+		a9.task_type,
+		a9.warning_time,
+		CONCAT(a9.action, a9.area_code) AS ruleInfo
+		FROM
+		tbl_mbddlk_result a9
+		WHERE
+		a9.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		UNION ALL
+		SELECT
+		a10.task_type,
+		a10.account_json,
+		a10.warning_time,
+		a10.gatherradius AS ruleInfo
+		FROM
+		tbl_mbjj_result a10
+		WHERE
+		a10.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		UNION ALL
+		SELECT
+		a11.task_tpye,
+		a11.account_json,
+		a11.warning_time,
+		a11.membernum AS ruleInfo
+		FROM
+		tbl_mbqxx_result a11
+		WHERE
+		a11.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		UNION ALL
+		SELECT
+		a12.account_json,
+		a12.task_type,
+		a12.warning_time,
+		a12.area_id AS ruleInfo
+		FROM
+		tbl_mbqyjj_result a12
+		WHERE
+		a12.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		UNION ALL
+		SELECT
+		a13.account_json,
+		'YJ_SS' as taskType,
+		a13.warning_time,
+		a13.account AS ruleInfo
+		FROM
+		tbl_ssyj_result a13
+		WHERE
+		a13.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		UNION ALL
+		SELECT
+		a14.account_json,
+		a14.task_type,
+		a14.warning_time,
+		a14.account AS ruleInfo
+		FROM
+		tbl_xzyj_result a14
+		WHERE
+		a14.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		UNION ALL
+		SELECT
+		a15.account_json,
+		a15.task_type,
+		a15.warning_time,
+		a15.account AS ruleInfo
+		FROM
+		tbl_ymgdqtl_result a15
+		WHERE
+		a15.rule_id IN
+		<foreach collection="ruleIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		) a
+		WHERE
+		1=1
+		<if test="startTime !=null and startTime !='' ">
+        <![CDATA[   AND DATE_FORMAT(a.warning_time, '%Y-%m-%d %H:%m:%s')>=  DATE_FORMAT(#{startTime}, '%Y-%m-%d %H:%m:%s')   ]]>
+		</if>
+		<if test="endTime !=null and endTime !='' ">
+         <![CDATA[   AND DATE_FORMAT(a.warning_time, '%Y-%m-%d %H:%m:%s')<=  DATE_FORMAT(#{endTime}, '%Y-%m-%d %H:%m:%s')   ]]>
+		</if>
+		order by a.warning_time
+	</select>
+
+	<select id="getTrajectoryByPhoneAndTime" resultMap="trajectoryVo">
+		SELECT
+		DATE_FORMAT(warning_time,'%Y-%m-%d %H:%i:%s') AS warningTime,
+		lat,
+		id,
+		lon AS lng,
+		location AS address,
+		t_id as taskId
+		FROM
+		tbl_member_result
+		WHERE
+		task_type = 'YJ_SS'
+		<if test="startTime !=null and startTime !='' ">
+        <![CDATA[   AND DATE_FORMAT(warning_time, '%Y-%m-%d %H:%m:%s')>=  DATE_FORMAT(#{startTime}, '%Y-%m-%d %H:%m:%s')   ]]>
+		</if>
+		<if test="endTime !=null and endTime !='' ">
+         <![CDATA[   AND DATE_FORMAT(warning_time, '%Y-%m-%d %H:%m:%s')<=  DATE_FORMAT(#{endTime}, '%Y-%m-%d %H:%m:%s')   ]]>
+		</if>
+		<if test="phone !=null and phone !='' ">
+			AND account =#{phone}
+		</if>
+		<if test="userId !=null and userId !='' ">
+			AND create_user =#{userId}
+		</if>
+		<if test="taskId !=null and taskId !='' ">
+			AND t_id =#{taskId}
+		</if>
+		order by warning_time asc
+	</select>
+
+	<select id="getTaskVoByUserId" resultMap="taskVo">
+		SELECT
+		t.tid AS id,
+		t.task_name AS NAME
+		FROM
+		tbl_warn_task t
+		WHERE
+		1 = 1
+		<if test="userId !=null userId !='' ">
+			t.create_user =#{userId}
+		</if>
+	</select>
+
+
+	<update id="updateReadStatus">
+		update #{tableName} set isReaded =
+		'1' where id = ${id}
+	</update>
+
+	<update id="readWarningMessage">
+		UPDATE tbl_rule_result
+		SET isReaded = '1'
+		WHERE
+		id in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+
+
+
+	<select id="getWarningMessagePageByRuleIdsAndWarningTime"
+		resultMap="warningMessage">
+		select 
+				a.id,
+				a.isReaded,
+				a.memberInfo,
+				a. taskType,
+				a.warningTime,
+				a.ruleId,
+				a.taskId
+		from (SELECT
+				r.id,
+				r.isReaded,
+				r.member_json AS memberInfo,
+				r.task_type as taskType,
+				r.t_id as taskId,
+				r.r_id as ruleId,
+				DATE_FORMAT(r.warning_time,'%Y-%m-%d %H:%i:%s')as warningTime
+				FROM
+				tbl_rule_result r
+				WHERE
+				task_type != 'YJ_SS'
+				AND r.r_id IN
+				<foreach collection="ruleIds" index="index" item="item" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+				<if test="startTime !=null and startTime !='' ">
+		        <![CDATA[   AND DATE_FORMAT(r.warning_time, '%Y-%m-%d %H:%m:%s')>=  DATE_FORMAT(#{startTime}, '%Y-%m-%d %H:%m:%s')   ]]>
+				</if>
+				<if test="endTime !=null and endTime !='' ">
+		         <![CDATA[   AND DATE_FORMAT(r.warning_time, '%Y-%m-%d %H:%m:%s')<=  DATE_FORMAT(#{endTime}, '%Y-%m-%d %H:%m:%s')   ]]>
+				</if>
+				<if test="idcard !=null and idcard !='' ">
+					AND r.member_json LIKE concat(concat('%',#{idcard}),'%')
+				</if>
+				<if test="phone !=null and phone !='' ">
+					AND r.member_json LIKE concat(concat('%',#{phone}),'%')
+				</if>
+				<if test="isShowResult !=null and isShowResult !='' ">
+					AND r.member_json LIKE concat(concat('%',#{isShowResult}),'%')
+				</if>
+				ORDER BY
+				r.warning_time DESC) a
+		where 1=1
+		<if test="isReaded !=null and isReaded !='' ">
+			AND a.isReaded =#{isReaded}
+		</if>
+	</select>
+
+
+
+
+	<update id="pushWarningMessage" parameterType="java.lang.String">
+		update
+		tbl_member_result
+		set
+		isPushed = '1'
+		where id in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<update id="updateWarningMessageByRuleIds" parameterType="java.lang.String">
+		update
+		tbl_member_result
+		set
+		isPushed = '1'
+		where r_id in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+
+
+	<select id="getPushWarningMessageByUserId" resultMap="prsonVo">
+		SELECT
+		r.id,
+		r.t_id as taskId,
+		r.task_type AS taskType,
+		r.account
+		FROM
+		tbl_member_result r
+		WHERE
+		r.create_user=#{userId}
+		 <![CDATA[   AND warning_time>=DATE_SUB(NOW(),INTERVAL 5 MINUTE)   ]]>
+		ORDER BY
+		r.warning_time desc
+	</select>
+	
+	<select id="getTrajectoryById" resultMap="trajectoryVo">
+		SELECT
+		DATE_FORMAT(warning_time,'%Y-%m-%d %H:%i:%s') AS warningTime,
+		lat,
+		id,
+		lon AS lng,
+		location AS address,
+		t_id as taskId,
+		name,
+		group_name as groupName,
+		idCard,
+		task_type,
+		account AS phone
+		FROM
+		tbl_member_result
+		WHERE
+		task_type = 'YJ_SS'
+		and id=#{id}
+	</select>
+
+
+
+
+
+
+
+</mapper>

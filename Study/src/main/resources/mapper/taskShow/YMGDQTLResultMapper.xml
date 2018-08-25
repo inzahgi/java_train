@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.fwpt.mapper.taskShow.YMGDQTLResultMapper">
+	<resultMap id="YMGDQTLResultVo" type="com.iflytek.fwpt.model.taskShow.YMGDQTLResultVo">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="rule_id" property="ruleId" jdbcType="VARCHAR" />
+		<result column="task_type" property="taskType" jdbcType="VARCHAR" />
+		<result column="acc_type" property="accType" jdbcType="VARCHAR" />
+		<result column="account" property="account" jdbcType="VARCHAR" />
+		<result column="relate_home" property="relateHome" jdbcType="VARCHAR" />
+		<result column="relate_account" property="relateAccount" jdbcType="VARCHAR" />
+		<result column="location" property="location" jdbcType="VARCHAR" />
+		<result column="lon" property="lon" jdbcType="VARCHAR" />
+		<result column="lat" property="lat" jdbcType="VARCHAR" />
+		<result column="idReaded" property="idReaded" jdbcType="VARCHAR" />
+		<result column="account_json" property="accountJSON" jdbcType="VARCHAR" />
+		<result column="warning_time" property="warningTime" jdbcType="TIMESTAMP" />
+		<result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<insert id="save">
+		INSERT INTO tbl_ymgdqtl_result (
+			id,
+			rule_id,
+			task_type,
+			acc_type,
+			account,
+			relate_home,
+			relate_account,
+			location,
+			lon,
+			lat,
+			idReaded,
+			account_json,
+			warning_time,
+			createtime
+		)
+		VALUES
+			(
+				#{id},
+				#{ruleId},
+				#{taskType},
+				#{accType},
+				#{account},
+				#{relateHome},
+				#{relateAccount},
+				#{location},
+				#{lon},
+				#{lat},
+				#{idReaded},
+				#{accountJSON},
+				#{warningTime},
+				now()
+			)
+	</insert>
+
+</mapper>

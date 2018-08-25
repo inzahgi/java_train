@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.fwpt.mapper.task.NewGroupMapper">
+  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.task.NewGroupEntity">
+    <id column="gid" jdbcType="VARCHAR" property="gid" />
+    <result column="gname" jdbcType="VARCHAR" property="gname" />
+    <result column="tid" jdbcType="VARCHAR" property="tid" />
+    <result column="isdel" jdbcType="INTEGER" property="isdel" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="up_time" jdbcType="TIMESTAMP" property="upTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="arg0" jdbcType="VARCHAR" property="arg0" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    gid, gname, tid, isdel, create_user, up_time, create_time, arg0
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_group
+    where gid = #{gid,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_group
+    where gid = #{gid,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.iflytek.fwpt.model.task.NewGroupEntity" >
+    insert into tbl_group (gid, gname, tid, isdel,
+      create_user, up_time, create_time, arg0)
+    values ( #{gid,jdbcType=VARCHAR}, #{gname,jdbcType=VARCHAR}, #{tid,jdbcType=VARCHAR}, #{isdel,jdbcType=INTEGER},
+      #{createUser,jdbcType=VARCHAR}, #{upTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{arg0,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" keyColumn="gid" keyProperty="gid" parameterType="com.iflytek.fwpt.model.task.NewGroupEntity" useGeneratedKeys="true">
+    insert into tbl_group
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gid != null">
+        gid,
+      </if>
+      <if test="gname != null">
+        gname,
+      </if>
+      <if test="tid != null">
+        tid,
+      </if>
+      <if test="isdel != null">
+        isdel,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="upTime != null">
+        up_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="arg0 != null">
+        arg0,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gid != null">
+        #{gid,jdbcType=VARCHAR},
+      </if>
+      <if test="gname != null">
+        #{gname,jdbcType=VARCHAR},
+      </if>
+      <if test="tid != null">
+        #{tid,jdbcType=VARCHAR},
+      </if>
+      <if test="isdel != null">
+        #{isdel,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="upTime != null">
+        #{upTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arg0 != null">
+        #{arg0,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.task.NewGroupEntity">
+    update tbl_group
+    <set>
+      <if test="gname != null">
+        gname = #{gname,jdbcType=VARCHAR},
+      </if>
+      <if test="tid != null">
+        tid = #{tid,jdbcType=VARCHAR},
+      </if>
+      <if test="isdel != null">
+        isdel = #{isdel,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="upTime != null">
+        up_time = #{upTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arg0 != null">
+        arg0 = #{arg0,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where gid = #{gid,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.task.NewGroupEntity">
+    update tbl_group
+    set gname = #{gname,jdbcType=VARCHAR},
+      tid = #{tid,jdbcType=VARCHAR},
+      isdel = #{isdel,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      up_time = #{upTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      arg0 = #{arg0,jdbcType=VARCHAR}
+    where gid = #{gid,jdbcType=VARCHAR}
+  </update>
+</mapper>

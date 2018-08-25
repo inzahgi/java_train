@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.fwpt.mapper.task.RuleMapper">
+
+
+	<resultMap id="ruleVo" type="com.iflytek.fwpt.model.rule.vo.RuleVo">
+		<result column="rid" property="ruleId" jdbcType="INTEGER" />
+		<result column="tid" property="taskId" jdbcType="VARCHAR" />
+		<result column="rule_mode" property="mode" jdbcType="VARCHAR" />
+		<result column="rule_type" property="type" jdbcType="VARCHAR" />
+		<result column="rule_info" property="info" jdbcType="VARCHAR" />
+		<result column="rule_header" property="header" jdbcType="VARCHAR" />
+		<result column="ischecked" property="isChecked" jdbcType="INTEGER" />
+		
+	</resultMap>
+	
+	<resultMap id="taskVo" type="com.iflytek.fwpt.model.task.TaskEntity">
+		<result column="tid" property="id" jdbcType="VARCHAR" />
+		<result column="task_name" property="name" jdbcType="VARCHAR" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="getRuleByTaskIdAndModeCode" resultMap="ruleVo">
+		SELECT
+			r.rid,
+			r.tid,
+			r.rule_mode,
+			r.rule_type,
+			r.rule_info,
+			r.rule_header,
+			r.ischecked
+		FROM
+			tbl_task_rule  r
+		WHERE 
+			isDel=0
+		AND      
+			status='0'
+	    <if test="taskId !=null and taskId !='' "  >
+	        AND r.tid =#{taskId}  
+	    </if>
+	    <if test="modeCode !=null and modeCode !='' "  >
+	        AND r.rule_mode =#{modeCode}  
+	    </if>
+	    
+	</select>
+		
+	
+	
+	<insert id="save">
+		INSERT INTO tbl_task_rule (
+			rid,
+			area_id,
+			tid,
+			rule_mode,
+			rule_type,
+			ischecked,
+			up_time,
+			create_time,
+			isdel,
+			rule_header,
+			rule_info
+		)
+		VALUES
+			(
+				#{ruleId},
+				#{areaId},
+				#{taskId},
+				#{mode},
+				#{type},
+				#{isChecked},
+				now(),
+				now(),
+				0,
+				#{header},
+				#{info}
+			)
+	</insert>
+	
+	<insert id="update">
+			UPDATE
+				 tbl_task_rule 
+			SET 
+				tid =#{taskId},
+				rule_mode =#{mode},
+				rule_type =#{type},
+				ischecked =#{isChecked},
+				up_time =now(),
+				rule_header=#{header},
+				area_id =#{areaId},
+				rule_info=#{info}
+	      where rid=#{ruleId}
+	</insert>
+	
+	
+	<delete id="deleteByTaskIdAndModeCode">
+		UPDATE 
+				tbl_task_rule 
+		SET 
+				isDel=1
+		WHERE
+				 tid =#{taskId}  
+		AND
+				 rule_mode =#{modeCode} 
+		AND      
+				 status='0'
+		
+	</delete>
+	
+	
+	
+	<select id="getRuleByTaskId" resultMap="ruleVo">
+				SELECT
+					r.rid,
+					r.tid,
+					r.rule_mode,
+					r.rule_type,
+					r.rule_info,
+					r.rule_header,
+					r.ischecked
+				FROM
+					tbl_task_rule  r
+				WHERE 
+					isDel=0
+				AND      
+					status='0'
+			    <if test="taskId !=null and taskId !='' "  >
+			        AND r.tid =#{taskId}  
+			    </if>
+	</select>
+	
+	<update id="updateRuleInfo">
+	    UPDATE 
+				tbl_task_rule 
+		SET 
+				rule_info=#{ruleInfo}
+		WHERE
+				rid =#{ruleId}  
+	</update>
+	
+	<update id="deleteByTaskId">
+	    UPDATE 
+				tbl_task_rule 
+		SET 
+				isDel=1
+		WHERE
+				 tid =#{taskId}  
+		AND      
+				 status='0'
+	</update>
+	
+	<select id="getRunningRuleByModeCodes" resultMap="ruleVo">
+		SELECT
+				r.rid,
+				r.tid,
+				r.rule_mode,
+				r.rule_type,
+				r.rule_info,
+				r.rule_header,
+				r.ischecked
+			FROM
+				tbl_warn_task t,
+				tbl_task_rule r
+			WHERE
+				t.tid = r.tid
+		   <![CDATA[   AND t.end_time >= now()   ]]>
+		    AND t.task_status = '2'
+			AND r.isDel=0
+			AND r.rule_mode in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<select id="getPendingRuleByModeCodes" resultMap="ruleVo">
+		SELECT
+				r.rid,
+				r.tid,
+				r.rule_mode,
+				r.rule_type,
+				r.rule_info,
+				r.rule_header,
+				r.ischecked
+			FROM
+				tbl_warn_task t,
+				tbl_task_rule r
+			WHERE
+				t.tid = r.tid
+		   <![CDATA[   AND t.start_time > now()   ]]>
+		    AND t.task_status = '1'
+			AND r.isDel=0
+			AND r.rule_mode in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<select id="getRuleIdByCreateUser" parameterType="java.lang.String" resultMap="ruleVo">
+		SELECT
+		 DISTINCT	r.rid
+		FROM
+			tbl_task_rule  r left join tbl_warn_task  t on r.tid=t.tid
+		WHERE 
+			t.isDel=0
+		AND      
+			r.status='0'
+	    <if test="userId != null and  userId != ''">
+			and t.create_user = #{userId}
+		</if>
+	</select>
+
+	
+	<select id="getRuleIdByUserIdAndTaskName"  resultType="java.lang.String">
+		SELECT
+			r.rid
+		FROM
+			tbl_warn_task t left join tbl_task_rule r on r.tid=t.tid
+		WHERE 
+			t.isDel=0
+		AND      
+			r.status='0'
+	    <if test="userId != null and  userId != ''">
+			and t.create_user = #{userId}
+		</if>
+		 <if test="taskName != null and  taskName != ''">
+			AND t.task_name LIKE concat(concat('%',#{taskName}),'%')
+		</if>
+	</select>
+	
+
+	
+	<select id="queryTaskIdAndUserByRuleId" parameterType="java.lang.String" resultMap="taskVo">
+		SELECT
+			r.tid, t.task_name, t.create_user
+		FROM
+			tbl_task_rule  r left join tbl_warn_task  t on r.tid=t.tid
+		WHERE 
+			t.isDel=0 and      
+			r.status='0'  AND  r.rid=#{ruleId}
+	</select>
+
+</mapper>

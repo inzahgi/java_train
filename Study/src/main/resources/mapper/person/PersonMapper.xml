@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iflytek.fwpt.mapper.person.PersonMapper">
+
+	<resultMap id="personMap" type="com.iflytek.fwpt.model.person.PersonEntity">
+		<id column="pid" property="id" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="idcard" property="idcard" jdbcType="VARCHAR" />
+		<result column="policeName" property="policeName" jdbcType="VARCHAR" />
+		<result column="policeId" property="policeId" jdbcType="VARCHAR" />
+		<result column="groupName" property="groupName" jdbcType="VARCHAR" />
+		<result column="groupId" property="groupId" jdbcType="VARCHAR" />
+		<result column="other_card_type" property="otherCardType" jdbcType="VARCHAR" />
+		<result column="other_card" property="otherCardNum" jdbcType="VARCHAR" />
+		<result column="isWarning" property="isWarning" jdbcType="VARCHAR" />
+		<result column="personCnt" property="personCnt" jdbcType="INTEGER" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
+
+	</resultMap>
+
+
+	<select id="getPersonPage" resultMap="personMap" >
+		SELECT
+			DATE_FORMAT(p.create_time,'%Y-%m-%d %H:%i:%s')as create_time,
+			DATE_FORMAT(p.up_time,'%Y-%m-%d %H:%i:%s')as updateTime,
+			p.create_user,
+			p.idcard,
+			p.iswarning,
+			p.`name`,
+			p.other_card,
+			p.other_card_type,
+			p.up_time,
+			p.pid,
+			p.phone,
+			p.busi_police_name as policeName,
+			p.busi_police as policeId,
+			g.gname as groupName
+		FROM
+			tbl_key_person p
+		LEFT JOIN tbl_group g ON g.gid = p.group_id
+		where p.isDel=0
+     <if test="criteria.startTime !=null and criteria.startTime !='' ">
+        <![CDATA[   AND DATE_FORMAT(p.create_time, '%Y-%m-%d %H:%m:%s')>=  DATE_FORMAT(#{criteria.startTime}, '%Y-%m-%d %H:%m:%s')   ]]>
+    </if>
+    <if test="criteria.endTime !=null and criteria.endTime !='' "  >
+         <![CDATA[   AND DATE_FORMAT(p.create_time, '%Y-%m-%d %H:%m:%s')<=  DATE_FORMAT(#{criteria.endTime}, '%Y-%m-%d %H:%m:%s')   ]]>
+    </if>
+    <if test="criteria.name !=null and criteria.name !='' "  >
+        AND p.name LIKE concat(concat('%',#{criteria.name}),'%')
+    </if>
+     <if test="criteria.certificatesNum !=null and criteria.certificatesNum !='' "  >
+        AND (
+        	 p.idcard LIKE concat(concat('%',#{criteria.certificatesNum}),'%') 
+        	 or
+        	 p.other_card LIKE concat(concat('%',#{criteria.certificatesNum}),'%')
+        	)
+    </if>
+    <if test="criteria.phone !=null and criteria.phone !='' "  >
+        AND p.phone LIKE concat(concat('%',#{criteria.phone}),'%') 
+    </if>
+    <if test="criteria.grouName !=null and criteria.grouName !='' "  >
+        AND g.gname LIKE concat(concat('%',#{criteria.grouName}),'%') 
+    </if>
+     <if test="criteria.policeName !=null and criteria.policeName !='' "  >
+        AND p.busi_police_name LIKE concat(concat('%',#{criteria.policeName}),'%') 
+    </if>
+      <if test="criteria.policeId !=null and criteria.policeId !='' "  >
+        AND p.busi_police =#{criteria.policeId} 
+    </if>
+     <if test="criteria.createUserId !=null and criteria.createUserId !='' "  >
+        AND p.create_user =#{criteria.createUserId}  
+    </if>
+      	ORDER BY
+			p.create_time, g.gname, p.name DESC
+	</select>
+	
+	
+	<select id="getPersonByPhones" resultMap="personMap" >
+		SELECT
+			p.busi_police as policeId,
+			p.create_user ,
+			p.pid,
+			p.phone,
+			p.group_id   as groupId
+		FROM
+			   tbl_key_person p
+		where   p.isDel=0
+		AND	    p.phone in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+    
+	</select>
+	
+	
+	
+	<select id="getPersonByPhoneAndTaskId" resultMap="personMap" >
+			SELECT
+				a.create_user,
+				a.idcard,
+				a.iswarning,
+				a.`name`,
+				a.pid,
+				a.phone,
+			  r.task_id,
+			  group_concat(DISTINCT a.gname) AS groupName
+			FROM
+				tbl_task_person_rsp r,
+				(
+					SELECT
+						p.create_user,
+						p.idcard,
+						p.iswarning,
+						p.`name`,
+						p.pid,
+						p.phone,
+						g.gname
+					FROM
+						tbl_key_person p,
+						tbl_group g
+					WHERE
+						p.group_id = g.gid
+					AND p.phone = #{phone}
+				) a
+			WHERE
+				r.person_id = a.pid
+				and r.task_id=#{taskId}
+	</select>
+	
+	<select id="getPersonByPhone" resultMap="personMap" >
+		SELECT
+			p.busi_police as policeId,
+			p.create_user ,
+			p.pid,
+			p.phone,
+			p.group_id   as groupId
+		FROM
+			tbl_key_person p
+		where   p.isDel=0
+		AND		p.phone=#{phone}
+    
+	</select>
+	
+	<select id="getPersonById" resultMap="personMap" >
+			SELECT
+				p.busi_police,
+				DATE_FORMAT(p.create_time,'%Y-%m-%d %H:%i:%s')as create_time,
+				DATE_FORMAT(p.up_time,'%Y-%m-%d %H:%i:%s')as updateTime,
+				p.create_user,
+				p.idcard,
+				p.iswarning,
+				p.`name`,
+				p.other_card,
+				p.other_card_type,
+				p.up_time,
+				p.phone,
+				p.busi_police as policeId,
+				p.group_id as groupId,
+				p.pid,
+				p.busi_police_name as policeName,
+				g.gname as groupName
+			FROM
+				tbl_key_person p
+			LEFT JOIN tbl_group g ON g.gid = p.group_id
+			where   p.isDel=0
+			AND		p.pid=#{id}
+	</select>
+	
+	<select id="getRspCountByPersonId" resultType="java.lang.Integer" >
+			SELECT
+				count(1)
+			FROM
+				tbl_task_person_rsp p
+			where   p.status=0
+			AND		p.person_id=#{personId}
+	</select>
+	
+	<select id="getPersonByIds" resultMap="personMap" >
+		SELECT
+			DATE_FORMAT(p.create_time,'%Y-%m-%d %H:%i:%s')as create_time,
+			DATE_FORMAT(p.up_time,'%Y-%m-%d %H:%i:%s')as updateTime,
+			p.create_user,
+			p.idcard,
+			p.iswarning,
+			p.`name`,
+			p.other_card,
+			p.other_card_type,
+			p.up_time,
+			p.pid,
+			p.phone,
+			p.busi_police_name as policeName,
+			p.busi_police as policeId,
+			g.gname as groupName
+		FROM
+			tbl_key_person p
+		LEFT JOIN tbl_group g ON g.gid = p.group_id
+		where p.isDel=0
+		and   pid in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		order by
+			p.create_time, g.gname, p.name DESC
+
+	</select>
+	
+	
+
+	<insert id="save">
+		INSERT INTO tbl_key_person (
+			pid,
+			NAME,
+			phone,
+			idcard,
+			other_card_type,
+			other_card,
+			busi_police_name,
+			busi_police,
+			group_id,
+			isdel,
+			iswarning,
+			create_user,
+			create_time
+		)
+		VALUES
+			(
+				#{id},
+				#{name},
+				#{phone},
+				#{idcard},
+				#{otherCardType},
+				#{otherCardNum},
+				#{policeName},
+				#{policeId},
+				#{groupId},
+				0,
+				0,
+				#{createUser},
+				now()
+			)
+	</insert>
+	
+	
+	<insert id="bathSave">
+		INSERT INTO tbl_key_person (
+			pid,
+			NAME,
+			phone,
+			idcard,
+			other_card_type,
+			other_card,
+			busi_police_name,
+			busi_police,
+			group_id,
+			isdel,
+			iswarning,
+			create_user,
+			create_time
+		)
+		VALUES
+		<foreach collection ="list" item="item" index= "index" separator =",">
+              (
+				#{item.id},
+				#{item.name},
+				#{item.phone},
+				#{item.idcard},
+				#{item.otherCardType},
+				#{item.otherCardNum},
+				#{item.policeName},
+				#{item.policeId},
+				#{item.groupId},
+				0,
+				0,
+				#{item.createUser},
+				now()
+			   )
+      </foreach >
+	</insert>
+	
+	<update id="update">
+		UPDATE tbl_key_person
+		SET 
+		NAME = #{name},
+		phone = #{phone},
+		idcard = #{idcard},
+		other_card_type = #{otherCardType},
+		other_card = #{otherCardNum},
+		create_user = #{createUser},
+		up_time = now()
+	where
+	    pid = #{id}
+	</update>
+
+	<delete id="bathDelete" parameterType="java.lang.String">
+		update
+		tbl_key_person
+		set
+		isDel=1
+		where pid in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<delete id="bathDeleteByGroupIds" parameterType="java.lang.String">
+		update
+		tbl_key_person
+		set
+		isDel=1
+		where group_id in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	
+	
+	<delete id="deleteByPhone" parameterType="java.lang.String">
+		update
+				tbl_key_person
+				set
+				isDel=1
+		where
+		 		phone=#{phone}
+	</delete>
+	
+	<delete id="deleteById" parameterType="java.lang.String">
+			update
+					tbl_key_person
+					set
+					isDel=1
+			where
+			 		pid=#{id}
+	</delete>
+	
+	<update id="bathUpdateStatus" parameterType="java.lang.String">
+		update
+		tbl_key_person
+		set
+		iswarning=1
+		where pid in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	
+
+	<select id="getCountByPhoneAndGourpIdAndPoliceId" resultType="java.lang.Integer">
+		select
+		count(1)
+		from tbl_key_person
+		where isDel=0
+		<if test="phone != null and  phone != ''">
+			AND phone=#{phone}
+		</if>
+		<if test="groupId != null and  groupId != ''">
+			AND group_id=#{groupId}
+		</if>
+		<if test="policeId != null and  policeId != ''">
+			AND busi_police=#{policeId}
+		</if>
+	</select>
+	
+	<select id="getPersonsByGroupIds" resultMap="personMap"  >
+		SELECT
+			DATE_FORMAT(p.create_time,'%Y-%m-%d %H:%i:%s')as create_time,
+			DATE_FORMAT(p.up_time,'%Y-%m-%d %H:%i:%s')as updateTime,
+			p.create_user,
+			p.idcard,
+			p.iswarning,
+			p.`name`,
+			p.other_card,
+			p.other_card_type,
+			p.up_time,
+			p.pid,
+			p.phone,
+			p.busi_police_name as policeName,
+			p.busi_police as policeId,
+			g.gname as groupName
+		FROM
+			tbl_key_person p
+		LEFT JOIN tbl_group g ON g.gid = p.group_id
+		where p.isDel=0
+			AND    p. group_id in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<select id="getPersonByPoliceId" resultMap="personMap" >
+			SELECT
+			    p.pid,
+				p.phone,
+				g.gname as groupName
+			FROM
+				tbl_key_person p
+			LEFT JOIN tbl_group g ON g.gid = p.group_id
+			where   p.isDel=0
+			AND		p.busi_police=#{policeId}
+	</select>
+	
+	<select id="getPersonByTaskId" resultType="java.lang.String">
+	    SELECT
+			 distinct p.pid
+		FROM
+			tbl_key_person p ,tbl_task_person_rsp r
+		WHERE r.person_id = p.pid
+		AND   p.isdel=0
+		AND r.task_id = #{taskId}
+		AND r.`status` = 0
+	</select>
+	
+		<select id="getStoragePersonByTaskId" resultType="java.lang.String">
+	    SELECT
+			 distinct p.pid
+		FROM
+			tbl_key_person p ,tbl_task_person_rsp r
+		WHERE r.person_id = p.pid
+		AND   p.isdel=0
+		AND r.task_id = #{taskId}
+		AND (r.`status` = 0  or r.`status` = 2)
+	</select>
+	
+	<select id="getPhonesByPersonIds" resultType="java.lang.String" >
+	    SELECT
+			 distinct p.phone
+		FROM
+			tbl_key_person p
+		WHERE
+			1=1
+		AND     
+			pid in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		    
+	</select>
+	
+	<select id="getPersonsByPersonIds" resultMap="personMap" >
+	    SELECT
+			    p.pid,
+				p.phone,
+				g.gname as groupName
+			FROM
+				tbl_key_person p
+			LEFT JOIN tbl_group g ON g.gid = p.group_id
+		where   p.isDel=0
+		AND		pid in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		    
+	</select>
+	
+	
+	
+	
+	
+	<select id="getPersonByGroupIdAndUserId" resultMap="personMap" >
+		SELECT
+			DATE_FORMAT(p.create_time,'%Y-%m-%d %H:%i:%s')as create_time,
+			DATE_FORMAT(p.up_time,'%Y-%m-%d %H:%i:%s')as updateTime,
+			p.create_user,
+			p.idcard,
+			p.iswarning,
+			p.`name`,
+			p.other_card,
+			p.other_card_type,
+			p.up_time,
+			p.pid,
+			p.phone,
+			p.busi_police_name as policeName,
+			p.busi_police as policeId,
+			g.gname as groupName
+		FROM
+			tbl_key_person p
+		LEFT JOIN tbl_group g ON g.gid = p.group_id
+		where p.isDel=0
+	<if test="userId !=null and userId !='' "  >
+	        AND g.gid =#{groupId}  
+	  </if>
+     <if test="userId !=null and userId !='' "  >
+        AND g.create_user =#{userId}  
+    </if>
+	</select>
+	
+	<insert id="bathUpdatePoliceName">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE tbl_key_person
+               SET busi_police_name = #{item.policeName}
+            WHERE busi_police = #{item.policeId}
+        </foreach>
+ </insert>
+ 
+ 	<select id="getPoliceMessageByUserId" resultMap="personMap">
+		select
+			  	busi_police_name as policeName,
+			  	busi_police as policeId
+		from 
+				tbl_key_person
+		where 
+				isDel=0
+		<if test="userId != null and  userId != ''">
+			AND create_user=#{userId}
+		</if>
+	</select>
+	
+	<select id="getPersonCounByGroupId" resultType="java.lang.Integer">
+		select
+			  	count(1)
+		from 
+				tbl_key_person 
+		where 
+				isDel=0
+	    AND
+	    		group_id=#{groupId}
+		group by group_id
+	</select>
+
+	<select id="getPersonCountByGroupIdList" resultMap="personMap">
+		select
+			group_id as groupId, count(1) as personCnt
+		from
+			tbl_key_person
+		where
+			isDel = 0
+		AND
+			group_id in
+		<foreach collection="list" index="index" item="item" open="("
+				 separator="," close=")">
+			#{item}
+		</foreach>
+		GROUP BY group_id
+
+	</select>
+	
+		<select id="getPersonByGroupIdsAndPoliceId" resultMap="personMap" >
+	   SELECT
+			    p.pid,
+				p.phone,
+				g.gname as groupName
+			FROM
+				tbl_key_person p
+			LEFT JOIN tbl_group g ON g.gid = p.group_id
+			where   p.isDel=0
+		    AND     p.busi_police=#{policeId}
+			AND
+			 		g.gid in
+		<foreach collection="groupIds" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		    
+	</select>
+	
+	
+	<select id="getPersonPageByTaskId" resultMap="personMap" >
+		SELECT
+			p.`name`,
+			p.other_card,
+			p.other_card_type,
+			p.phone
+		FROM
+			tbl_key_person p,
+			tbl_task_person_rsp r
+		WHERE
+			p.isDel = 0
+		AND	r.`status`=0
+		AND p.pid = r.person_id
+		
+	<if test="criteria.taskId !=null and criteria.taskId !='' "  >
+       AND r.task_id = #{criteria.taskId}
+    </if>
+    <if test="criteria.name !=null and criteria.name !='' "  >
+        AND p.name LIKE concat(concat('%',#{criteria.name}),'%')
+    </if>
+     <if test="criteria.certificatesNum !=null and criteria.certificatesNum !='' "  >
+        AND (
+        	 p.idcard LIKE concat(concat('%',#{criteria.certificatesNum}),'%') 
+        	 or
+        	 p.other_card LIKE concat(concat('%',#{criteria.certificatesNum}),'%')
+        	)
+    </if>
+    <if test="criteria.phone !=null and criteria.phone !='' "  >
+        AND p.phone LIKE concat(concat('%',#{criteria.phone}),'%') 
+    </if>
+     <if test="criteria.policeId !=null and criteria.policeId !='' "  >
+        AND p.busi_police =#{criteria.policeId} 
+    </if>
+     <if test="criteria.createUserId !=null and criteria.createUserId !='' "  >
+        AND p.create_user =#{criteria.createUserId}  
+    </if>
+    
+	</select>
+	
+		
+	<select id="getStoragePersonPage" resultMap="personMap" >
+		SELECT
+			p.`name`,
+			p.other_card,
+			p.other_card_type,
+			p.phone,
+			p.idcard,
+			p.pid
+		FROM
+			tbl_key_person p,
+			tbl_task_person_rsp r
+		WHERE
+			p.isDel = 0
+		AND	(r.`status`=0 or r.`status`= 2 )
+		AND p.pid = r.person_id
+		
+	<if test="criteria.taskId !=null and criteria.taskId !='' "  >
+       AND r.task_id = #{criteria.taskId}
+    </if>
+    <if test="criteria.name !=null and criteria.name !='' "  >
+        AND p.name LIKE concat(concat('%',#{criteria.name}),'%')
+    </if>
+     <if test="criteria.certificatesNum !=null and criteria.certificatesNum !='' "  >
+        AND (
+        	 p.idcard LIKE concat(concat('%',#{criteria.certificatesNum}),'%') 
+        	 or
+        	 p.other_card LIKE concat(concat('%',#{criteria.certificatesNum}),'%')
+        	)
+    </if>
+    <if test="criteria.phone !=null and criteria.phone !='' "  >
+        AND p.phone LIKE concat(concat('%',#{criteria.phone}),'%') 
+    </if>
+     <if test="criteria.policeId !=null and criteria.policeId !='' "  >
+        AND p.busi_police =#{criteria.policeId} 
+    </if>
+     <if test="criteria.createUserId !=null and criteria.createUserId !='' "  >
+        AND p.create_user =#{criteria.createUserId}  
+    </if>
+    
+	</select>
+	
+		<select id="getRspPersonCountByGroupId" resultType="java.lang.Integer" >
+				SELECT
+					count(1)
+				FROM
+					tbl_key_person p,
+					tbl_task_person_rsp r
+				WHERE
+					r.person_id = p.pid
+				AND p.isdel = 0
+				AND p.group_id = #{groupId}
+				GROUP BY
+					p.pid
+	</select>
+	
+	
+	<select id="queryCountNumByTaskId" resultType="java.lang.Integer" >
+			SELECT
+				count(1)
+			FROM
+				tbl_task_person_rsp
+			where (status=0 OR status=1) 
+			AND task_id=#{taskId}
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+
