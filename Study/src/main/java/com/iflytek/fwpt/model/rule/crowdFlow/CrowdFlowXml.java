@@ -65,4 +65,12 @@ public class CrowdFlowXml implements Serializable {
     public void setAreaListXml(AreaListXml areaListXml) {
         this.areaListXml = areaListXml;
     }
+
+    public RulesXml getRulesXml() {
+        return rulesXml;
+    }
+
+    public void setRulesXml(RulesXml rulesXml) {
+        this.rulesXml = rulesXml;
+    }
 }

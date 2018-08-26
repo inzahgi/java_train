@@ -10,7 +10,14 @@ import com.iflytek.fwpt.model.rule.crowdFlow.AppinfoXml;
 import com.iflytek.fwpt.model.rule.crowdFlow.AppinfosXml;
 import com.iflytek.fwpt.model.rule.crowdFlow.CrowdFlowXml;
 
+import com.iflytek.fwpt.model.rule.crowdFlow.IncountwarningParamsXml;
+import com.iflytek.fwpt.model.rule.crowdFlow.RiskWarningParamsXml;
+import com.iflytek.fwpt.model.rule.crowdFlow.RuleXml;
+import com.iflytek.fwpt.model.rule.crowdFlow.RulesXml;
 import com.iflytek.fwpt.model.rule.crowdFlow.StationAreaForCrowdFlowXml;
+import com.iflytek.fwpt.model.rule.crowdFlow.TargetContractLostParamsXml;
+import com.iflytek.fwpt.model.rule.crowdFlow.TotalCountWarningParamsXml;
+import com.iflytek.fwpt.model.rule.crowdFlow.UpdateCycleXml;
 import com.iflytek.fwpt.utils.XmlUtils;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +33,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = MyBatisApplication.class)
+//@SpringBootTest(classes = MyBatisApplication.class)
 public class XmlTest {
 
 
@@ -89,6 +96,47 @@ public class XmlTest {
 
         areaListXml.setAreas(Arrays.asList(stationAreaXml));
         crowdFlowXml.setAreaListXml(areaListXml);
+
+        RulesXml rulesXml = new RulesXml();
+        //更新时间
+        RuleXml ruleOneXml = new RuleXml();
+        ruleOneXml.setName("targetcontactlost");
+        TargetContractLostParamsXml targetContractLostParamsXml = new TargetContractLostParamsXml();
+        UpdateCycleXml updateCycleXml = new UpdateCycleXml();
+        updateCycleXml.setMobile("7200");
+        updateCycleXml.setTelecom("3600");
+        updateCycleXml.setUnicom("3600");
+        targetContractLostParamsXml.setUpdateCycleXml(updateCycleXml);
+        ruleOneXml.setParams(targetContractLostParamsXml);
+        rulesXml.setTargetcontactlostXml(ruleOneXml);
+
+
+        //流入人数预警
+        RuleXml ruleTwoXml = new RuleXml();
+        ruleTwoXml.setName("incountwarning");
+        IncountwarningParamsXml incountwarningParamsXml = new IncountwarningParamsXml();
+        incountwarningParamsXml.setIncount("1000");
+        ruleTwoXml.setParams(incountwarningParamsXml);
+        rulesXml.setIncountwarningXml(ruleTwoXml);
+
+        //区域总人数
+        RuleXml ruleThreeXml = new RuleXml();
+        ruleThreeXml.setParams("totalcountwarning");
+        TotalCountWarningParamsXml totalCountWarningParamsXml = new TotalCountWarningParamsXml();
+        totalCountWarningParamsXml.setTotalcount("23000");
+        ruleThreeXml.setParams(totalCountWarningParamsXml);
+        rulesXml.setTotalcountwarningXml(ruleThreeXml);
+
+        //敏感归属地预警
+        RuleXml ruleFourXml = new RuleXml();
+        ruleFourXml.setName("riskwarning");
+        RiskWarningParamsXml riskWarningParamsXml = new RiskWarningParamsXml();
+        riskWarningParamsXml.setCount("50");
+        riskWarningParamsXml.setRiskCity("0986,0987,0988,0087");
+        ruleFourXml.setParams(riskWarningParamsXml);
+        rulesXml.setRiskwarningXml(ruleFourXml);
+
+        crowdFlowXml.setRulesXml(rulesXml);
 
         return crowdFlowXml;
     }

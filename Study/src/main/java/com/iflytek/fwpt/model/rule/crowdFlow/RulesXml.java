@@ -27,4 +27,35 @@ public class RulesXml {
     @XmlElement(name = "rule")
     private RuleXml riskwarningXml;
 
+    public RuleXml getTargetcontactlostXml() {
+        return targetcontactlostXml;
+    }
+
+    public void setTargetcontactlostXml(RuleXml targetcontactlostXml) {
+        this.targetcontactlostXml = targetcontactlostXml;
+    }
+
+    public RuleXml getIncountwarningXml() {
+        return incountwarningXml;
+    }
+
+    public void setIncountwarningXml(RuleXml incountwarningXml) {
+        this.incountwarningXml = incountwarningXml;
+    }
+
+    public RuleXml getTotalcountwarningXml() {
+        return totalcountwarningXml;
+    }
+
+    public void setTotalcountwarningXml(RuleXml totalcountwarningXml) {
+        this.totalcountwarningXml = totalcountwarningXml;
+    }
+
+    public RuleXml getRiskwarningXml() {
+        return riskwarningXml;
+    }
+
+    public void setRiskwarningXml(RuleXml riskwarningXml) {
+        this.riskwarningXml = riskwarningXml;
+    }
 }
