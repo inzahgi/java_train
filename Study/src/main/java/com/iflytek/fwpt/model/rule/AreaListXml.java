@@ -1,7 +1,7 @@
 package com.iflytek.fwpt.model.rule;
 
 
-import com.iflytek.fwpt.model.rule.crowdFlow.StationAreaForCrowdFlowXml;
+import com.iflytek.fwpt.model.rule.noTargetArea.StationAreaForCrowdFlowXml;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
