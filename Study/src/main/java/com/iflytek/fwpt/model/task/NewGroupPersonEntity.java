@@ -33,6 +33,18 @@ public class NewGroupPersonEntity {
      */
     private String status;
 
+    public NewGroupPersonEntity() {
+    }
+
+    private NewGroupPersonEntity(Builder builder) {
+        setId(builder.id);
+        setGid(builder.gid);
+        setPhone(builder.phone);
+        setIdcard(builder.idcard);
+        setCarNum(builder.carNum);
+        setStatus(builder.status);
+    }
+
     public interface STATUS{
         String STOP = "0";
         String USEING = "1";
@@ -85,5 +97,59 @@ public class NewGroupPersonEntity {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+
+    public static final class Builder {
+
+        private String id;
+        private String gid;
+        private String phone;
+        private String idcard;
+        private String carNum;
+        private String status;
+
+        public Builder() {
+        }
+
+        public Builder id(String val) {
+            id = val;
+            return this;
+        }
+
+        public Builder gid(String val) {
+            gid = val;
+            return this;
+        }
+
+        public Builder phone(String val) {
+            phone = val;
+            return this;
+        }
+
+        public Builder idcard(String val) {
+            idcard = val;
+            return this;
+        }
+
+        public Builder carNum(String val) {
+            carNum = val;
+            return this;
+        }
+
+        public Builder status(String val) {
+            status = val;
+            return this;
+        }
+
+        public NewGroupPersonEntity build() {
+            return new NewGroupPersonEntity(this);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "NewGroupPersonEntity{" + "id='" + id + '\'' + ", gid='" + gid + '\'' + ", phone='" + phone + '\''
+                + ", idcard='" + idcard + '\'' + ", carNum='" + carNum + '\'' + ", status='" + status + '\'' + '}';
     }
 }

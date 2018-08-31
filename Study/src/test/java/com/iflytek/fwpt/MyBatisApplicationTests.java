@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
@@ -20,6 +21,10 @@ public class MyBatisApplicationTests {
 
 	@Resource
 	private AreaMapper areaMapper;
+
+	@Autowired
+	private RedisTemplate redisTemplate;
+
 	@Test
 	public void contextLoads() {
 		System.out.println("\n\n\n");
@@ -28,5 +33,7 @@ public class MyBatisApplicationTests {
 			System.out.println(entity.toString());
 		}
 	}
+
+
 
 }
