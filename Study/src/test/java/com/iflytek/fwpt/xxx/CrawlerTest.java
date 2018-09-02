@@ -1,7 +1,11 @@
 package com.iflytek.fwpt.xxx;
 
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.iflytek.fwpt.utils.HttpClientsUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Lists;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Attributes;
@@ -13,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Map;
 
 public class CrawlerTest {
 
@@ -41,7 +46,10 @@ public class CrawlerTest {
                 List<Node> recList = ((Element) node).childNodes();
                 if (node instanceof Element){
                     List<Node> tempList = node.childNodes();
-                    int i = 0;
+                    int redIndex = 0;
+                    int blueIndex = 0;
+                    Map<String, List<String>> resMap = Maps.newHashMap();
+
                     for (Node recNode : tempList){
                         if(recNode instanceof Element){
                             if(((Element) recNode).hasClass("f_red") ||
@@ -49,18 +57,41 @@ public class CrawlerTest {
                                     ((Element) recNode).hasClass("ball_red") ||
                                     ((Element) recNode).hasClass("ball_blue")) {
 
+
                                 Attributes attributes = recNode.attributes();
                                 String text = ((Element) recNode).text();
-                                logger.info("{}----{}", attributes.dataset(), text);
+                                String className = ((Element) recNode).className();
+                                logger.info("{}----{}------{}", attributes.dataset(), className, text);
+
+
+                                addRes(resMap, text, className);
+
+//                                if(((Element) recNode).hasClass("f_red")){
+//                                    addRes(resMap, "f_red", text);
+//                                }
+
+
                             }
                         }
                     }
+                    logger.info("\n{}", resMap);
                 }
             }
 
         }
 
 
+    }
+
+
+    private static Map<String, List<String>> addRes(Map<String, List<String>> resMap, String text, String key){
+        if(resMap.containsKey(key)){
+            resMap.get(key).add(text);
+        }else {
+            List<String> list = Lists.newArrayList(text);
+            resMap.put(key, list);
+        }
+        return resMap;
     }
 
 }
