@@ -23,8 +23,9 @@ public class CrawlerTest {
 
     private static Logger logger = LoggerFactory.getLogger(CrawlerTest.class);
 
-    private static String CAIPI_163= "http://trend.caipiao.163.com/dlt/";
+    //private static String CAIPI_163= "http://trend.caipiao.163.com/dlt/";
 
+    private static String CAIPI_163 = "http://trend.caipiao.163.com/dlt/?periodNumber=100";
     public static void main(String[] args) {
         String htmlStr = HttpClientsUtil.get(CAIPI_163);
 //        System.out.println(htmlStr);
@@ -34,6 +35,8 @@ public class CrawlerTest {
         Element totalElement = doc.getElementById("cpdata");
         //System.out.println(ele.childNodeSize());
         List<Node> nodesList = totalElement.childNodes();
+        Map<String, Map<String, List<String>>> dataMap = Maps.newTreeMap();
+
 
         for(Node node : nodesList){
             if( node instanceof  TextNode){
@@ -41,30 +44,41 @@ public class CrawlerTest {
             }
             if( node instanceof Element) {
                 //System.out.println(node.toString());
-                System.out.println("\n\n\n");
+                //System.out.println("\n");
                 //break;
+
                 List<Node> recList = ((Element) node).childNodes();
                 if (node instanceof Element){
                     List<Node> tempList = node.childNodes();
                     int redIndex = 0;
                     int blueIndex = 0;
                     Map<String, List<String>> resMap = Maps.newHashMap();
-
+                    String phase = ((Element) node).attributes().get("data-period");
                     for (Node recNode : tempList){
                         if(recNode instanceof Element){
-                            if(((Element) recNode).hasClass("f_red") ||
-                                    ((Element) recNode).hasClass("f_blue") ||
-                                    ((Element) recNode).hasClass("ball_red") ||
-                                    ((Element) recNode).hasClass("ball_blue")) {
+
+
+//                            if(((Element) recNode).hasClass("f_red") ||
+//                                    ((Element) recNode).hasClass("f_blue") ||
+//                                    ((Element) recNode).hasClass("ball_red") ||
+//                                    ((Element) recNode).hasClass("ball_blue")) {
+                                if(recNode.hasAttr("data-omit")){
+
 
 
                                 Attributes attributes = recNode.attributes();
                                 String text = ((Element) recNode).text();
                                 String className = ((Element) recNode).className();
-                                logger.info("{}----{}------{}", attributes.dataset(), className, text);
+                                //logger.info("{}----{}------
+                                // {}", attributes.dataset(), className, text);
 
 
-                                addRes(resMap, text, className);
+                                //addRes(resMap, text, className);
+                                if(attributes.get("data-omit").equals("0")){
+                                    addRes(resMap, text, className);
+                                }else if(attributes.get("data-omit").equals("-1")){
+                                    addRes(resMap, text, "ball_red");
+                                }
 
 //                                if(((Element) recNode).hasClass("f_red")){
 //                                    addRes(resMap, "f_red", text);
@@ -74,10 +88,15 @@ public class CrawlerTest {
                             }
                         }
                     }
-                    logger.info("\n{}", resMap);
+                    //logger.info("\n{}", resMap);
+                    dataMap.put(phase, resMap);
                 }
             }
 
+        }
+        for (Map.Entry<String, Map<String, List<String>>> entry : dataMap.entrySet()){
+            String key = entry.getKey();
+            logger.info("{}---------{}", key, entry.getValue());
         }
 
 
