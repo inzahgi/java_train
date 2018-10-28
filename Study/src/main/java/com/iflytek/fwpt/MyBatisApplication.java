@@ -15,7 +15,8 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
-//@ComponentScan("com.iflytek.fwpt.*")
+//@ComponentScan("com.iflytek.fwpt")
+@ComponentScan
 public class MyBatisApplication {
 
 //	@Bean

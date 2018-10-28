@@ -55,11 +55,11 @@
 		</dependency>
 
 
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>26.0-jre</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.google.guava</groupId>-->
+			<!--<artifactId>guava</artifactId>-->
+			<!--<version>26.0-jre</version>-->
+		<!--</dependency>-->
 
 
 		<dependency>
@@ -90,6 +90,18 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.8</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.spring4all</groupId>
+			<artifactId>spring-boot-starter-hbase</artifactId>
+			<version>1.0.0.RELEASE</version>
+			<!--<exclusions>-->
+				<!--<exclusion>-->
+					<!--<groupId>com.google.guava</groupId>-->
+					<!--<artifactId>guava</artifactId>-->
+				<!--</exclusion>-->
+			<!--</exclusions>-->
 		</dependency>
 
 
