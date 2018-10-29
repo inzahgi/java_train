@@ -9,7 +9,7 @@ spring:
     password: Iflytek@123
   data:
     hbase:
-      quorum: 172.16.16.169:2181
+      quorum: 172.16.16.183:2181
       rootDir:  file:///iflytek/software/hbase/data
       nodeParent: /hbase
 
