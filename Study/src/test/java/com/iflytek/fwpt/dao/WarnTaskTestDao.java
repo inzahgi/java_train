@@ -1,7 +1,7 @@
 package com.iflytek.fwpt.dao;
 
 
-import com.iflytek.fwpt.MyBatisApplication;
+import com.iflytek.fwpt.Application;
 import com.iflytek.fwpt.mapper.task.WarnTaskMapper;
 import com.iflytek.fwpt.model.task.WarnTaskEntity;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = MyBatisApplication.class)
+@SpringBootTest(classes = Application.class)
 public class WarnTaskTestDao {
 
     @Resource

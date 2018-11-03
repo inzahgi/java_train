@@ -1,10 +1,10 @@
 package com.iflytek.fwpt;
 
-import com.github.pagehelper.PageHelper;
 import com.iflytek.fwpt.event.CustomizePublisher;
 import com.iflytek.fwpt.event.MealEnum;
 import com.iflytek.fwpt.event.MealEvent;
 import com.iflytek.fwpt.event.TroubleEvent;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -15,8 +15,8 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
-//@ComponentScan("com.iflytek.fwpt")
-@ComponentScan
+@ComponentScan("com.iflytek.fwpt")
+@MapperScan(basePackages ="com.iflytek.fwpt.mapper" )
 public class MyBatisApplication {
 
 //	@Bean
