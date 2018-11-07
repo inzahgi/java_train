@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.fwpt.mapper.dqjc.CreditScoreMapper">
+  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.dqjc.CreditScore">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="idCard" jdbcType="VARCHAR" property="idCard" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="level" jdbcType="TINYINT" property="level" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="createTime" jdbcType="DATE" property="createtime" />
+  </resultMap>
+
+  <resultMap id="extendsResultMap" type="com.iflytek.fwpt.model.dqjc.CreditPerson" extends="BaseResultMap">
+    <result column="name" jdbcType="VARCHAR"  property="pName"/>
+    <result column="areaId" jdbcType="VARCHAR"  property="areaId"/>
+    <result column="areaName" jdbcType="VARCHAR"  property="areaName"/>
+    <result column="subStationId" jdbcType="VARCHAR" property="policeSubStationId" />
+    <result column="subStationName" jdbcType="VARCHAR" property="policeSubStationName" />
+    <result column="isGy" jdbcType="INTEGER" property="isGy" />
+    <result column="isYx" jdbcType="INTEGER" property="isYx" />
+
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, idCard, phone, `level`, score, `status`, createTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_credit_score
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_credit_score
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.iflytek.fwpt.model.dqjc.CreditScore" useGeneratedKeys="true">
+    insert into t_credit_score (idCard, phone, `level`,
+      score, `status`, createTime
+      )
+    values (#{idCard,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{level,jdbcType=TINYINT}, 
+      #{score,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.dqjc.CreditScore">
+    update t_credit_score
+    <set>
+      <if test="idCard != null">
+        idCard = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        `level` = #{level,jdbcType=TINYINT},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.dqjc.CreditScore">
+    update t_credit_score
+    set idCard = #{idCard,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      `level` = #{level,jdbcType=TINYINT},
+      score = #{score,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=TINYINT},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getTotal" parameterType="com.iflytek.fwpt.model.dqjc.CreditPerson"
+          resultType="java.lang.Integer">
+    select count(1)
+    from t_credit_score cs
+    join t_phone_info pi
+      on cs.idCard = pi.idCard
+    <where>
+      <if test="level != null">
+        cs.`level` = #{level,jdbcType=TINYINT}
+      </if>
+      <if test="score != null">
+        and cs.score = #{score,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and cs.`status` = #{status,jdbcType=TINYINT}
+      </if>
+    </where>
+  </select>
+
+  <select id="getList" parameterType="com.iflytek.fwpt.model.dqjc.CreditPerson" resultMap="extendsResultMap">
+    select
+      cs.id, cs.idCard, cs.phone, cs.`level`, cs.score, cs.`status`, cs.createTime,
+    pi.pName, pi.areaName, pi.areaId, pi.subStationName, pi.subStationId, pi.isGy, pi.isYx
+    from t_credit_score cs
+    join t_phone_info pi
+    on cs.idCard = pi.idCard
+    <where>
+      <if test="level != null">
+        cs.`level` = #{level,jdbcType=TINYINT}
+      </if>
+      <if test="score != null">
+        and cs.score = #{score,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and cs.`status` = #{status,jdbcType=TINYINT}
+      </if>
+    </where>
+
+
+
+  </select>
+
+
+  <insert id="batchInsert" >
+    insert into t_credit_score (idCard, phone, `level`,
+    score, `status`, createTime
+    )
+    values
+    <foreach collection="list" index="index" item="item"
+             separator=",">
+      (
+      #{item.idCard,jdbcType=VARCHAR},
+      #{item.phone,jdbcType=VARCHAR},
+      #{item.level,jdbcType=TINYINT},
+      #{item.score,jdbcType=INTEGER},
+      #{item.status,jdbcType=TINYINT},
+      #{item.createtime,jdbcType=TIMESTAMP}
+      )
+    </foreach>
+
+
+  </insert>
+
+</mapper>

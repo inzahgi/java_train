@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.fwpt.mapper.dqjc.CreditDailyTmpMapper">
+  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.dqjc.CreditDailyTmp">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="idCard" jdbcType="VARCHAR" property="idCard" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="actionTime" jdbcType="DATE" property="actiontime" />
+    <result column="createTime" jdbcType="DATE" property="createtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, idCard, content, actionTime, createTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_credit_daily_tmp
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_credit_daily_tmp
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.iflytek.fwpt.model.dqjc.CreditDailyTmp" useGeneratedKeys="true">
+    insert into t_credit_daily_tmp (idCard, content, actionTime,
+      createTime)
+    values (#{idCard,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{actiontime,jdbcType=TIMESTAMP},
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.dqjc.CreditDailyTmp">
+    update t_credit_daily_tmp
+    <set>
+      <if test="idCard != null">
+        idCard = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="actiontime != null">
+        actionTime = #{actiontime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.dqjc.CreditDailyTmp">
+    update t_credit_daily_tmp
+    set idCard = #{idCard,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      actionTime = #{actiontime,jdbcType=TIMESTAMP},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getTotal" resultType="java.lang.Integer">
+    select count(*)
+    from t_credit_daily_tmp
+  </select>
+
+  <select id="getList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_credit_daily_tmp
+  </select>
+
+  <delete id="batchDelete">
+    delete from t_credit_daily_tmp
+    where id in
+    <foreach collection="list" index="index" item="item" open="("
+             separator="," close=")">
+      #{item,jdbcType=INTEGER}
+    </foreach>
+  </delete>
+
+  <insert id="batchInsert" >
+    insert into t_credit_daily_tmp (idCard, content, actionTime,
+    createTime)
+    values
+    <foreach collection="list" index="index" item="item"
+             separator=",">
+      (
+      #{item.idCard,jdbcType=VARCHAR},
+      #{item.content,jdbcType=VARCHAR},
+      #{item.actiontime,jdbcType=TIMESTAMP},
+      #{item.createtime,jdbcType=TIMESTAMP}
+      )
+    </foreach>
+  </insert>
+</mapper>

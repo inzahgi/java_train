@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.fwpt.mapper.dqjc.SyncDwMapper">
+
+	<select id="getSyncDw" resultType="com.iflytek.fwpt.vo.SyncDwVO">
+		select * from jz_sync_dw where lacCode = #{lac} and ciCode = #{ci}
+	</select>
+	
+	<select id="getSyncDwByArea" resultType="com.iflytek.fwpt.vo.SyncDwVO">
+		select distinct ciAddress addressName, ciLat lat, ciLng lng, cityName area 
+		from jz_sync_dw
+		where cityName = #{area} 
+		<if test="address != null and address != '' and address != '重庆市'">
+			and ciAddress like CONCAT('%',#{address},'%')
+		</if>
+	</select>
+
+	<select id="getList" resultType="com.iflytek.fwpt.vo.SyncDwVO">
+		select * from jz_sync_dw;
+	</select>
+
+</mapper>

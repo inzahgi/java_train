@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.dqjc.fwpt.mapper.dqjc.CreditStatisticsMapper">
+  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.dqjc.CreditStatistics">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="policeSubStationName" jdbcType="VARCHAR" property="policeSubStationName" />
+    <result column="areaName" jdbcType="VARCHAR" property="areaName" />
+    <result column="noImprisonCnt" jdbcType="INTEGER" property="noimprisoncnt" />
+    <result column="recessiveCnt" jdbcType="INTEGER" property="recessivecnt" />
+    <result column="highestCnt" jdbcType="INTEGER" property="highestcnt" />
+    <result column="higherCnt" jdbcType="INTEGER" property="highercnt" />
+    <result column="highCnt" jdbcType="INTEGER" property="highcnt" />
+    <result column="midCnt" jdbcType="INTEGER" property="midcnt" />
+    <result column="lowCnt" jdbcType="INTEGER" property="lowcnt" />
+    <result column="warnCnt" jdbcType="INTEGER" property="warncnt" />
+    <result column="handleCnt" jdbcType="INTEGER" property="handlecnt" />
+    <result column="pushCnt" jdbcType="INTEGER" property="pushcnt" />
+    <result column="feedbackCnt" jdbcType="INTEGER" property="feedbackcnt" />
+    <result column="createTime" jdbcType="DATE" property="createtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, policeSubStationName, areaName, noImprisonCnt, recessiveCnt, highestCnt, higherCnt,
+    highCnt, midCnt, lowCnt, warnCnt, handleCnt, pushCnt, feedbackCnt, createTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_credit_statistics
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_credit_statistics
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.iflytek.fwpt.model.dqjc.CreditStatistics" useGeneratedKeys="true">
+    insert into t_credit_statistics (policeSubStationName, areaName, noImprisonCnt,
+      recessiveCnt, highestCnt, higherCnt, 
+      highCnt, midCnt, lowCnt, 
+      warnCnt, handleCnt, pushCnt, 
+      feedbackCnt, createTime
+      )
+    values (#{policeSubStationName,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, #{noimprisoncnt,jdbcType=INTEGER},
+      #{recessivecnt,jdbcType=INTEGER}, #{highestcnt,jdbcType=INTEGER}, #{highercnt,jdbcType=INTEGER}, 
+      #{highcnt,jdbcType=INTEGER}, #{midcnt,jdbcType=INTEGER}, #{lowcnt,jdbcType=INTEGER}, 
+      #{warncnt,jdbcType=INTEGER}, #{handlecnt,jdbcType=INTEGER}, #{pushcnt,jdbcType=INTEGER}, 
+      #{feedbackcnt,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.dqjc.CreditStatistics">
+    update t_credit_statistics
+    <set>
+      <if test="policeSubStationName != null">
+        policeSubStationName = #{policeSubStationName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null">
+        areaName = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="noimprisoncnt != null">
+        noImprisonCnt = #{noimprisoncnt,jdbcType=INTEGER},
+      </if>
+      <if test="recessivecnt != null">
+        recessiveCnt = #{recessivecnt,jdbcType=INTEGER},
+      </if>
+      <if test="highestcnt != null">
+        highestCnt = #{highestcnt,jdbcType=INTEGER},
+      </if>
+      <if test="highercnt != null">
+        higherCnt = #{highercnt,jdbcType=INTEGER},
+      </if>
+      <if test="highcnt != null">
+        highCnt = #{highcnt,jdbcType=INTEGER},
+      </if>
+      <if test="midcnt != null">
+        midCnt = #{midcnt,jdbcType=INTEGER},
+      </if>
+      <if test="lowcnt != null">
+        lowCnt = #{lowcnt,jdbcType=INTEGER},
+      </if>
+      <if test="warncnt != null">
+        warnCnt = #{warncnt,jdbcType=INTEGER},
+      </if>
+      <if test="handlecnt != null">
+        handleCnt = #{handlecnt,jdbcType=INTEGER},
+      </if>
+      <if test="pushcnt != null">
+        pushCnt = #{pushcnt,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackcnt != null">
+        feedbackCnt = #{feedbackcnt,jdbcType=INTEGER},
+      </if>
+
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.dqjc.CreditStatistics">
+    update t_credit_statistics
+    set policeSubStationName = #{policeSubStationName,jdbcType=VARCHAR},
+      areaName = #{areaName,jdbcType=VARCHAR},
+      noImprisonCnt = #{noimprisoncnt,jdbcType=INTEGER},
+      recessiveCnt = #{recessivecnt,jdbcType=INTEGER},
+      highestCnt = #{highestcnt,jdbcType=INTEGER},
+      higherCnt = #{highercnt,jdbcType=INTEGER},
+      highCnt = #{highcnt,jdbcType=INTEGER},
+      midCnt = #{midcnt,jdbcType=INTEGER},
+      lowCnt = #{lowcnt,jdbcType=INTEGER},
+      warnCnt = #{warncnt,jdbcType=INTEGER},
+      handleCnt = #{handlecnt,jdbcType=INTEGER},
+      pushCnt = #{pushcnt,jdbcType=INTEGER},
+      feedbackCnt = #{feedbackcnt,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getList" parameterType="com.iflytek.fwpt.model.dqjc.CreditStatistics" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_credit_statistics
+    <where>
+      <if test="policeSubStationName != null and policeSubStationName != ''">
+        policeSubStationName = #{policeSubStationName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null and areaName != ''">
+        areaName = #{areaName,jdbcType=VARCHAR},
+      </if>
+    </where>
+    <if test="queryOrder != null and queryOrder != ''">
+      order by ${queryOrder}
+    </if>
+  </select>
+
+  <insert id="insertBatch" keyColumn="id" keyProperty="id" parameterType="com.iflytek.fwpt.model.dqjc.CreditStatistics" useGeneratedKeys="true">
+    insert into t_credit_statistics (policeSubStationName, areaName, noImprisonCnt,
+    recessiveCnt, highestCnt, higherCnt,
+    highCnt, midCnt, lowCnt,
+    warnCnt, handleCnt, pushCnt,
+    feedbackCnt, createTime
+    )
+    values
+    <foreach collection ="list" item="item" index= "index" separator =",">
+      (
+        #{item.policeSubStationName,jdbcType=VARCHAR},
+        #{item.areaName,jdbcType=VARCHAR},
+        #{item.noimprisoncnt,jdbcType=INTEGER},
+        #{item.recessivecnt,jdbcType=INTEGER},
+        #{item.highestcnt,jdbcType=INTEGER},
+        #{item.highercnt,jdbcType=INTEGER},
+        #{item.highcnt,jdbcType=INTEGER},
+        #{item.midcnt,jdbcType=INTEGER},
+        #{item.lowcnt,jdbcType=INTEGER},
+        #{item.warncnt,jdbcType=INTEGER},
+        #{item.handlecnt,jdbcType=INTEGER},
+        #{item.pushcnt,jdbcType=INTEGER},
+        #{item.feedbackcnt,jdbcType=INTEGER},
+        #{item.createtime,jdbcType=TIMESTAMP}
+      )
+    </foreach >
+  </insert>
+
+  <delete id="deleteAll">
+    delete from t_credit_statistics
+  </delete>
+
+</mapper>

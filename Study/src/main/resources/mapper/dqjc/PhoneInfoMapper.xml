@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.fwpt.mapper.dqjc.PhoneInfoMapper">
+  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.dqjc.PhoneInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="pName" jdbcType="VARCHAR" property="pname" />
+    <result column="idCard" jdbcType="VARCHAR" property="idcard" />
+    <result column="sex" jdbcType="INTEGER" property="sdrole" />
+    <result column="sdRole" jdbcType="VARCHAR" property="sdrole" />
+    <result column="sdStatus" jdbcType="VARCHAR" property="sdstatus" />
+    <result column="areaCode" jdbcType="VARCHAR" property="areaCode" />
+    <result column="areaName" jdbcType="VARCHAR" property="areaname" />
+    <result column="subStationId" jdbcType="VARCHAR" property="substationid" />
+    <result column="subStationName" jdbcType="VARCHAR" property="substationname" />
+    <result column="isZk" jdbcType="INTEGER" property="iszk" />
+    <result column="isGy" jdbcType="INTEGER" property="isgy" />
+    <result column="isYx" jdbcType="INTEGER" property="isyx" />
+    <result column="upTime" jdbcType="DATE" property="uptime" />
+  </resultMap>
+
+
+
+  <sql id="Base_Column_List">
+    id, phone, pName, idCard, sex, sdRole, sdStatus, areaCode, areaName, subStationId, subStationName,
+    isZk, isGy, isYx, upTime
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_phone_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_phone_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.iflytek.fwpt.model.dqjc.PhoneInfo" >
+    insert into t_phone_info (id, phone, pName, idCard, sex,
+      sdRole, sdStatus, areaCode, 
+      areaName, subStationId, subStationName, 
+      isZk, isGy, isYx, upTime
+      )
+    values (#{id,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{pname,jdbcType=VARCHAR},
+     #{idcard,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{sdrole,jdbcType=VARCHAR}, #{sdstatus,jdbcType=VARCHAR},
+     #{areaCode,jdbcType=VARCHAR}, #{areaname,jdbcType=VARCHAR}, #{substationid,jdbcType=VARCHAR},
+     #{substationname,jdbcType=VARCHAR}, #{iszk,jdbcType=BIT}, #{isgy,jdbcType=BIT}, #{isyx,jdbcType=BIT},
+      #{uptime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.dqjc.PhoneInfo">
+    update t_phone_info
+    set phone = #{phone,jdbcType=VARCHAR},
+      pName = #{pname,jdbcType=VARCHAR},
+      idCard = #{idcard,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      sdRole = #{sdrole,jdbcType=VARCHAR},
+      sdStatus = #{sdstatus,jdbcType=VARCHAR},
+      areaCode = #{areaCode,jdbcType=VARCHAR},
+      areaName = #{areaname,jdbcType=VARCHAR},
+      subStationId = #{substationid,jdbcType=VARCHAR},
+      subStationName = #{substationname,jdbcType=VARCHAR},
+      isZk = #{iszk,jdbcType=BIT},
+      isGy = #{isgy,jdbcType=BIT},
+      isYx = #{isyx,jdbcType=BIT},
+      upTime = #{uptime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="getList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_phone_info
+  </select>
+
+  <insert id="batchInsert"  >
+    insert into t_phone_info (id, phone, pName, idCard, sex,
+    sdRole, sdStatus, areaCode,
+    areaName, subStationId, subStationName,
+    isZk, isGy, isYx, upTime
+    )
+    values
+    <foreach collection="list" index="index" item="item"
+             separator=",">
+      (
+      #{item.id,jdbcType=VARCHAR},
+      #{item.phone,jdbcType=VARCHAR},
+      #{item.pname,jdbcType=VARCHAR},
+      #{item.idcard,jdbcType=VARCHAR},
+      #{item.sex,jdbcType=VARCHAR},
+      #{item.sdrole,jdbcType=VARCHAR},
+      #{item.sdstatus,jdbcType=VARCHAR},
+      #{item.areaCode,jdbcType=VARCHAR},
+      #{item.areaname,jdbcType=VARCHAR},
+      #{item.substationid,jdbcType=VARCHAR},
+      #{item.substationname,jdbcType=VARCHAR},
+      #{item.iszk,jdbcType=INTEGER},
+      #{item.isgy,jdbcType=INTEGER},
+      #{item.isyx,jdbcType=INTEGER},
+      #{item.uptime,jdbcType=TIMESTAMP}
+      )
+    </foreach>
+
+
+
+
+  </insert>
+</mapper>
