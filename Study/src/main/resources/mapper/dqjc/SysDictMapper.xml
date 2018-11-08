@@ -6,4 +6,12 @@
 		select * from t_sys_dict where dictTypeCode = #{dictTypeCode} order by sort
 	</select>
 
+	<update id="updateAreaCode" parameterType="com.iflytek.fwpt.vo.SysDictVO">
+		update t_sys_dict
+		SET dictCode = #{dictCode}
+		WHERE dictTypeCode = 'areaName'
+		AND dictName = #{dictName}
+
+	</update>
+
 </mapper>

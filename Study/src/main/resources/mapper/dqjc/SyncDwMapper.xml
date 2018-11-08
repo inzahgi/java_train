@@ -19,4 +19,19 @@
 		select * from jz_sync_dw;
 	</select>
 
+	<insert id="insert" parameterType="com.iflytek.fwpt.vo.SyncDwVO">
+		insert into jz_sync_dw (id, cityCode, cityName, areaCode,
+		areaName, lacCode, lacName,
+		ciCode, ciName, ciLat,
+		ciLng, ciAddress, createDate
+		)
+		values (#{id,jdbcType=VARCHAR}, #{cityCode,jdbcType=VARCHAR},
+		#{cityName,jdbcType=VARCHAR}, #{areaCode,jdbcType=VARCHAR},
+		#{areaName,jdbcType=VARCHAR}, #{lacCode,jdbcType=VARCHAR},
+		#{lacName,jdbcType=VARCHAR},#{ciCode,jdbcType=VARCHAR},
+		#{ciName,jdbcType=VARCHAR}, #{ciLat,jdbcType=VARCHAR},
+		#{ciLng,jdbcType=VARCHAR}, #{ciAddress,jdbcType=VARCHAR},
+		#{createDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
 </mapper>

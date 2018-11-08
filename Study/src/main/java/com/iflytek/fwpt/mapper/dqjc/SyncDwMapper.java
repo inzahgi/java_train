@@ -45,4 +45,6 @@ public interface SyncDwMapper {
     List<AddressVO> getSyncDwByArea(@Param(value = "area") String area, @Param(value = "address") String address);
 
     List<SyncDwVO> getList();
+
+    int insert(SyncDwVO vo);
 }

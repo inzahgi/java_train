@@ -5,18 +5,24 @@ import Guava.common.base.Strings;
 import Guava.common.collect.Sets;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.iflytek.fwpt.Application;
 import com.iflytek.fwpt.mapper.dqjc.CreditDailyTmpMapper;
 import com.iflytek.fwpt.mapper.dqjc.CreditScoreMapper;
+import com.iflytek.fwpt.mapper.dqjc.PoliceSubstationInfoMapper;
 import com.iflytek.fwpt.mapper.dqjc.SyncDwMapper;
+import com.iflytek.fwpt.mapper.dqjc.SysDictMapper;
 import com.iflytek.fwpt.model.dqjc.CreditDailyTmp;
 import com.iflytek.fwpt.model.dqjc.CreditScore;
 import com.iflytek.fwpt.model.dqjc.DW;
 import com.iflytek.fwpt.model.dqjc.PhoneInfo;
 import com.iflytek.fwpt.mapper.dqjc.PhoneInfoMapper;
+import com.iflytek.fwpt.model.dqjc.PoliceSubstationInfo;
+import com.iflytek.fwpt.model.sys.SysDict;
 import com.iflytek.fwpt.utils.ChineseNameUtil;
 import com.iflytek.fwpt.utils.CreateIdcardUtil;
 import com.iflytek.fwpt.vo.SyncDwVO;
+import com.iflytek.fwpt.vo.SysDictVO;
 import com.spring4all.spring.boot.starter.hbase.api.HbaseTemplate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +36,7 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -49,7 +56,11 @@ public class ProduceData {
     private CreditDailyTmpMapper dailyTmpMapper;
     @Resource
     private SyncDwMapper dwMapper;
+    @Resource
+    private PoliceSubstationInfoMapper policeSubstationInfoMapper;
 
+    @Resource
+    private SysDictMapper sysDictMapper;
 
     private Random random = new Random();
 
@@ -220,6 +231,27 @@ public class ProduceData {
     }
 
 
+
+    @Test
+    public void updatePersonPCs(){
+        List<PhoneInfo> list = phoneInfoMapper.getList();
+        List<PoliceSubstationInfo> stationList = policeSubstationInfoMapper.getAll();
+        List<SysDictVO> dictList = sysDictMapper.getSysDict("areaName");
+        Map<String, String> dictMap = Maps.newHashMap();
+        for (SysDictVO vo : dictList){
+            dictMap.put(vo.getDictCode(), vo.getDictName());
+        }
+
+        for (PhoneInfo pi : list){
+            PoliceSubstationInfo substation = stationList.get(random.nextInt(stationList.size()));
+            String areaName = dictMap.get(substation.getAreacode());
+            pi.setAreaCode(substation.getAreacode());
+            pi.setAreaname(areaName);
+            pi.setSubstationid(substation.getPcscode());
+            pi.setSubstationname(substation.getPcsname());
+            phoneInfoMapper.updateByPrimaryKey(pi);
+        }
+    }
 
 
 }

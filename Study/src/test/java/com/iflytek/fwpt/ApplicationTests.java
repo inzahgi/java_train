@@ -37,6 +37,11 @@ public class ApplicationTests {
 		}
 	}
 
+	@Test
+	public void redisTest(){
+		System.out.println(redisTemplate.getClientList());
+	}
+
 
 
 }

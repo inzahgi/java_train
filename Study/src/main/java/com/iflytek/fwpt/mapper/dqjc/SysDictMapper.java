@@ -21,4 +21,6 @@ import java.util.List;
 public interface SysDictMapper {
 
     List<SysDictVO> getSysDict(String dictTypeCode);
+
+    int updateAreaCode(SysDictVO vo);
 }
