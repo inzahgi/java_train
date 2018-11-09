@@ -220,8 +220,8 @@ public class ProduceData {
         dw.setLat(Double.valueOf(sdv.getCiLat()));
         dw.setLac(sdv.getLacCode());
         dw.setCi(sdv.getCiCode());
-        dw.setArea(sdv.getCityName());
-        dw.setAreaId(dw.getArea().equals("渝中区")? "1" : "4");
+        dw.setArea(sdv.getAreaName());
+        dw.setAreaId(sdv.getAreaCode());
         return dw;
     }
 
