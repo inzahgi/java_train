@@ -1,8 +1,8 @@
 package com.iflytek.fwpt.hbase;
 
+import com.github.inzahgi.spring.boot.starter.hbase.api.HbaseTemplate;
 import com.google.common.collect.Lists;
 import com.iflytek.fwpt.Application;
-import com.spring4all.spring.boot.starter.hbase.api.HbaseTemplate;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.Delete;
@@ -93,9 +93,5 @@ public class hbaseTest {
 
     }
 
-    @Test
-    public void testQuery(){
-
-    }
 
 }

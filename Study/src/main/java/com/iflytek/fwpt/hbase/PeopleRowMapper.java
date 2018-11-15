@@ -1,6 +1,6 @@
 package com.iflytek.fwpt.hbase;
 
-import com.spring4all.spring.boot.starter.hbase.api.RowMapper;
+import com.github.inzahgi.spring.boot.starter.hbase.api.RowMapper;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
 

@@ -117,13 +117,10 @@
 		<!--</dependency>-->
 
 		<dependency>
-			<groupId>com.spring4all</groupId>
+			<groupId>com.github.inzahgi</groupId>
 			<artifactId>spring-boot-starter-hbase</artifactId>
 			<version>1.0.0.RELEASE</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/lib/spring-boot-starter-hbase-1.0.0.RELEASE.jar</systemPath>
 		</dependency>
-
 
 
 		<dependency>

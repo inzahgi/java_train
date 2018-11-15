@@ -1,6 +1,6 @@
 package com.iflytek.fwpt.hbase;
 
-import com.spring4all.spring.boot.starter.hbase.api.HbaseTemplate;
+import com.github.inzahgi.spring.boot.starter.hbase.api.HbaseTemplate;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Mutation;

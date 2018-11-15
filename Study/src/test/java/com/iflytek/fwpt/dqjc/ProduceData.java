@@ -1,11 +1,13 @@
 package com.iflytek.fwpt.dqjc;
 
 
-import Guava.common.base.Strings;
-import Guava.common.collect.Sets;
+
 import com.alibaba.fastjson.JSON;
+import com.github.inzahgi.spring.boot.starter.hbase.api.HbaseTemplate;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.iflytek.fwpt.Application;
 import com.iflytek.fwpt.mapper.dqjc.CreditDailyTmpMapper;
 import com.iflytek.fwpt.mapper.dqjc.CreditScoreMapper;
@@ -23,7 +25,6 @@ import com.iflytek.fwpt.utils.ChineseNameUtil;
 import com.iflytek.fwpt.utils.CreateIdcardUtil;
 import com.iflytek.fwpt.vo.SyncDwVO;
 import com.iflytek.fwpt.vo.SysDictVO;
-import com.spring4all.spring.boot.starter.hbase.api.HbaseTemplate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,12 +137,13 @@ public class ProduceData {
         List<PhoneInfo> phoneList = phoneInfoMapper.getList();
         List<CreditDailyTmp> list = Lists.newArrayList();
         for (PhoneInfo pi : phoneList) {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 10; i++) {
                 CreditDailyTmp cdt = new CreditDailyTmp();
                 cdt.setIdCard(pi.getIdcard());
                 cdt.setCreatetime(curDate);
                 cdt.setContent(getActionContent());
-                cdt.setActiontime(new Date(curDate.getTime() - (long)random.nextInt(10000000)*1000));
+                //cdt.setActiontime(new Date(curDate.getTime() - (long)random.nextInt(10000000)*1000));
+                cdt.setActiontime(new Date(curDate.getTime() - (long)(random.nextInt(3)+2)*86400*1000));
                 //dailyTmpMapper.insert(cdt);
                 list.add(cdt);
             }
