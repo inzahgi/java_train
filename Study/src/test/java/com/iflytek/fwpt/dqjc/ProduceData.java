@@ -73,9 +73,12 @@ public class ProduceData {
 
     @Test
     public void insertPhoneInfo(){
+        //List<SysDictVO> dictVOList = sysDictMapper.getSysDict("areaName");
+        List<PoliceSubstationInfo> pcStationList = policeSubstationInfoMapper.getAll();
+
         Set<String> filterSet = Sets.newHashSet();
         List<PhoneInfo> phoneInfoList = Lists.newArrayList();
-        for (int i = 1; i <= 10000; i++) {
+        for (int i = 1; i <= 500000; i++) {
             PhoneInfo pi = new PhoneInfo();
             pi.setId(String.valueOf(i));
             pi.setPhone(getPhone(filterSet));
@@ -84,23 +87,26 @@ public class ProduceData {
             pi.setSex(random.nextInt(2));
             pi.setSdrole("111000");
             pi.setSdstatus("000111");
-            pi.setAreaCode(random.nextInt(2) == 1 ? "4":"1");
-            if(pi.getAreaCode().equals("4")){
-                pi.setAreaname("沙坪坝区");
-                pi.setSubstationid("5001060002");
-                pi.setSubstationname("沙坪坝派出所");
-            }else if(pi.getAreaCode().equals("1")){
-                pi.setAreaname("渝中区");
-                pi.setSubstationid("5001030017");
-                pi.setSubstationname("朝天门派出所");
-            }
+            PoliceSubstationInfo pcStaionInfo = pcStationList.get(random.nextInt(pcStationList.size()));
+            pi.setAreaCode(pcStaionInfo.getAreacode());
+            pi.setAreaname(null);
+            pi.setSubstationname(pcStaionInfo.getPcsname());
+            pi.setSubstationid(pcStaionInfo.getPcscode());
 
             pi.setIsgy(random.nextInt(2));
             pi.setIsyx(random.nextInt(2));
             pi.setIszk(random.nextInt(2));
 
-            phoneInfoMapper.insert(pi);
-            //phoneInfoMapper.getList();
+            //phoneInfoMapper.insert(pi);
+            phoneInfoList.add(pi);
+            if(phoneInfoList.size() >= 1000){
+                phoneInfoMapper.batchInsert(phoneInfoList);
+                phoneInfoList.clear();
+            }
+        }
+        if(phoneInfoList.size() > 0){
+            phoneInfoMapper.batchInsert(phoneInfoList);
+            phoneInfoList.clear();
         }
 
     }

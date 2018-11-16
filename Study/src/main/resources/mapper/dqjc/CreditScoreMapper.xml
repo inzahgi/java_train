@@ -123,7 +123,7 @@
 
 
   <insert id="batchInsert" >
-    insert into t_credit_score (idCard, phone, `level`,
+    insert into t_credit_score_backup (idCard, phone, `level`,
     score, `status`, createTime
     )
     values

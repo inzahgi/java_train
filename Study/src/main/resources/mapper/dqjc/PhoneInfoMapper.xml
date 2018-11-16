@@ -76,7 +76,7 @@
   </select>
 
   <insert id="batchInsert"  >
-    insert into t_phone_info (id, phone, pName, idCard, sex,
+    insert into t_phone_info_backup (id, phone, pName, idCard, sex,
     sdRole, sdStatus, areaCode,
     areaName, subStationId, subStationName,
     isZk, isGy, isYx, upTime
