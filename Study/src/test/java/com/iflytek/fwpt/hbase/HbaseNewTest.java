@@ -15,16 +15,24 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.coprocessor.AggregationClient;
+import org.apache.hadoop.hbase.client.coprocessor.LongColumnInterpreter;
 import org.apache.hadoop.hbase.filter.BinaryComparator;
 import org.apache.hadoop.hbase.filter.BinaryPrefixComparator;
 import org.apache.hadoop.hbase.filter.BitComparator;
+import org.apache.hadoop.hbase.filter.ColumnCountGetFilter;
+import org.apache.hadoop.hbase.filter.ColumnPrefixFilter;
 import org.apache.hadoop.hbase.filter.ColumnRangeFilter;
 import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.Filter;
+import org.apache.hadoop.hbase.filter.FirstKeyOnlyFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueExcludeFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
+import org.apache.hadoop.hbase.filter.SubstringComparator;
+import org.apache.hadoop.hbase.filter.ValueFilter;
+import org.apache.hadoop.hbase.protobuf.generated.FilterProtos;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -85,7 +93,7 @@ public class HbaseNewTest {
 
         try{
             Filter filter = new RowFilter(CompareFilter.CompareOp.EQUAL,
-                    new BinaryComparator(Bytes.toBytes("user1|ts1")));
+                    new BinaryComparator(Bytes.toBytes("user1|te1")));
             ResultScanner rs = table.getScanner(scan.setFilter(filter));
             printRes(rs);
             table.close();
@@ -101,7 +109,7 @@ public class HbaseNewTest {
         printEmpty();
         Connection conn = getConn();
         Table table = conn.getTable(TableName.valueOf(DAILY_TABLE));
-        Scan scan = new Scan(Bytes.toBytes("user1|ts1"),
+        Scan scan = new Scan(Bytes.toBytes("user1|te1"),
                 Bytes.toBytes("user2|ts6"));
         scan.setCaching(1000);
         scan.addFamily(Bytes.toBytes("sf"));
@@ -126,7 +134,7 @@ public class HbaseNewTest {
         printEmpty();
         Connection conn = getConn();
         Table table = conn.getTable(TableName.valueOf(DAILY_TABLE));
-        Scan scan = new Scan(Bytes.toBytes("user1|ts1"),
+        Scan scan = new Scan(Bytes.toBytes("user1|te1"),
                 Bytes.toBytes("user2|ts6"));
         scan.setCaching(1000);
         scan.addFamily(Bytes.toBytes("sf"));
@@ -173,14 +181,11 @@ public class HbaseNewTest {
         printEmpty();
         Connection conn = getConn();
         Table table = conn.getTable(TableName.valueOf(DAILY_TABLE));
-        Scan scan = new Scan(Bytes.toBytes("user1|ts1"),
+        Scan scan = new Scan(Bytes.toBytes("user1|te1"),
                 Bytes.toBytes("user2|ts6"));
         scan.setCaching(1000);
         scan.addFamily(Bytes.toBytes("sf"));
         try{
-//            SingleColumnValueFilter filter = new SingleColumnValueFilter(Bytes.toBytes("action"),
-//                    Bytes.toBytes("info"), CompareFilter.CompareOp.NOT_EQUAL,
-//                    new BinaryComparator(Bytes.toBytes("00000")));
             SingleColumnValueFilter filter = new SingleColumnValueFilter(Bytes.toBytes("sf"),
                     Bytes.toBytes("c1"), CompareFilter.CompareOp.EQUAL,
                     Bytes.toBytes("sku1"));
@@ -194,6 +199,86 @@ public class HbaseNewTest {
         }
     }
 
+    //每一行的第一列数据
+    @Test
+    public void firstKeyRangeTest()throws Exception {
+        printEmpty();
+        Connection conn = getConn();
+        Table table = conn.getTable(TableName.valueOf(DAILY_TABLE));
+        Scan scan = new Scan(Bytes.toBytes("user1|te1"),
+                Bytes.toBytes("user2|ts6"));
+        scan.setCaching(1000);
+        scan.addFamily(Bytes.toBytes("sf"));
+        try {
+            FirstKeyOnlyFilter filter = new FirstKeyOnlyFilter();
+            ResultScanner rs = table.getScanner(scan.setFilter(filter));
+            printRes(rs);
+            table.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void columnPrefixTest()throws Exception {
+        printEmpty();
+        Connection conn = getConn();
+        Table table = conn.getTable(TableName.valueOf(DAILY_TABLE));
+        Scan scan = new Scan(Bytes.toBytes("user1|te1"),
+                Bytes.toBytes("user2|ts6"));
+        scan.setCaching(1000);
+        scan.addFamily(Bytes.toBytes("sf"));
+        try {
+            ColumnPrefixFilter filter = new ColumnPrefixFilter(Bytes.toBytes("c"));
+            ResultScanner rs = table.getScanner(scan.setFilter(filter));
+            printRes(rs);
+            table.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void vlaueFilterTest()throws Exception {
+        printEmpty();
+        Connection conn = getConn();
+        Table table = conn.getTable(TableName.valueOf(DAILY_TABLE));
+        Scan scan = new Scan(Bytes.toBytes("user1|te1"),
+                Bytes.toBytes("user2|ts6"));
+        scan.setCaching(1000);
+        scan.addFamily(Bytes.toBytes("sf"));
+        try {
+//            Filter filter = new ValueFilter(CompareFilter.CompareOp.EQUAL,
+//                    new BinaryComparator(Bytes.toBytes("sku1")));
+            Filter filter = new ValueFilter(CompareFilter.CompareOp.EQUAL,
+                    new SubstringComparator("ku1"));
+            ResultScanner rs = table.getScanner(scan.setFilter(filter));
+            printRes(rs);
+            table.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void columnCntFilterTest()throws Exception {
+        printEmpty();
+        Connection conn = getConn();
+        Table table = conn.getTable(TableName.valueOf(DAILY_TABLE));
+        Scan scan = new Scan(Bytes.toBytes("user1|te1"),
+                Bytes.toBytes("user2|ts6"));
+        scan.setCaching(1000);
+        scan.addFamily(Bytes.toBytes("sf"));
+        try {
+            Filter filter = new ColumnCountGetFilter(2);
+            ResultScanner rs = table.getScanner(scan.setFilter(filter));
+            printRes(rs);
+            table.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
@@ -217,6 +302,27 @@ public class HbaseNewTest {
             logger.info("res = {}\n {}", r, Bytes.toString(r.value()));
         }
         System.out.println("---------end--------");
+    }
+
+
+    @Test
+    public void getCnt(){
+        System.out.println("\n\ncnt = " + getTotalRecord(TableName.valueOf("dqjc_credit_daily")));
+    }
+
+    private int getTotalRecord(TableName tableName ){
+        int count=0;
+        AggregationClient aggregationClient = new AggregationClient(hbaseTemplate.getConfiguration());
+        Scan scan=new Scan();
+        //scan.setStopRow(nowTime.getBytes());//小于当前时间
+        try {
+            Long rowCount = aggregationClient.rowCount(tableName, new LongColumnInterpreter(), scan);
+            aggregationClient.close();
+            count=rowCount.intValue();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return count;
     }
 
 
