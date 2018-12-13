@@ -117,6 +117,9 @@ public class ProduceData {
         List<PhoneInfo> phoneList = phoneInfoMapper.getList();
         List<CreditScore> list = Lists.newArrayList();
         for(PhoneInfo pi : phoneList){
+            if(random.nextBoolean()){
+                continue;
+            }
             CreditScore cs = new CreditScore();
             cs.setIdCard(pi.getIdcard());
             cs.setPhone(pi.getPhone());
@@ -139,6 +142,33 @@ public class ProduceData {
 
     @Test
     public void insertDaily() {
+        Date curDate = new Date();
+        List<PhoneInfo> phoneList = phoneInfoMapper.getList();
+        List<CreditDailyTmp> list = Lists.newArrayList();
+        for (PhoneInfo pi : phoneList) {
+            for (int i = 0; i < 10; i++) {
+                CreditDailyTmp cdt = new CreditDailyTmp();
+                cdt.setIdCard(pi.getIdcard());
+                cdt.setCreatetime(curDate);
+                cdt.setContent(getActionContent());
+                //cdt.setActiontime(new Date(curDate.getTime() - (long)random.nextInt(10000000)*1000));
+                cdt.setActiontime(new Date(curDate.getTime() - (long)(random.nextInt(3)+2)*86400*1000));
+                //dailyTmpMapper.insert(cdt);
+                list.add(cdt);
+            }
+            if(list.size() > 1000){
+                dailyTmpMapper.batchInsert(list);
+                list.clear();
+            }
+        }
+        if(list.size() > 0){
+            dailyTmpMapper.batchInsert(list);
+            list.clear();
+        }
+    }
+
+    @Test
+    public void insertWarning() {
         Date curDate = new Date();
         List<PhoneInfo> phoneList = phoneInfoMapper.getList();
         List<CreditDailyTmp> list = Lists.newArrayList();
@@ -259,6 +289,21 @@ public class ProduceData {
             pi.setSubstationname(substation.getPcsname());
             phoneInfoMapper.updateByPrimaryKey(pi);
         }
+    }
+
+    @Test
+    public void updateAreaName(){
+        List<PhoneInfo> list = phoneInfoMapper.getList();
+        List<SysDictVO> dictList = sysDictMapper.getSysDict("areaName");
+
+        for (PhoneInfo pi : list){
+            SysDictVO dictVO = dictList.get(random.nextInt(dictList.size()));
+            pi.setSex(random.nextInt(2));
+            pi.setAreaCode(dictVO.getDictCode());
+            pi.setAreaname(dictVO.getDictName());
+            phoneInfoMapper.updateArea(pi);
+        }
+
     }
 
 
