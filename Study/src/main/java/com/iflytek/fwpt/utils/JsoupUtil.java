@@ -3,6 +3,7 @@ package com.iflytek.fwpt.utils;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Table;
@@ -16,6 +17,21 @@ import java.util.ListIterator;
 import java.util.Map;
 
 public class JsoupUtil {
+
+    public static Map<String, String> getUaacKey(String inputStr){
+        Map<String, String> map = Maps.newHashMap();
+        // #fm1
+        try {
+            Document doc = Jsoup.parse(inputStr, "UTF-8");
+            Element form = doc.getElementById("fm1");
+            String lt = form.getElementsByAttributeValue("name", "lt").attr("value");
+            String execution = form.getElementsByAttributeValue("name", "execution").attr("value");
+            map = ImmutableMap.of("lt", lt, "execution", execution);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
 
     public static Table<String, String, String> getPcStation(String filePath) {
         File input = new File(filePath);
