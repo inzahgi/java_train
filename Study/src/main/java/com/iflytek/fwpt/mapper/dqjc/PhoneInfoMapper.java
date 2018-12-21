@@ -21,4 +21,6 @@ public interface PhoneInfoMapper {
     List<PhoneInfo> getList();
 
     int batchInsert(@Param("list")List<PhoneInfo> list);
+
+    int updateArea(PhoneInfo record);
 }

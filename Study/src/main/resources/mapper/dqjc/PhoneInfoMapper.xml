@@ -102,9 +102,14 @@
       #{item.uptime,jdbcType=TIMESTAMP}
       )
     </foreach>
-
-
-
-
   </insert>
+
+  <update id="updateArea" parameterType="com.iflytek.fwpt.model.dqjc.PhoneInfo">
+    update t_phone_info
+    set
+    sex = #{sex,jdbcType=VARCHAR},
+    areaCode = #{areaCode,jdbcType=VARCHAR},
+    areaName = #{areaname,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
 </mapper>
