@@ -15,6 +15,7 @@ public class PointUtil {
         Queue<PointVO> queue = new ArrayDeque<>(list);
         for (PointVO pv : list){
 
+
         }
 
         return Lists.newArrayList();
