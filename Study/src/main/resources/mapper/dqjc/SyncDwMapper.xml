@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.iflytek.fwpt.mapper.dqjc.SyncDwMapper">
+<mapper namespace="com.example.study.mapper.dqjc.SyncDwMapper">
 
-	<select id="getSyncDw" resultType="com.iflytek.fwpt.vo.SyncDwVO">
+	<select id="getSyncDw" resultType="com.example.study.vo.SyncDwVO">
 		select * from jz_sync_dw where lacCode = #{lac} and ciCode = #{ci}
 	</select>
 	
-	<select id="getSyncDwByArea" resultType="com.iflytek.fwpt.vo.SyncDwVO">
+	<select id="getSyncDwByArea" resultType="com.example.study.vo.SyncDwVO">
 		select distinct ciAddress addressName, ciLat lat, ciLng lng, cityName area 
 		from jz_sync_dw
 		where cityName = #{area} 
@@ -15,11 +15,11 @@
 		</if>
 	</select>
 
-	<select id="getList" resultType="com.iflytek.fwpt.vo.SyncDwVO">
+	<select id="getList" resultType="com.example.study.vo.SyncDwVO">
 		select * from jz_sync_dw;
 	</select>
 
-	<insert id="insert" parameterType="com.iflytek.fwpt.vo.SyncDwVO">
+	<insert id="insert" parameterType="com.example.study.vo.SyncDwVO">
 		insert into jz_sync_dw (id, cityCode, cityName, areaCode,
 		areaName, lacCode, lacName,
 		ciCode, ciName, ciLat,

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.iflytek.fwpt.mapper.task.NewGroupPersonMapper">
-  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.task.NewGroupPersonEntity">
+<mapper namespace="com.example.study.mapper.task.NewGroupPersonMapper">
+  <resultMap id="BaseResultMap" type="com.example.study.model.task.NewGroupPersonEntity">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="gid" jdbcType="VARCHAR" property="gid" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
@@ -26,14 +26,14 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
 
-  <insert id="insert" parameterType="com.iflytek.fwpt.model.task.NewGroupPersonEntity" >
+  <insert id="insert" parameterType="com.example.study.model.task.NewGroupPersonEntity" >
     insert into tbl_group_person (id, gid, phone, idcard,
       car_num, `status`)
     values (#{id,jdbcType=VARCHAR},#{gid,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR},
       #{carNum,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
   </insert>
 
-  <insert id="insertSelective" parameterType="com.iflytek.fwpt.model.task.NewGroupPersonEntity" >
+  <insert id="insertSelective" parameterType="com.example.study.model.task.NewGroupPersonEntity" >
     insert into tbl_group_person
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -77,7 +77,7 @@
     </trim>
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.task.NewGroupPersonEntity">
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.study.model.task.NewGroupPersonEntity">
     update tbl_group_person
     <set>
       <if test="gid != null">
@@ -99,7 +99,7 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
-  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.task.NewGroupPersonEntity">
+  <update id="updateByPrimaryKey" parameterType="com.example.study.model.task.NewGroupPersonEntity">
     update tbl_group_person
     set gid = #{gid,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},

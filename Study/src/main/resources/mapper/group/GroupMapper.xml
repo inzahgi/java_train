@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.iflytek.fwpt.mapper.group.GroupMapper">
+<mapper namespace="com.example.study.mapper.group.GroupMapper">
 
 
-	<resultMap id="groupMap" type="com.iflytek.fwpt.model.group.GroupEntity">
+	<resultMap id="groupMap" type="com.example.study.model.group.GroupEntity">
 		<id column="gid" property="id" jdbcType="VARCHAR" />
 		<result column="gname" property="name" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="VARCHAR" />

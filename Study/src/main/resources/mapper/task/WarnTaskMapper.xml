@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.iflytek.fwpt.mapper.task.WarnTaskMapper">
-  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.task.WarnTaskEntity">
+<mapper namespace="com.example.study.mapper.task.WarnTaskMapper">
+  <resultMap id="BaseResultMap" type="com.example.study.model.task.WarnTaskEntity">
     <id column="tid" jdbcType="VARCHAR" property="tid" />
     <result column="warn_type_id" jdbcType="VARCHAR" property="warnTypeId" />
     <result column="task_name" jdbcType="VARCHAR" property="taskName" />
@@ -33,7 +33,7 @@
     where tid = #{tid,jdbcType=VARCHAR}
   </delete>
 
-  <insert id="insert" parameterType="com.iflytek.fwpt.model.task.WarnTaskEntity" >
+  <insert id="insert" parameterType="com.example.study.model.task.WarnTaskEntity" >
     insert into tbl_warn_task (tid, warn_type_id, task_name, start_time,
       end_time, task_status, is_realtime_warn,
       is_message_warn, create_user, create_time,
@@ -43,7 +43,7 @@
       #{isMessageWarn,jdbcType=TINYINT}, #{createUser,jdbcType=VARCHAR}, NOW(),  Now(), #{isDel,jdbcType=TINYINT})
   </insert>
 
-  <insert id="insertSelective" parameterType="com.iflytek.fwpt.model.task.WarnTaskEntity" >
+  <insert id="insertSelective" parameterType="com.example.study.model.task.WarnTaskEntity" >
     insert into tbl_warn_task
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="tid != null">
@@ -123,7 +123,7 @@
     </trim>
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.task.WarnTaskEntity">
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.study.model.task.WarnTaskEntity">
     update tbl_warn_task
     <set>
       <if test="warnTypeId != null">
@@ -163,7 +163,7 @@
     where tid = #{tid,jdbcType=VARCHAR}
   </update>
 
-  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.task.WarnTaskEntity">
+  <update id="updateByPrimaryKey" parameterType="com.example.study.model.task.WarnTaskEntity">
     update tbl_warn_task
     set warn_type_id = #{warnTypeId,jdbcType=VARCHAR},
       task_name = #{taskName,jdbcType=VARCHAR},

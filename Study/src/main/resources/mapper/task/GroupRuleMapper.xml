@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.iflytek.fwpt.mapper.task.GroupRuleMapper">
-  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.task.GroupRuleEntity">
+<mapper namespace="com.example.study.mapper.task.GroupRuleMapper">
+  <resultMap id="BaseResultMap" type="com.example.study.model.task.GroupRuleEntity">
     <id column="rid" jdbcType="VARCHAR" property="rid" />
     <result column="tid" jdbcType="VARCHAR" property="tid" />
     <result column="gid" jdbcType="VARCHAR" property="gid" />
@@ -33,7 +33,7 @@
     where rid = #{rid,jdbcType=VARCHAR}
   </delete>
 
-  <insert id="insert" parameterType="com.iflytek.fwpt.model.task.GroupRuleEntity" >
+  <insert id="insert" parameterType="com.example.study.model.task.GroupRuleEntity" >
     insert into tbl_group_rule (rid, tid, gid, rule_type,
       is_intersection, create_user, create_time, 
       update_time, rule_info_xml, rule_param, 
@@ -44,7 +44,7 @@
       #{areaInfo,jdbcType=LONGVARCHAR})
   </insert>
 
-  <insert id="insertSelective" parameterType="com.iflytek.fwpt.model.task.GroupRuleEntity" >
+  <insert id="insertSelective" parameterType="com.example.study.model.task.GroupRuleEntity" >
     insert into tbl_group_rule
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="rid != null">
@@ -118,7 +118,7 @@
     </trim>
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.task.GroupRuleEntity">
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.study.model.task.GroupRuleEntity">
     update tbl_group_rule
     <set>
       <if test="tid != null">
@@ -155,7 +155,7 @@
     where rid = #{rid,jdbcType=VARCHAR}
   </update>
 
-  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.task.GroupRuleEntity">
+  <update id="updateByPrimaryKey" parameterType="com.example.study.model.task.GroupRuleEntity">
     update tbl_group_rule
     set tid = #{tid,jdbcType=VARCHAR},
       gid = #{gid,jdbcType=VARCHAR},

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.iflytek.fwpt.mapper.dqjc.CreditDailyTmpMapper">
-  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.dqjc.CreditDailyTmp">
+<mapper namespace="com.example.study.mapper.dqjc.CreditDailyTmpMapper">
+  <resultMap id="BaseResultMap" type="com.example.study.model.dqjc.CreditDailyTmp">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="idCard" jdbcType="VARCHAR" property="idCard" />
     <result column="content" jdbcType="VARCHAR" property="content" />
@@ -21,14 +21,14 @@
     delete from t_credit_daily_tmp
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.iflytek.fwpt.model.dqjc.CreditDailyTmp" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.study.model.dqjc.CreditDailyTmp" useGeneratedKeys="true">
     insert into t_credit_daily_tmp (idCard, content, actionTime,
       createTime)
     values (#{idCard,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{actiontime,jdbcType=TIMESTAMP},
       #{createtime,jdbcType=TIMESTAMP})
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.dqjc.CreditDailyTmp">
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.study.model.dqjc.CreditDailyTmp">
     update t_credit_daily_tmp
     <set>
       <if test="idCard != null">
@@ -46,7 +46,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.dqjc.CreditDailyTmp">
+  <update id="updateByPrimaryKey" parameterType="com.example.study.model.dqjc.CreditDailyTmp">
     update t_credit_daily_tmp
     set idCard = #{idCard,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},

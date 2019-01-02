@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.iflytek.fwpt.mapper.dqjc.PhoneInfoMapper">
-  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.dqjc.PhoneInfo">
+<mapper namespace="com.example.study.mapper.dqjc.PhoneInfoMapper">
+  <resultMap id="BaseResultMap" type="com.example.study.model.dqjc.PhoneInfo">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="pName" jdbcType="VARCHAR" property="pname" />
@@ -36,7 +36,7 @@
     delete from t_phone_info
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.iflytek.fwpt.model.dqjc.PhoneInfo" >
+  <insert id="insert" parameterType="com.example.study.model.dqjc.PhoneInfo" >
     insert into t_phone_info (id, phone, pName, idCard, sex,
       sdRole, sdStatus, areaCode, 
       areaName, subStationId, subStationName, 
@@ -50,7 +50,7 @@
       )
   </insert>
 
-  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.dqjc.PhoneInfo">
+  <update id="updateByPrimaryKey" parameterType="com.example.study.model.dqjc.PhoneInfo">
     update t_phone_info
     set phone = #{phone,jdbcType=VARCHAR},
       pName = #{pname,jdbcType=VARCHAR},
@@ -104,7 +104,7 @@
     </foreach>
   </insert>
 
-  <update id="updateArea" parameterType="com.iflytek.fwpt.model.dqjc.PhoneInfo">
+  <update id="updateArea" parameterType="com.example.study.model.dqjc.PhoneInfo">
     update t_phone_info
     set
     sex = #{sex,jdbcType=VARCHAR},

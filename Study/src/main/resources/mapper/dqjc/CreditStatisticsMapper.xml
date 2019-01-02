@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.iflytek.dqjc.fwpt.mapper.dqjc.CreditStatisticsMapper">
-  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.dqjc.CreditStatistics">
+  <resultMap id="BaseResultMap" type="com.example.study.model.dqjc.CreditStatistics">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="policeSubStationName" jdbcType="VARCHAR" property="policeSubStationName" />
     <result column="areaName" jdbcType="VARCHAR" property="areaName" />
@@ -32,7 +32,7 @@
     delete from t_credit_statistics
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.iflytek.fwpt.model.dqjc.CreditStatistics" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.study.model.dqjc.CreditStatistics" useGeneratedKeys="true">
     insert into t_credit_statistics (policeSubStationName, areaName, noImprisonCnt,
       recessiveCnt, highestCnt, higherCnt, 
       highCnt, midCnt, lowCnt, 
@@ -47,7 +47,7 @@
       )
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.dqjc.CreditStatistics">
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.study.model.dqjc.CreditStatistics">
     update t_credit_statistics
     <set>
       <if test="policeSubStationName != null">
@@ -96,7 +96,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.dqjc.CreditStatistics">
+  <update id="updateByPrimaryKey" parameterType="com.example.study.model.dqjc.CreditStatistics">
     update t_credit_statistics
     set policeSubStationName = #{policeSubStationName,jdbcType=VARCHAR},
       areaName = #{areaName,jdbcType=VARCHAR},
@@ -115,7 +115,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="getList" parameterType="com.iflytek.fwpt.model.dqjc.CreditStatistics" resultMap="BaseResultMap">
+  <select id="getList" parameterType="com.example.study.model.dqjc.CreditStatistics" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from t_credit_statistics
@@ -132,7 +132,7 @@
     </if>
   </select>
 
-  <insert id="insertBatch" keyColumn="id" keyProperty="id" parameterType="com.iflytek.fwpt.model.dqjc.CreditStatistics" useGeneratedKeys="true">
+  <insert id="insertBatch" keyColumn="id" keyProperty="id" parameterType="com.example.study.model.dqjc.CreditStatistics" useGeneratedKeys="true">
     insert into t_credit_statistics (policeSubStationName, areaName, noImprisonCnt,
     recessiveCnt, highestCnt, higherCnt,
     highCnt, midCnt, lowCnt,

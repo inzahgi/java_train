@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.iflytek.fwpt.mapper.task.TaskGroupMapper">
-  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.task.TaskGroupEntity">
+<mapper namespace="com.example.study.mapper.task.TaskGroupMapper">
+  <resultMap id="BaseResultMap" type="com.example.study.model.task.TaskGroupEntity">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="task_id" jdbcType="VARCHAR" property="taskId" />
@@ -20,13 +20,13 @@
     delete from tbl_task_group
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.iflytek.fwpt.model.task.TaskGroupEntity" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.study.model.task.TaskGroupEntity" useGeneratedKeys="true">
     insert into tbl_task_group (group_name, task_id, is_del
       )
     values (#{groupName,jdbcType=VARCHAR}, #{taskId,jdbcType=VARCHAR}, #{isDel,jdbcType=TINYINT}
       )
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.iflytek.fwpt.model.task.TaskGroupEntity" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.example.study.model.task.TaskGroupEntity" useGeneratedKeys="true">
     insert into tbl_task_group
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="groupName != null">
@@ -51,7 +51,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.task.TaskGroupEntity">
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.study.model.task.TaskGroupEntity">
     update tbl_task_group
     <set>
       <if test="groupName != null">
@@ -66,7 +66,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.task.TaskGroupEntity">
+  <update id="updateByPrimaryKey" parameterType="com.example.study.model.task.TaskGroupEntity">
     update tbl_task_group
     set group_name = #{groupName,jdbcType=VARCHAR},
       task_id = #{taskId,jdbcType=VARCHAR},

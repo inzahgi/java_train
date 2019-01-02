@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.iflytek.fwpt.mapper.task.NewGroupMapper">
-  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.task.NewGroupEntity">
+<mapper namespace="com.example.study.mapper.task.NewGroupMapper">
+  <resultMap id="BaseResultMap" type="com.example.study.model.task.NewGroupEntity">
     <id column="gid" jdbcType="VARCHAR" property="gid" />
     <result column="gname" jdbcType="VARCHAR" property="gname" />
     <result column="tid" jdbcType="VARCHAR" property="tid" />
@@ -28,7 +28,7 @@
     where gid = #{gid,jdbcType=VARCHAR}
   </delete>
 
-  <insert id="insert" parameterType="com.iflytek.fwpt.model.task.NewGroupEntity" >
+  <insert id="insert" parameterType="com.example.study.model.task.NewGroupEntity" >
     insert into tbl_group (gid, gname, tid, isdel,
       create_user, up_time, create_time, arg0)
     values ( #{gid,jdbcType=VARCHAR}, #{gname,jdbcType=VARCHAR}, #{tid,jdbcType=VARCHAR}, #{isdel,jdbcType=INTEGER},
@@ -36,7 +36,7 @@
       #{arg0,jdbcType=VARCHAR})
   </insert>
 
-  <insert id="insertSelective" keyColumn="gid" keyProperty="gid" parameterType="com.iflytek.fwpt.model.task.NewGroupEntity" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="gid" keyProperty="gid" parameterType="com.example.study.model.task.NewGroupEntity" useGeneratedKeys="true">
     insert into tbl_group
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="gid != null">
@@ -92,7 +92,7 @@
     </trim>
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.task.NewGroupEntity">
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.study.model.task.NewGroupEntity">
     update tbl_group
     <set>
       <if test="gname != null">
@@ -120,7 +120,7 @@
     where gid = #{gid,jdbcType=VARCHAR}
   </update>
 
-  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.task.NewGroupEntity">
+  <update id="updateByPrimaryKey" parameterType="com.example.study.model.task.NewGroupEntity">
     update tbl_group
     set gname = #{gname,jdbcType=VARCHAR},
       tid = #{tid,jdbcType=VARCHAR},

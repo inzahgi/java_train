@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.iflytek.fwpt.mapper.dqjc.PoliceSubstationInfoNewMapper">
-  <resultMap id="BaseResultMap" type="com.iflytek.fwpt.model.dqjc.PoliceSubstationInfo">
+<mapper namespace="com.example.study.mapper.dqjc.PoliceSubstationInfoNewMapper">
+  <resultMap id="BaseResultMap" type="com.example.study.model.dqjc.PoliceSubstationInfo">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="pcsName" jdbcType="VARCHAR" property="pcsname" />
     <result column="pcsCode" jdbcType="VARCHAR" property="pcscode" />
@@ -10,7 +10,7 @@
     <result column="lat" jdbcType="DOUBLE" property="lat" />
     <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.iflytek.fwpt.model.dqjc.PoliceSubstationInfo">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.study.model.dqjc.PoliceSubstationInfo">
     <result column="region" jdbcType="LONGVARCHAR" property="region" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -31,7 +31,7 @@
     delete from t_police_substation_info_new
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.iflytek.fwpt.model.dqjc.PoliceSubstationInfo">
+  <insert id="insert" parameterType="com.example.study.model.dqjc.PoliceSubstationInfo">
     insert into t_police_substation_info_new (id, pcsName, pcsCode, 
       areaCode, lng, lat, updateTime, 
       region)
@@ -39,7 +39,7 @@
       #{areacode,jdbcType=VARCHAR}, #{lng,jdbcType=DOUBLE}, #{lat,jdbcType=DOUBLE}, #{updatetime,jdbcType=TIMESTAMP}, 
       #{region,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.iflytek.fwpt.model.dqjc.PoliceSubstationInfo">
+  <insert id="insertSelective" parameterType="com.example.study.model.dqjc.PoliceSubstationInfo">
     insert into t_police_substation_info_new
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -94,7 +94,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.iflytek.fwpt.model.dqjc.PoliceSubstationInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.study.model.dqjc.PoliceSubstationInfo">
     update t_police_substation_info_new
     <set>
       <if test="pcsname != null">
@@ -121,7 +121,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.iflytek.fwpt.model.dqjc.PoliceSubstationInfo">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.study.model.dqjc.PoliceSubstationInfo">
     update t_police_substation_info_new
     set pcsName = #{pcsname,jdbcType=VARCHAR},
       pcsCode = #{pcscode,jdbcType=VARCHAR},
@@ -132,7 +132,7 @@
       region = #{region,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.iflytek.fwpt.model.dqjc.PoliceSubstationInfo">
+  <update id="updateByPrimaryKey" parameterType="com.example.study.model.dqjc.PoliceSubstationInfo">
     update t_police_substation_info_new
     set pcsName = #{pcsname,jdbcType=VARCHAR},
       pcsCode = #{pcscode,jdbcType=VARCHAR},
