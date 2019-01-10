@@ -72,7 +72,7 @@
   <select id="getList" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from t_phone_info
+    from t_phone_info_credit
   </select>
 
   <insert id="batchInsert"  >

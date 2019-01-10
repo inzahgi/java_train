@@ -12,12 +12,14 @@ import com.example.study.model.dqjc.CreditDailyTmp;
 import com.example.study.model.dqjc.CreditScore;
 import com.example.study.model.dqjc.DW;
 import com.example.study.model.dqjc.PhoneInfo;
+import com.example.study.utils.AxisTool;
 import com.example.study.utils.ChineseNameUtil;
 import com.example.study.utils.CreateIdcardUtil;
 import com.example.study.vo.SyncDwVO;
 import com.example.study.vo.SysDictVO;
 import com.github.inzahgi.spring.boot.starter.hbase.api.HbaseTemplate;
 import com.google.common.base.Strings;
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -212,16 +214,19 @@ public class ProduceData {
         Date curDate = new Date();
         List<SyncDwVO> dwList = dwMapper.getList();
         List<PhoneInfo> phoneList = phoneInfoMapper.getList();
+        ArrayListMultimap<String, PoliceSubstationInfo> pcsMulitumap = getPcsMap();
+
         List<DW> list = Lists.newArrayList();
 
 
         for(PhoneInfo pi : phoneList){
-            DW dw = getDwFromList(dwList);
+            DW dw = getDwFromList(dwList, pcsMulitumap);
             dw.setId(pi.getPhone());
             dw.setpName(pi.getPname());
             dw.setIsZk(pi.getIszk());
             dw.setIsGy(pi.getIsgy());
             dw.setIsYx(pi.getIsyx());
+            dw.setCreateTime(curDate.getTime()/1000 + random.nextInt(3600*24*100));
             list.add(dw);
             if(list.size() > 1000){
                 batchSaveToMonogDb(list);
@@ -264,7 +269,7 @@ public class ProduceData {
     }
 
 
-    private DW getDwFromList(List<SyncDwVO> dwVOS){
+    private DW getDwFromList(List<SyncDwVO> dwVOS, ArrayListMultimap<String, PoliceSubstationInfo> multimap){
         SyncDwVO sdv = dwVOS.get(random.nextInt(dwVOS.size()));
         DW dw = new DW();
         dw.setLng(Double.valueOf(sdv.getCiLng()));
@@ -273,6 +278,25 @@ public class ProduceData {
         dw.setCi(sdv.getCiCode());
         dw.setArea(sdv.getAreaName());
         dw.setAreaId(sdv.getAreaCode());
+
+        if(multimap.containsKey(dw.getAreaId())){
+            List<PoliceSubstationInfo> pcsList = multimap.get(dw.getAreaId());
+            String pcsId = findPcsId(pcsList, dw.getLng(), dw.getLat());
+            String ownId = pcsList.get(random.nextInt(pcsList.size())).getPcscode();
+            if(pcsId.startsWith("$")) {
+                String tmpStr = pcsId.substring(1);
+                dw.setLocPcsId(tmpStr);
+                dw.setOwnPcsId(tmpStr);
+            }else {
+                dw.setLocPcsId(pcsId);
+                if(random.nextBoolean()){
+                    dw.setOwnPcsId(pcsId);
+                }else {
+                    dw.setOwnPcsId(ownId);
+                }
+            }
+        }
+
         return dw;
     }
 
@@ -319,5 +343,41 @@ public class ProduceData {
 
     }
 
+    private ArrayListMultimap<String, PoliceSubstationInfo> getPcsMap() {
+        List<PoliceSubstationInfo> pcStationList = policeSubstationInfoMapper.getAll();
+
+        ArrayListMultimap<String, PoliceSubstationInfo> multimap =
+                ArrayListMultimap.create(60, 50);
+
+        for (PoliceSubstationInfo pcsInfo : pcStationList){
+            String regionStr = pcsInfo.getRegion();
+            String[] strArr = regionStr.split(",");
+            List<double[]> pointList = Lists.newArrayList();
+            for (int i = 0; i < strArr.length / 2; i++) {
+                double[] pointArr = new double[2];
+                pointArr[0] = Double.parseDouble(strArr[2*i]);
+                pointArr[1] = Double.parseDouble(strArr[2*i +1]);
+                pointList.add(pointArr);
+            }
+            pcsInfo.setPointList(pointList);
+            multimap.put(pcsInfo.getAreacode(), pcsInfo);
+        }
+        return multimap;
+    }
+
+    private String findPcsId( List<PoliceSubstationInfo> pcStationList, double lon, double lat){
+        String nearPcsId = null;
+        double distance = 0;
+        for(PoliceSubstationInfo pcsInfo : pcStationList){
+            if(AxisTool.isInArea(pcsInfo.getPointList(), lon, lat)){
+                return pcsInfo.getPcscode();
+            }
+            double tmp = AxisTool.distanceOfTwoPoints(pcsInfo.getLng(), pcsInfo.getLat(), lon, lat);
+            if(distance == 0 || tmp < distance){
+                nearPcsId = pcsInfo.getPcscode();
+            }
+        }
+        return "$" +nearPcsId;
+    }
 
 }

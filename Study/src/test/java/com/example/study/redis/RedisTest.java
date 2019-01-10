@@ -6,6 +6,8 @@ import com.example.study.MyBatisApplication;
 import com.example.study.model.task.NewGroupPersonEntity;
 import com.example.study.model.task.NewTaskEntity;
 import java.util.Map;
+import java.util.Set;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,7 @@ public class RedisTest {
 
     @Test
     public void redisTest(){
+
         System.out.println(redisTemplate.getClientList());
     }
 
@@ -89,7 +92,20 @@ public class RedisTest {
                 return null;
             }
         });
+    }
 
+    @Test
+    public void zSetTest(){
+        String key = "testZSet";
+        for (int i = 0; i < 100; i++) {
+            redisTemplate.opsForZSet().add("testZSet", i, 100-i);
+        }
+
+        Set<Integer> set= redisTemplate.opsForZSet().reverseRange(key, 0, 10);
+
+        for (Integer str : set){
+            System.out.println(str);
+        }
 
     }
 

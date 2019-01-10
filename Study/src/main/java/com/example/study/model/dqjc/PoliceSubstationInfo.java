@@ -2,12 +2,13 @@ package com.example.study.model.dqjc;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * t_police_substation_info
  * @author 
  */
-public class PoliceSubstationInfo implements Serializable {
+public class PoliceSubstationInfo {
     private Integer id;
 
     /**
@@ -36,7 +37,8 @@ public class PoliceSubstationInfo implements Serializable {
      */
     private String region;
 
-    private static final long serialVersionUID = 1L;
+    private List<double[]> pointList;
+
 
     public Integer getId() {
         return id;
@@ -100,6 +102,14 @@ public class PoliceSubstationInfo implements Serializable {
 
     public void setRegion(String region) {
         this.region = region;
+    }
+
+    public List<double[]> getPointList() {
+        return pointList;
+    }
+
+    public void setPointList(List<double[]> pointList) {
+        this.pointList = pointList;
     }
 
     @Override

@@ -5,11 +5,18 @@ import com.example.study.event.MealEnum;
 import com.example.study.event.MealEvent;
 import com.example.study.event.TroubleEvent;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.core.convert.CustomConversions;
+import org.springframework.data.mongodb.core.convert.DbRefResolver;
+import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
+import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +38,16 @@ public class MyBatisApplication {
 //		return pageHelper;
 //	}
 
+//	@Bean
+//	public MappingMongoConverter mappingMongoConverter(MongoDbFactory factory,
+//													   MongoMappingContext context, BeanFactory beanFactory, CustomConversions conversions) {
+//		DbRefResolver dbRefResolver = new DefaultDbRefResolver(factory);
+//		MappingMongoConverter mappingConverter = new MappingMongoConverter(dbRefResolver, context);
+//		// remove _class field
+////    mappingConverter.setTypeMapper(new DefaultMongoTypeMapper(null));
+//		mappingConverter.setCustomConversions(conversions);
+//		return mappingConverter;
+//	}
 
 	public static void main(String[] args) throws Exception{
 		ApplicationContext ctx = SpringApplication.run(MyBatisApplication.class, args);

@@ -10,6 +10,8 @@ public class DW {
     private String ci;
     private String area;
     private String areaId;
+    private String locPcsId;//当前位置属于哪个派出所
+    private String ownPcsId;
     private String flag;
     private Integer isZk;
     private Integer isGy;
@@ -71,6 +73,22 @@ public class DW {
 
     public void setAreaId(String areaId) {
         this.areaId = areaId;
+    }
+
+    public String getLocPcsId() {
+        return locPcsId;
+    }
+
+    public void setLocPcsId(String locPcsId) {
+        this.locPcsId = locPcsId;
+    }
+
+    public String getOwnPcsId() {
+        return ownPcsId;
+    }
+
+    public void setOwnPcsId(String ownPcsId) {
+        this.ownPcsId = ownPcsId;
     }
 
     public String getFlag() {
