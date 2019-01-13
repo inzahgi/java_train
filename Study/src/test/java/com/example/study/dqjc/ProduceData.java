@@ -215,14 +215,16 @@ public class ProduceData {
         List<SyncDwVO> dwList = dwMapper.getList();
         List<PhoneInfo> phoneList = phoneInfoMapper.getList();
         ArrayListMultimap<String, PoliceSubstationInfo> pcsMulitumap = getPcsMap();
+        Map<String, String> pcsToAreaMap = getPcsToAreaMap();
 
         List<DW> list = Lists.newArrayList();
 
 
         for(PhoneInfo pi : phoneList){
-            DW dw = getDwFromList(dwList, pcsMulitumap);
+            DW dw = getDwFromList(dwList, pcsMulitumap, pcsToAreaMap);
             dw.setId(pi.getPhone());
             dw.setpName(pi.getPname());
+            dw.setScore(random.nextInt(1000)+1);
             dw.setIsZk(pi.getIszk());
             dw.setIsGy(pi.getIsgy());
             dw.setIsYx(pi.getIsyx());
@@ -269,7 +271,8 @@ public class ProduceData {
     }
 
 
-    private DW getDwFromList(List<SyncDwVO> dwVOS, ArrayListMultimap<String, PoliceSubstationInfo> multimap){
+    private DW getDwFromList(List<SyncDwVO> dwVOS, ArrayListMultimap<String, PoliceSubstationInfo> multimap,
+                             Map<String, String> pcsToAreaMap){
         SyncDwVO sdv = dwVOS.get(random.nextInt(dwVOS.size()));
         DW dw = new DW();
         dw.setLng(Double.valueOf(sdv.getCiLng()));
@@ -278,23 +281,34 @@ public class ProduceData {
         dw.setCi(sdv.getCiCode());
         dw.setArea(sdv.getAreaName());
         dw.setAreaId(sdv.getAreaCode());
+        dw.setCurAreaId(sdv.getAreaCode());
 
+        //获取当前所在区域
         if(multimap.containsKey(dw.getAreaId())){
+            //获取当前所在区域的派出所
             List<PoliceSubstationInfo> pcsList = multimap.get(dw.getAreaId());
+            //计算可能的派出所  最近的一个
             String pcsId = findPcsId(pcsList, dw.getLng(), dw.getLat());
+            //todo  由phone_info带入
             String ownId = pcsList.get(random.nextInt(pcsList.size())).getPcscode();
+            //说明没有找到当前位置归属派出所
             if(pcsId.startsWith("$")) {
                 String tmpStr = pcsId.substring(1);
-                dw.setLocPcsId(tmpStr);
+                dw.setCurPcsId(tmpStr);
                 dw.setOwnPcsId(tmpStr);
             }else {
-                dw.setLocPcsId(pcsId);
+                //设置当前位置归属派出所
+                dw.setCurPcsId(pcsId);
+                //随机  同时属于这个派出所
                 if(random.nextBoolean()){
                     dw.setOwnPcsId(pcsId);
                 }else {
+                    //制造流入数据
                     dw.setOwnPcsId(ownId);
                 }
             }
+            //dw.setOwnAreaId(pcsToAreaMap.get(dw.getOwnPcsId()));
+            dw.setOwnAreaId(dw.getOwnPcsId().substring(0, 6));
         }
 
         return dw;
@@ -363,6 +377,18 @@ public class ProduceData {
             multimap.put(pcsInfo.getAreacode(), pcsInfo);
         }
         return multimap;
+    }
+
+    private Map<String, String> getPcsToAreaMap(){
+        List<PoliceSubstationInfo> pcStationList = policeSubstationInfoMapper.getAll();
+
+        Map<String, String> resMap = Maps.newHashMap();
+
+        for (PoliceSubstationInfo pcsInfo : pcStationList){
+
+            resMap.put( pcsInfo.getPcscode(), pcsInfo.getAreacode());
+        }
+        return resMap;
     }
 
     private String findPcsId( List<PoliceSubstationInfo> pcStationList, double lon, double lat){

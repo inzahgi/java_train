@@ -10,9 +10,12 @@ public class DW {
     private String ci;
     private String area;
     private String areaId;
-    private String locPcsId;//当前位置属于哪个派出所
+    private String curAreaId;
+    private String ownAreaId;
+    private String curPcsId;//当前位置属于哪个派出所
     private String ownPcsId;
     private String flag;
+    private int score;
     private Integer isZk;
     private Integer isGy;
     private Integer isYx;
@@ -75,12 +78,28 @@ public class DW {
         this.areaId = areaId;
     }
 
-    public String getLocPcsId() {
-        return locPcsId;
+    public String getCurAreaId() {
+        return curAreaId;
     }
 
-    public void setLocPcsId(String locPcsId) {
-        this.locPcsId = locPcsId;
+    public void setCurAreaId(String curAreaId) {
+        this.curAreaId = curAreaId;
+    }
+
+    public String getOwnAreaId() {
+        return ownAreaId;
+    }
+
+    public void setOwnAreaId(String ownAreaId) {
+        this.ownAreaId = ownAreaId;
+    }
+
+    public String getCurPcsId() {
+        return curPcsId;
+    }
+
+    public void setCurPcsId(String curPcsId) {
+        this.curPcsId = curPcsId;
     }
 
     public String getOwnPcsId() {
@@ -99,45 +118,41 @@ public class DW {
         this.flag = flag;
     }
 
-    /**
-     * @return the isZk
-     */
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     public Integer getIsZk() {
         return isZk;
     }
 
-    /**
-     * @param isZk the isZk to set
-     */
     public void setIsZk(Integer isZk) {
         this.isZk = isZk;
     }
-
 
     public Integer getIsGy() {
         return isGy;
     }
 
-
     public void setIsGy(Integer isGy) {
         this.isGy = isGy;
     }
-
 
     public Integer getIsYx() {
         return isYx;
     }
 
-
     public void setIsYx(Integer isYx) {
         this.isYx = isYx;
     }
 
-
     public String getpName() {
         return pName;
     }
-
 
     public void setpName(String pName) {
         this.pName = pName;
@@ -150,5 +165,4 @@ public class DW {
     public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
-
 }
