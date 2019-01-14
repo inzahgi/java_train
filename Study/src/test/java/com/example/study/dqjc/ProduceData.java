@@ -223,6 +223,7 @@ public class ProduceData {
         for(PhoneInfo pi : phoneList){
             DW dw = getDwFromList(dwList, pcsMulitumap, pcsToAreaMap);
             dw.setId(pi.getPhone());
+            dw.setFlag(String.valueOf(random.nextInt(5) +1));
             dw.setpName(pi.getPname());
             dw.setScore(random.nextInt(1000)+1);
             dw.setIsZk(pi.getIszk());
