@@ -9,6 +9,7 @@ import com.example.study.mapper.dqjc.PhoneInfoMapper;
 import com.example.study.mapper.dqjc.SyncDwMapper;
 import com.example.study.mapper.dqjc.SysDictMapper;
 import com.example.study.model.dqjc.CreditDailyTmp;
+import com.example.study.model.dqjc.CreditPerson;
 import com.example.study.model.dqjc.CreditScore;
 import com.example.study.model.dqjc.DW;
 import com.example.study.model.dqjc.PhoneInfo;
@@ -210,26 +211,26 @@ public class ProduceData {
     }
 
     @Test
-    public void insertLoation(){
+    public void insertOriginLoation(){
         Date curDate = new Date();
         List<SyncDwVO> dwList = dwMapper.getList();
-        List<PhoneInfo> phoneList = phoneInfoMapper.getList();
+        //List<PhoneInfo> phoneList = phoneInfoMapper.getList();
+        CreditPerson cpQuery = CreditPerson.CreditPersonBuilder.aCreditPerson()
+                .status(1).build();
+        List<CreditPerson> scoreList = scoreMapper.getList(cpQuery);
         ArrayListMultimap<String, PoliceSubstationInfo> pcsMulitumap = getPcsMap();
         Map<String, String> pcsToAreaMap = getPcsToAreaMap();
 
         List<DW> list = Lists.newArrayList();
 
-
-        for(PhoneInfo pi : phoneList){
+        for(CreditPerson cp : scoreList){
             DW dw = getDwFromList(dwList, pcsMulitumap, pcsToAreaMap);
-            dw.setId(pi.getPhone());
-            dw.setFlag(String.valueOf(random.nextInt(5) +1));
-            dw.setpName(pi.getPname());
-            dw.setScore(random.nextInt(1000)+1);
-            dw.setIsZk(pi.getIszk());
-            dw.setIsGy(pi.getIsgy());
-            dw.setIsYx(pi.getIsyx());
-            dw.setCreateTime(curDate.getTime()/1000 + random.nextInt(3600*24*100));
+            dw.setId(cp.getPhone());
+            dw.setpName(cp.getName());
+            dw.setIsZk(cp.getIsZk());
+            dw.setIsGy(cp.getIsGy());
+            dw.setIsYx(cp.getIsYx());
+            dw.setCreateTime(String.valueOf(curDate.getTime()/1000 + random.nextInt(3600*24*100)));
             list.add(dw);
             if(list.size() > 1000){
                 batchSaveToMonogDb(list);
@@ -241,6 +242,40 @@ public class ProduceData {
             list.clear();
         }
     }
+
+//    @Test
+//    public void insertNewLoation(){
+//        Date curDate = new Date();
+//        List<SyncDwVO> dwList = dwMapper.getList();
+//        List<PhoneInfo> phoneList = phoneInfoMapper.getList();
+//        ArrayListMultimap<String, PoliceSubstationInfo> pcsMulitumap = getPcsMap();
+//        Map<String, String> pcsToAreaMap = getPcsToAreaMap();
+//
+//        List<DW> list = Lists.newArrayList();
+//
+//
+//        for(PhoneInfo pi : phoneList){
+//            DW dw = getDwFromList(dwList, pcsMulitumap, pcsToAreaMap);
+//            dw.setId(pi.getPhone());
+//            dw.setLevel(String.valueOf(random.nextInt(5) +1));
+//            dw.setpName(pi.getPname());
+//            dw.setIdcard(pi.getIdcard());
+//            dw.setScore(random.nextInt(1000)+1);
+//            dw.setIsZk(pi.getIszk());
+//            dw.setIsGy(pi.getIsgy());
+//            dw.setIsYx(pi.getIsyx());
+//            dw.setCreateTime(curDate.getTime()/1000 + random.nextInt(3600*24*100));
+//            list.add(dw);
+//            if(list.size() > 1000){
+//                batchSaveToMonogDb(list);
+//                list.clear();
+//            }
+//        }
+//        if(list.size() > 0){
+//            batchSaveToMonogDb(list);
+//            list.clear();
+//        }
+//    }
 
     private String getPhone(Set<String> filterSet){
         String str = null;
@@ -258,7 +293,7 @@ public class ProduceData {
     private void batchSaveToMonogDb(List<DW> dwList){
         //        BulkOperations.BulkMode bulkMode = new BulkOperations();
 //        mongoTemplate.bulkOps()
-        BulkOperations ops = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED,  "dw");
+        BulkOperations ops = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED,  "dw_origin");
 //        for (DW dw : dwList) {
 //
 //            //我用的insert方法
@@ -281,39 +316,71 @@ public class ProduceData {
         dw.setLac(sdv.getLacCode());
         dw.setCi(sdv.getCiCode());
         dw.setArea(sdv.getAreaName());
-        dw.setAreaId(sdv.getAreaCode());
-        dw.setCurAreaId(sdv.getAreaCode());
 
         //获取当前所在区域
-        if(multimap.containsKey(dw.getAreaId())){
+        if(multimap.containsKey(sdv.getAreaCode())){
             //获取当前所在区域的派出所
-            List<PoliceSubstationInfo> pcsList = multimap.get(dw.getAreaId());
+            List<PoliceSubstationInfo> pcsList = multimap.get(sdv.getAreaCode());
             //计算可能的派出所  最近的一个
             String pcsId = findPcsId(pcsList, dw.getLng(), dw.getLat());
             //todo  由phone_info带入
-            String ownId = pcsList.get(random.nextInt(pcsList.size())).getPcscode();
+            //String ownId = pcsList.get(random.nextInt(pcsList.size())).getPcscode();
             //说明没有找到当前位置归属派出所
             if(pcsId.startsWith("$")) {
                 String tmpStr = pcsId.substring(1);
-                dw.setCurPcsId(tmpStr);
-                dw.setOwnPcsId(tmpStr);
+                dw.setPcsCode(tmpStr);
             }else {
                 //设置当前位置归属派出所
-                dw.setCurPcsId(pcsId);
-                //随机  同时属于这个派出所
-                if(random.nextBoolean()){
-                    dw.setOwnPcsId(pcsId);
-                }else {
-                    //制造流入数据
-                    dw.setOwnPcsId(ownId);
-                }
+                dw.setPcsCode(pcsId);
+
             }
-            //dw.setOwnAreaId(pcsToAreaMap.get(dw.getOwnPcsId()));
-            dw.setOwnAreaId(dw.getOwnPcsId().substring(0, 6));
         }
 
         return dw;
     }
+
+//    private DW getDwFromList(List<SyncDwVO> dwVOS, ArrayListMultimap<String, PoliceSubstationInfo> multimap,
+//                             Map<String, String> pcsToAreaMap){
+//        SyncDwVO sdv = dwVOS.get(random.nextInt(dwVOS.size()));
+//        DW dw = new DW();
+//        dw.setLng(Double.valueOf(sdv.getCiLng()));
+//        dw.setLat(Double.valueOf(sdv.getCiLat()));
+//        dw.setLac(sdv.getLacCode());
+//        dw.setCi(sdv.getCiCode());
+//        dw.setArea(sdv.getAreaName());
+//        dw.setAreaId(sdv.getAreaCode());
+//        dw.setCurAreaId(sdv.getAreaCode());
+//
+//        //获取当前所在区域
+//        if(multimap.containsKey(dw.getAreaId())){
+//            //获取当前所在区域的派出所
+//            List<PoliceSubstationInfo> pcsList = multimap.get(dw.getAreaId());
+//            //计算可能的派出所  最近的一个
+//            String pcsId = findPcsId(pcsList, dw.getLng(), dw.getLat());
+//            //todo  由phone_info带入
+//            String ownId = pcsList.get(random.nextInt(pcsList.size())).getPcscode();
+//            //说明没有找到当前位置归属派出所
+//            if(pcsId.startsWith("$")) {
+//                String tmpStr = pcsId.substring(1);
+//                dw.setCurPcsId(tmpStr);
+//                dw.setOwnPcsId(tmpStr);
+//            }else {
+//                //设置当前位置归属派出所
+//                dw.setCurPcsId(pcsId);
+//                //随机  同时属于这个派出所
+//                if(random.nextBoolean()){
+//                    dw.setOwnPcsId(pcsId);
+//                }else {
+//                    //制造流入数据
+//                    dw.setOwnPcsId(ownId);
+//                }
+//            }
+//            //dw.setOwnAreaId(pcsToAreaMap.get(dw.getOwnPcsId()));
+//            dw.setOwnAreaId(dw.getOwnPcsId().substring(0, 6));
+//        }
+//
+//        return dw;
+//    }
 
 
     private String getActionContent(){

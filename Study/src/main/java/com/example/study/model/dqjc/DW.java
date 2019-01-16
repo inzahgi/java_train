@@ -10,17 +10,13 @@ public class DW {
     private String ci;
     private String area;
     private String areaId;
-    private String curAreaId;
-    private String ownAreaId;
-    private String curPcsId;//当前位置属于哪个派出所
-    private String ownPcsId;
-    private String flag;
-    private int score;
     private Integer isZk;
     private Integer isGy;
     private Integer isYx;
     private String pName;
-    private Long createTime;
+    private String createTime;
+    private String pcsCode;
+
 
     public String getId() {
         return id;
@@ -78,54 +74,6 @@ public class DW {
         this.areaId = areaId;
     }
 
-    public String getCurAreaId() {
-        return curAreaId;
-    }
-
-    public void setCurAreaId(String curAreaId) {
-        this.curAreaId = curAreaId;
-    }
-
-    public String getOwnAreaId() {
-        return ownAreaId;
-    }
-
-    public void setOwnAreaId(String ownAreaId) {
-        this.ownAreaId = ownAreaId;
-    }
-
-    public String getCurPcsId() {
-        return curPcsId;
-    }
-
-    public void setCurPcsId(String curPcsId) {
-        this.curPcsId = curPcsId;
-    }
-
-    public String getOwnPcsId() {
-        return ownPcsId;
-    }
-
-    public void setOwnPcsId(String ownPcsId) {
-        this.ownPcsId = ownPcsId;
-    }
-
-    public String getFlag() {
-        return flag;
-    }
-
-    public void setFlag(String flag) {
-        this.flag = flag;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public Integer getIsZk() {
         return isZk;
     }
@@ -158,11 +106,19 @@ public class DW {
         this.pName = pName;
     }
 
-    public Long getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Long createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getPcsCode() {
+        return pcsCode;
+    }
+
+    public void setPcsCode(String pcsCode) {
+        this.pcsCode = pcsCode;
     }
 }

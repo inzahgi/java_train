@@ -19,6 +19,7 @@
     <result column="subStationName" jdbcType="VARCHAR" property="policeSubStationName" />
     <result column="isGy" jdbcType="INTEGER" property="isGy" />
     <result column="isYx" jdbcType="INTEGER" property="isYx" />
+    <result column="isZk" jdbcType="INTEGER" property="isZk" />
 
   </resultMap>
 
@@ -98,26 +99,26 @@
     </where>
   </select>
 
-  <select id="getList" parameterType="com.example.study.model.dqjc.CreditPerson" resultMap="extendsResultMap">
+  <select id="getList"  resultMap="extendsResultMap">
     select
-      cs.id, cs.idCard, cs.phone, cs.`level`, cs.score, cs.`status`, cs.createTime,
-    pi.pName, pi.areaName, pi.areaId, pi.subStationName, pi.subStationId, pi.isGy, pi.isYx
+    cs.id, cs.idCard, cs.phone, cs.`level`, cs.warnLevel, cs.score, cs.`status`, cs.createTime,
+    pi.pName, pi.subStationName, pi.subStationId, pi.isGy, pi.isYx, psi.areaName, psi.areaCode
     from t_credit_score cs
-    join t_phone_info pi
+    join t_phone_info_credit pi
     on cs.idCard = pi.idCard
+    JOIN t_police_substation_info psi
+    ON pi.`subStationId` = psi.`pcsCode`
     <where>
-      <if test="level != null">
-        cs.`level` = #{level,jdbcType=TINYINT}
-      </if>
-      <if test="score != null">
-        and cs.score = #{score,jdbcType=INTEGER}
-      </if>
-      <if test="status != null">
-        and cs.`status` = #{status,jdbcType=TINYINT}
-      </if>
+        <if test="level != null">
+          cs.`level` = #{level,jdbcType=TINYINT}
+        </if>
+        <if test="score != null">
+          and cs.score = #{score,jdbcType=INTEGER}
+        </if>
+        <if test="status != null">
+          and cs.`status` = #{status,jdbcType=TINYINT}
+        </if>
     </where>
-
-
 
   </select>
 

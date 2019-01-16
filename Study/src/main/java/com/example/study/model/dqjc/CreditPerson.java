@@ -17,6 +17,8 @@ public class CreditPerson extends CreditScore {
 
     private Integer isYx;
 
+    private Integer isZk;
+
 
     public String getName() {
         return name;
@@ -74,6 +76,13 @@ public class CreditPerson extends CreditScore {
         this.isYx = isYx;
     }
 
+    public Integer getIsZk() {
+        return isZk;
+    }
+
+    public void setIsZk(Integer isZk) {
+        this.isZk = isZk;
+    }
 
     public static final class CreditPersonBuilder {
         private CreditPerson creditPerson;
@@ -133,6 +142,11 @@ public class CreditPerson extends CreditScore {
 
         public CreditPersonBuilder isYx(Integer isYx) {
             creditPerson.setIsYx(isYx);
+            return this;
+        }
+
+        public CreditPersonBuilder isZk(Integer isZk) {
+            creditPerson.setIsZk(isZk);
             return this;
         }
 
