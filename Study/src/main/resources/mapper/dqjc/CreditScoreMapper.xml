@@ -12,7 +12,7 @@
   </resultMap>
 
   <resultMap id="extendsResultMap" type="com.example.study.model.dqjc.CreditPerson" extends="BaseResultMap">
-    <result column="name" jdbcType="VARCHAR"  property="pName"/>
+    <result column="name" jdbcType="VARCHAR"  property="name"/>
     <result column="areaId" jdbcType="VARCHAR"  property="areaId"/>
     <result column="areaName" jdbcType="VARCHAR"  property="areaName"/>
     <result column="subStationId" jdbcType="VARCHAR" property="policeSubStationId" />
@@ -102,7 +102,7 @@
   <select id="getList"  resultMap="extendsResultMap">
     select
     cs.id, cs.idCard, cs.phone, cs.`level`, cs.warnLevel, cs.score, cs.`status`, cs.createTime,
-    pi.pName, pi.subStationName, pi.subStationId, pi.isGy, pi.isYx, psi.areaName, psi.areaCode
+    pi.pName name, pi.subStationName, pi.subStationId, pi.isGy, pi.isYx, pi.isZk, psi.areaName, psi.areaCode
     from t_credit_score cs
     join t_phone_info_credit pi
     on cs.idCard = pi.idCard
