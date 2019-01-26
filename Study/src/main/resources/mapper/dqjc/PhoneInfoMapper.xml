@@ -11,6 +11,8 @@
     <result column="sdStatus" jdbcType="VARCHAR" property="sdstatus" />
     <result column="areaCode" jdbcType="VARCHAR" property="areaCode" />
     <result column="areaName" jdbcType="VARCHAR" property="areaname" />
+    <result column="controlStationId" jdbcType="VARCHAR" property="controlStationId" />
+    <result column="controlStationName" jdbcType="VARCHAR" property="controlStationName" />
     <result column="subStationId" jdbcType="VARCHAR" property="substationid" />
     <result column="subStationName" jdbcType="VARCHAR" property="substationname" />
     <result column="isZk" jdbcType="INTEGER" property="iszk" />
@@ -110,6 +112,19 @@
     sex = #{sex,jdbcType=VARCHAR},
     areaCode = #{areaCode,jdbcType=VARCHAR},
     areaName = #{areaname,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+  <update id="updateControlIdAndName" parameterType="com.example.study.model.dqjc.PhoneInfo">
+    update t_phone_info_credit
+    set
+    controlStationId = #{controlStationId, jdbcType=VARCHAR},
+    controlStationName = #{controlStationName, jdbcType=VARCHAR},
+    isZk = #{iszk,jdbcType=BIT},
+    isGy = #{isgy,jdbcType=BIT},
+    isYx = #{isyx,jdbcType=BIT},
+    upTime = #{uptime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

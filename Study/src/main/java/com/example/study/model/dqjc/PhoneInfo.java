@@ -46,6 +46,10 @@ public class PhoneInfo {
      */
     private String areaname;
 
+    private String controlStationId;
+
+    private String controlStationName;
+
     /**
      * 派出所ID
      */
@@ -144,6 +148,22 @@ public class PhoneInfo {
 
     public void setAreaname(String areaname) {
         this.areaname = areaname;
+    }
+
+    public String getControlStationId() {
+        return controlStationId;
+    }
+
+    public void setControlStationId(String controlStationId) {
+        this.controlStationId = controlStationId;
+    }
+
+    public String getControlStationName() {
+        return controlStationName;
+    }
+
+    public void setControlStationName(String controlStationName) {
+        this.controlStationName = controlStationName;
     }
 
     public String getSubstationid() {

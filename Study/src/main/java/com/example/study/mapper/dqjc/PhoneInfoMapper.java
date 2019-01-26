@@ -23,4 +23,6 @@ public interface PhoneInfoMapper {
     int batchInsert(@Param("list")List<PhoneInfo> list);
 
     int updateArea(PhoneInfo record);
+
+    int updateControlIdAndName(PhoneInfo record);
 }
