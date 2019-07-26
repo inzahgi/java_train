@@ -76,7 +76,7 @@
   </delete>
 
   <insert id="batchInsert" >
-    insert into t_credit_daily_tmp_backup (idCard, content, actionTime,
+    insert into t_credit_daily_tmp (idCard, content, actionTime,
     createTime)
     values
     <foreach collection="list" index="index" item="item"

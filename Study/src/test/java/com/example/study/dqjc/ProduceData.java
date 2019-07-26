@@ -16,6 +16,7 @@ import com.example.study.model.dqjc.PhoneInfo;
 import com.example.study.utils.AxisTool;
 import com.example.study.utils.ChineseNameUtil;
 import com.example.study.utils.CreateIdcardUtil;
+import com.example.study.utils.TimeUtil;
 import com.example.study.vo.SyncDwVO;
 import com.example.study.vo.SysDictVO;
 import com.github.inzahgi.spring.boot.starter.hbase.api.HbaseTemplate;
@@ -50,6 +51,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -81,10 +84,22 @@ public class ProduceData {
 
     private Random random = new Random();
 
-    private List<String> actionList = Arrays.asList("上网","开车", "吃饭", "写代码",
-            "写bug", "调戏测试", "睡觉", "逛街", "买东西","上馆子","坐公交","喝茶","打测试",
-            "请假","玩LOL");
+//    private List<String> actionList = Arrays.asList("上网","开车", "吃饭", "写代码",
+//            "写bug", "调戏测试", "睡觉", "逛街", "买东西","上馆子","坐公交","喝茶","打测试",
+//            "请假","玩LOL");
 //
+    private List<String> actionList = Arrays.asList("注射类，海洛因","滥用阿片类人员","滥用冰毒人员",
+        "滥用K粉人员","滥用其他毒品人员","与涉毒人员同上网","与涉毒人员同坐火车或飞机","本地户籍人员入住本地旅店",
+        "尿检呈阳性","涉毒前科记录","涉毒人员近亲","刑嫌人员前科记录","涉毒人员同住人员","涉毒人员同店人员",
+        "涉毒人员同案人员","与刑嫌人员同坐火车或飞机");
+
+    private List<String> warningList = Arrays.asList(" 四级预警，分值从低级别到高级别跨级",
+            " 三级预警，当前分值与1周内分值之差大于70分",
+            " 三级预警，连续1周时间，分值保持在较高及以上",
+            " 二级预警，连续5周的时间，分值保持在极高级别",
+            " 一级预警，匹配在逃人员");
+
+
 //    private String[] nameAt
 
     @Test
@@ -159,16 +174,19 @@ public class ProduceData {
     @Test
     public void insertDaily() {
         Date curDate = new Date();
-        List<PhoneInfo> phoneList = phoneInfoMapper.getList();
+
+        List<PhoneInfo> phoneList = getPhoneList();
         List<CreditDailyTmp> list = Lists.newArrayList();
+
         for (PhoneInfo pi : phoneList) {
+
             for (int i = 0; i < 10; i++) {
                 CreditDailyTmp cdt = new CreditDailyTmp();
                 cdt.setIdCard(pi.getIdcard());
                 cdt.setCreatetime(curDate);
                 cdt.setContent(getActionContent());
                 //cdt.setActiontime(new Date(curDate.getTime() - (long)random.nextInt(10000000)*1000));
-                cdt.setActiontime(new Date(curDate.getTime() - (long)(random.nextInt(3)+2)*86400*1000));
+                cdt.setActiontime(new Date(curDate.getTime() - (long)(random.nextInt(30)+2)*86400*1000));
                 //dailyTmpMapper.insert(cdt);
                 list.add(cdt);
             }
@@ -186,16 +204,19 @@ public class ProduceData {
     @Test
     public void insertWarning() {
         Date curDate = new Date();
-        List<PhoneInfo> phoneList = phoneInfoMapper.getList();
+        //List<PhoneInfo> phoneList = phoneInfoMapper.getList();
+        List<PhoneInfo> phoneList = getPhoneList();
         List<CreditDailyTmp> list = Lists.newArrayList();
         for (PhoneInfo pi : phoneList) {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 5; i++) {
                 CreditDailyTmp cdt = new CreditDailyTmp();
+                Date actionTime = new Date(curDate.getTime() - (long)(random.nextInt(30)+2)*86400*1000);
+                String timePrefix = TimeUtil.dateToStr(actionTime, "yyyy-MM-dd");
                 cdt.setIdCard(pi.getIdcard());
                 cdt.setCreatetime(curDate);
-                cdt.setContent(getActionContent());
+                cdt.setContent(timePrefix + getWarningContent());
                 //cdt.setActiontime(new Date(curDate.getTime() - (long)random.nextInt(10000000)*1000));
-                cdt.setActiontime(new Date(curDate.getTime() - (long)(random.nextInt(3)+2)*86400*1000));
+                cdt.setActiontime(actionTime);
                 //dailyTmpMapper.insert(cdt);
                 list.add(cdt);
             }
@@ -382,6 +403,9 @@ public class ProduceData {
 //        return dw;
 //    }
 
+    private String getWarningContent(){
+        return warningList.get(random.nextInt(warningList.size()));
+    }
 
     private String getActionContent(){
         return actionList.get(random.nextInt(actionList.size()));
@@ -472,6 +496,20 @@ public class ProduceData {
             }
         }
         return "$" +nearPcsId;
+    }
+
+    private List<PhoneInfo> getPhoneList(){
+        List<PhoneInfo> phoneList = phoneInfoMapper.getList();
+
+        List<String> list = scoreMapper.getIdCardList();
+        Set<String> set = Sets.newHashSet(list);
+        List<PhoneInfo> resList = Lists.newArrayList();
+        for (PhoneInfo pi : phoneList){
+            if(set.contains(pi.getIdcard())){
+                resList.add(pi);
+            }
+        }
+        return resList;
     }
 
 }

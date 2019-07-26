@@ -143,4 +143,10 @@
 
   </insert>
 
+  <select id="getIdCardList"  resultType="java.lang.String">
+    select idCard
+    from t_credit_score
+    where `status` = 1
+  </select>
+
 </mapper>

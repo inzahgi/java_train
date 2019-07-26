@@ -26,4 +26,6 @@ public interface CreditScoreMapper {
     List<CreditPerson> getList(CreditPerson record);
 
     int batchInsert(@Param("list") List<CreditScore> list);
+
+    List<String> getIdCardList();
 }
