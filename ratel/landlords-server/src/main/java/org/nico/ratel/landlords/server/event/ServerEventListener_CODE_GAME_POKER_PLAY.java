@@ -21,9 +21,12 @@ public class ServerEventListener_CODE_GAME_POKER_PLAY implements ServerEventList
 
 	@Override
 	public void call(ClientSide clientSide, String data) {
+		//获取房间
 		Room room = ServerContains.getRoom(clientSide.getRoomId());
 		if(room != null) {
+			//如果是当前的出牌方
 			if(room.getCurrentSellClient() == clientSide.getId()) {
+				//反序列化输入参数
 				Character[] options = Noson.convert(data, Character[].class);
 				int[] indexes = PokerHelper.getIndexes(options, clientSide.getPokers());
 				if(PokerHelper.checkPokerIndex(indexes, clientSide.getPokers())){
