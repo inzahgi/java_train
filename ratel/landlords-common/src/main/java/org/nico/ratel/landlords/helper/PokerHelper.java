@@ -58,24 +58,37 @@ public class PokerHelper {
 		}
 	}
 
+	//按照牌面升序 排序
 	public static void sortPoker(List<Poker> pokers){
 		Collections.sort(pokers, pokerComparator);
 	}
 
+	/**
+	 * 解析输入参数 获取客户端输出牌数
+	 * @param options 客户端出牌参数
+	 * @param pokers  客户端剩余的牌数
+	 * @return
+	 */
 	public static int[] getIndexes(Character[] options, List<Poker> pokers) {
+		//复制客户端的牌数
 		List<Poker> copyList = new ArrayList<>(pokers.size());
 		copyList.addAll(pokers);
 		int[] indexes = new int[options.length];
+		//遍历输入参数
 		for(int index = 0; index < options.length; index ++) {
 			char option = options[index];
 			boolean isTarget = false;
+			//遍历备份的剩余扑克牌
 			for(int pi = 0; pi < copyList.size(); pi ++) {
 				Poker poker = copyList.get(pi);
 				if(poker != null) {
+					//如果输入的参数在剩余的扑克牌中有
 					if(Arrays.asList(poker.getLevel().getAlias()).contains(option)) {
 						isTarget = true;
 						//Index start from 1, not 0
+						//保存牌的索引
 						indexes[index] = pi + 1;
+						//清空该备份扑克牌列表
 						copyList.set(pi, null);
 						break;
 					}
@@ -88,6 +101,7 @@ public class PokerHelper {
 		Arrays.sort(indexes);
 		return indexes;
 	}
+
 
 	public static boolean checkPokerIndex(int[] indexes, List<Poker> pokers){
 		boolean access = true;
@@ -103,12 +117,15 @@ public class PokerHelper {
 		return access;
 	}
 
+	//检查出牌花色
 	public static PokerSell checkPokerType(List<Poker> pokers) {
 
 		if(pokers != null && ! pokers.isEmpty()) {
+			//升序排序
 			sortPoker(pokers);
-
+			//标志出牌的字典表
 			int[] levelTable = new int[20];
+			//统计相同出牌的次数 对子 炸弹...
 			for(Poker poker: pokers) {
 				levelTable[poker.getLevel().getLevel()] ++; 
 			}
@@ -125,14 +142,19 @@ public class PokerHelper {
 			int fourCount = 0;
 			int fourStartIndex = -1;
 			int fourEndIndex = -1;
+			//遍历出牌字典表
 			for(int index = 0; index < levelTable.length; index ++) {
+				//获取出牌重复次数
 				int value = levelTable[index];
 				if(value != 0) {
+					//设置结束索引为当前索引
 					endIndex = index;
 					count ++;
+					//首次初始化起始索引 为当前索引
 					if(startIndex == -1) {
 						startIndex = index;
 					}
+					//统计出牌重复类型
 					if(value == 1) {
 						singleCount ++;
 					}else if(value == 2) {
@@ -152,69 +174,89 @@ public class PokerHelper {
 					}
 				}
 			}
-
+			//只出了四张一样的  为炸弹
 			if(singleCount == doubleCount && singleCount == threeCount && singleCount == 0 && fourCount == 1) {
 				return new PokerSell(SellType.BOMB, pokers, startIndex);
 			}
-
+			//出了两张牌 大小王 为王炸
 			if(singleCount == 2 && startIndex == PokerLevel.LEVEL_SMALL_KING.getLevel() && endIndex == PokerLevel.LEVEL_BIG_KING.getLevel()) {
 				return new PokerSell(SellType.KING_BOMB, pokers, PokerLevel.LEVEL_SMALL_KING.getLevel());
 			}
-
+			//当只有一种数字的牌时
 			if(startIndex == endIndex) {
+				// 单张
 				if(levelTable[startIndex] == 1) {
 					return new PokerSell(SellType.SINGLE, pokers, startIndex);
 				}else if(levelTable[startIndex] == 2) {
+					//对子
 					return new PokerSell(SellType.DOUBLE, pokers, startIndex);
 				}else if(levelTable[startIndex] == 3) {
+					// 三张
 					return new PokerSell(SellType.THREE, pokers, startIndex);
 				}
 			}
+			//出完牌后
 			if(endIndex - startIndex == count - 1 && endIndex < PokerLevel.LEVEL_2.getLevel()) {
+				//起始牌为单张 总数大于4张牌  没有对子 三张 四张的  说明是单顺子
 				if(levelTable[startIndex] == 1 && singleCount > 4 && doubleCount + threeCount + fourCount == 0) {
 					return new PokerSell(SellType.SINGLE_STRAIGHT, pokers, endIndex);
+					//起始相同牌数为2张 说明是连对
 				}else if(levelTable[startIndex] == 2 && doubleCount > 2 && singleCount + threeCount + fourCount == 0) {
 					return new PokerSell(SellType.DOUBLE_STRAIGHT, pokers, endIndex);
+					//起始相同牌数为3张  说明三顺子
 				}else if(levelTable[startIndex] == 3 && threeCount > 1 && doubleCount + singleCount + fourCount == 0) {
 					return new PokerSell(SellType.THREE_STRAIGHT, pokers, endIndex);
+					//起始相同牌数为4张  说明四顺子
 				}else if(levelTable[startIndex] == 4 && fourCount > 1 && doubleCount + threeCount + singleCount == 0) {
 					return new PokerSell(SellType.FOUR_STRAIGHT, pokers, endIndex);
 				}
 			}
-
+			// 考虑三带 X
 			if(threeCount != 0) {
+				//三带一  带单牌
 				if(singleCount != 0 && singleCount == threeCount && doubleCount == 0 && fourCount == 0) {
+					// 一个三带一
 					if(threeCount == 1) {
 						return new PokerSell(SellType.THREE_ZONES_SINGLE, pokers, threeEndIndex);
 					}else {
+						//连续 三带一  而且不以二结束
 						if(threeEndIndex - threeStartIndex + 1 == threeCount && threeEndIndex < PokerLevel.LEVEL_2.getLevel()) {
 							return new PokerSell(SellType.THREE_STRAIGHT_WITH_SINGLE, pokers, threeEndIndex);
 						}
 					}
+					// 三带二
 				}else if(doubleCount != 0 && doubleCount == threeCount && singleCount == 0 && fourCount == 0) {
+					// 单个三带二
 					if(threeCount == 1) {
 						return new PokerSell(SellType.THREE_ZONES_DOUBLE, pokers, threeEndIndex);
 					}else {
+						// 连续三带二
 						if(threeEndIndex - threeStartIndex + 1 == threeCount && threeEndIndex < PokerLevel.LEVEL_2.getLevel()) {
 							return new PokerSell(SellType.FOUR_STRAIGHT_WITH_DOUBLE, pokers, threeEndIndex);
 						}
 					}
 				}
 			}
-
+			// 考虑 四带 X
 			if(fourCount != 0) {
+				// 四带一
 				if(singleCount != 0 && singleCount == fourCount * 2 && doubleCount == 0 && threeCount == 0) {
+					//单个四带一
 					if(fourCount == 1) {
 						return new PokerSell(SellType.FOUR_ZONES_SINGLE, pokers, fourEndIndex);
 					}else {
+						//多个四带一
 						if(fourEndIndex - fourStartIndex + 1 == fourCount && fourEndIndex < PokerLevel.LEVEL_2.getLevel()) {
 							return new PokerSell(SellType.FOUR_STRAIGHT_WITH_SINGLE, pokers, fourEndIndex);
 						}
 					}
+					//四带二
 				}else if(doubleCount != 0 && doubleCount == fourCount * 2 && singleCount == 0 && threeCount == 0) {
+					//单个四带一
 					if(fourCount == 1) {
 						return new PokerSell(SellType.FOUR_ZONES_DOUBLE, pokers, fourEndIndex);
 					}else {
+						//多个四带二
 						if(fourEndIndex - fourStartIndex + 1 == fourCount && fourEndIndex < PokerLevel.LEVEL_2.getLevel()) {
 							return new PokerSell(SellType.FOUR_STRAIGHT_WITH_DOUBLE, pokers, fourEndIndex);
 						}
@@ -224,7 +266,7 @@ public class PokerHelper {
 		}
 		return new PokerSell(SellType.ILLEGAL, null, -1);
 	}
-
+	//计算牌面 得分
 	public static int parseScore(SellType sellType, int level) {
 		if(sellType == SellType.BOMB) {
 			return level * 4 + 999;
