@@ -25,12 +25,30 @@
 	</properties>
 
 	<dependencies>
-	
+
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>3.11.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java-util</artifactId>
+			<version>3.11.1</version>
+		</dependency>
+
+		<!--<dependency>-->
+			<!--<groupId>com.googlecode.protobuf-java-format</groupId>-->
+			<!--<artifactId>protobuf-java-format</artifactId>-->
+			<!--<version>1.4</version>-->
+		<!--</dependency>-->
+
+
 		<!-- fastjson 依赖 和 spring boot dev tool 依赖 start  -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 		 	<artifactId>fastjson</artifactId> 
-		 	<version>1.2.22</version>
+		 	<version>1.2.62</version>
 		</dependency>
 		<dependency> 
 		 	<groupId>org.springframework.boot</groupId>
