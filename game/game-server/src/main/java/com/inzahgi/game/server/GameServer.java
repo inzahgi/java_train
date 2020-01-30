@@ -3,6 +3,7 @@ package com.inzahgi.game.server;
 import com.inzahgi.game.print.SimplePrinter;
 import com.inzahgi.game.server.handler.DefaultChannelInitializer;
 import com.inzahgi.game.server.timer.RoomClearTask;
+import com.inzahgi.game.utils.DefaultThreadFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
@@ -12,12 +13,12 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import java.net.InetSocketAddress;
-import java.util.Timer;
-import com.inzahgi.game.print.SimplePrinter;
-import com.inzahgi.game.server.handler.DefaultChannelInitializer;
-import com.inzahgi.game.server.timer.RoomClearTask;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-public class SimpleServer {
+
+public class GameServer {
 
 	public static void main(String[] args) throws InterruptedException {
 
@@ -40,10 +41,9 @@ public class SimpleServer {
 
 			SimplePrinter.serverLog("The server was successfully started on port " + ServerContains.port);
 
-			ServerContains.THREAD_EXCUTER.execute(() -> {
-				Timer timer=new Timer();
-				timer.schedule(new RoomClearTask(), 0L, 3000L);
-			});
+			ScheduledExecutorService scheduledService = new ScheduledThreadPoolExecutor(1,
+					new DefaultThreadFactory("cron", true));
+			scheduledService.scheduleWithFixedDelay(new RoomClearTask(), 10L,3000L, TimeUnit.SECONDS);
 			f.channel().closeFuture().sync();
 		} finally {
 			parentGroup.shutdownGracefully();

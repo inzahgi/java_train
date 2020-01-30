@@ -8,8 +8,7 @@ import java.util.HashMap;
 
 import com.inzahgi.game.entity.Poker;
 import com.inzahgi.game.helper.PokerHelper;
-import com.inzahgi.game.entity.Poker;
-import com.inzahgi.game.helper.PokerHelper;
+
 
 public class SimplePrinter {
 

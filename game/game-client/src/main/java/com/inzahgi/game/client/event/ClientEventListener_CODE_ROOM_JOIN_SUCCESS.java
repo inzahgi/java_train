@@ -2,7 +2,7 @@ package com.inzahgi.game.client.event;
 
 import java.util.Map;
 
-import com.inzahgi.game.client.SimpleClient;
+import com.inzahgi.game.client.GameClient;
 import com.inzahgi.game.helper.MapHelper;
 import com.inzahgi.game.print.SimplePrinter;
 
@@ -17,7 +17,7 @@ public class ClientEventListener_CODE_ROOM_JOIN_SUCCESS extends ClientEventListe
 		initLastSellInfo();
 		
 		int joinClientId = (int) map.get("clientId");
-		if(SimpleClient.id == joinClientId) {
+		if(GameClient.id == joinClientId) {
 			SimplePrinter.printNotice("You have joined room：" + map.get("roomId") + ". There are " + map.get("roomClientCount") + " players in the room now.");
 			SimplePrinter.printNotice("Please wait for other players to join, start a good game when the room player reaches three !");
 		}else {

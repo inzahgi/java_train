@@ -5,7 +5,7 @@ import static com.inzahgi.game.client.event.ClientEventListener_CODE_CLIENT_NICK
 import java.util.List;
 import java.util.Map;
 
-import com.inzahgi.game.client.SimpleClient;
+import com.inzahgi.game.client.GameClient;
 import com.inzahgi.game.enums.ClientEventCode;
 import com.inzahgi.game.helper.MapHelper;
 import com.inzahgi.game.print.FormatPrinter;
@@ -39,7 +39,7 @@ public class ClientEventListener_CODE_GAME_POKER_PLAY_REDIRECT extends ClientEve
 		}
 		SimplePrinter.printNotice("");
 		
-		if(sellClientId == SimpleClient.id) {
+		if(sellClientId == GameClient.id) {
 			get(ClientEventCode.CODE_GAME_POKER_PLAY).call(channel, data);
 		}else {
 			SimplePrinter.printNotice("Next player is " + map.get("sellClinetNickname") + ". Please wait for him to play his cards.");

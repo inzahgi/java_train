@@ -2,7 +2,7 @@ package com.inzahgi.game.client.event;
 
 import java.util.Map;
 
-import com.inzahgi.game.client.SimpleClient;
+import com.inzahgi.game.client.GameClient;
 import com.inzahgi.game.enums.ServerEventCode;
 import com.inzahgi.game.helper.MapHelper;
 import com.inzahgi.game.print.SimplePrinter;
@@ -21,7 +21,7 @@ public class ClientEventListener_CODE_GAME_LANDLORD_ELECT extends ClientEventLis
 			SimplePrinter.printNotice(map.get("preClientNickname") + " don't rob the landlord!");
 		}
 		
-		if(turnClientId == SimpleClient.id) {
+		if(turnClientId == GameClient.id) {
 			SimplePrinter.printNotice("It's your turn. Do you want to rob the landlord? [Y/N] (enter [EXIT] to exit current room)");
 			String line = SimpleWriter.write("Y/N");
 			if(line.equalsIgnoreCase("EXIT")) {

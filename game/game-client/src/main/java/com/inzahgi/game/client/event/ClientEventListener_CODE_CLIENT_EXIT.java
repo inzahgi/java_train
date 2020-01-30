@@ -2,7 +2,7 @@ package com.inzahgi.game.client.event;
 
 import java.util.Map;
 
-import com.inzahgi.game.client.SimpleClient;
+import com.inzahgi.game.client.GameClient;
 import com.inzahgi.game.enums.ClientEventCode;
 import com.inzahgi.game.helper.MapHelper;
 import com.inzahgi.game.print.SimplePrinter;
@@ -18,7 +18,7 @@ public class ClientEventListener_CODE_CLIENT_EXIT extends ClientEventListener{
 		Integer exitClientId = (Integer) map.get("exitClientId");
 		
 		String role = null;
-		if(exitClientId == SimpleClient.id) {
+		if(exitClientId == GameClient.id) {
 			role = "You";
 		}else {
 			role = String.valueOf(map.get("exitClientNickname"));

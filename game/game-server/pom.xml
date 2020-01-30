@@ -4,7 +4,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>game-server</artifactId>
 	<name>game-server</name>
-	<description>This is a console version of the game</description>
 
 	<parent>
 		<groupId>com.inzahgi.game</groupId>
@@ -12,9 +11,9 @@
 		<version>0.0.1</version>
 	</parent>
 
-	<properties>
-		<start-class>com.inzahgi.game.server.SimpleServer</start-class>
-	</properties>
+	<!--<properties>-->
+		<!--<start-class>com.inzahgi.game.server.GameServer</start-class>-->
+	<!--</properties>-->
 
 	<dependencies>
 		<dependency>
@@ -27,18 +26,16 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
 				<configuration>
-					<mainClass>${start-class}</mainClass>
+					<archive>
+						<manifest>
+							<mainClass>com.inzahgi.game.server.GameServer</mainClass>
+						</manifest>
+					</archive>
 				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 
 			<plugin>

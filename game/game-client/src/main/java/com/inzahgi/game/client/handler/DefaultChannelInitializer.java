@@ -18,7 +18,7 @@ public class DefaultChannelInitializer extends ChannelInitializer<SocketChannel>
 	protected void initChannel(SocketChannel ch) throws Exception {
 		
 		ch.pipeline()
-		.addLast(new IdleStateHandler(0, 4, 0, TimeUnit.SECONDS))
+		.addLast(new IdleStateHandler(0, 20, 0, TimeUnit.SECONDS))
         .addLast(new ProtobufVarint32FrameDecoder())
         .addLast(new ProtobufDecoder(ClientTransferData.ClientTransferDataProtoc.getDefaultInstance()))
         .addLast(new ProtobufVarint32LengthFieldPrepender())

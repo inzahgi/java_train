@@ -4,11 +4,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>game-client</artifactId>
 	<name>game-client</name>
-	<description>This is a console version of the fight landlord game</description>
-
-	<properties>
-		<start-class>com.inzahgi.game.client.SimpleClient</start-class>
-	</properties>
 
 	<parent>
 		<groupId>com.inzahgi.game</groupId>
@@ -26,20 +21,20 @@
 
 	<build>
 		<plugins>
+
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
 				<configuration>
-					<mainClass>${start-class}</mainClass>
+					<archive>
+						<manifest>
+							<mainClass>com.inzahgi.game.client.GameClient</mainClass>
+						</manifest>
+					</archive>
 				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
+
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
