@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+
+import "GameDataProtoc.proto";
+import "ControlDataProtoc.proto";
+
+
+package com.inzahgi.game.entity;
+
+option java_package = "com.inzahgi.game.entity";
+option java_outer_classname = "DataProtoc";
+
+message Data{
+
+	uint64 msg_id = 1;
+	
+	int32 msg_type = 2;
+	
+	ControlData ctrl_msg = 3;
+
+	GameData game_msg = 4;
+	
+	string info = 10;
+	
+}
+
+
+

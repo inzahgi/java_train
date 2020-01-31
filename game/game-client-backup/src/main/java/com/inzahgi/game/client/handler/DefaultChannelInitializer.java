@@ -23,7 +23,7 @@ public class DefaultChannelInitializer extends ChannelInitializer<SocketChannel>
         .addLast(new ProtobufDecoder(ClientTransferData.ClientTransferDataProtoc.getDefaultInstance()))
         .addLast(new ProtobufVarint32LengthFieldPrepender())
         .addLast(new ProtobufEncoder())
-        //.addLast(new SecondProtobufCodec())
+        .addLast(new SecondProtobufCodec())
         .addLast(new TransferHandler());
 		
 	}

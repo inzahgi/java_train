@@ -1,8 +1,9 @@
-package com.inzahgi.game.client.handler;
+package com.inzahgi.game.server.handler;
 
 import java.util.concurrent.TimeUnit;
 
-import com.inzahgi.game.entity.ClientTransferData;
+import com.inzahgi.game.entity.ServerTransferData;
+import com.inzahgi.game.entity.ServerTransferData;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
@@ -16,14 +17,14 @@ public class DefaultChannelInitializer extends ChannelInitializer<SocketChannel>
 
 	@Override
 	protected void initChannel(SocketChannel ch) throws Exception {
-		
+
 		ch.pipeline()
-		.addLast(new IdleStateHandler(0, 20, 0, TimeUnit.SECONDS))
+		.addLast(new IdleStateHandler(60 * 30, 0, 0, TimeUnit.SECONDS))
         .addLast(new ProtobufVarint32FrameDecoder())
-        .addLast(new ProtobufDecoder(ClientTransferData.ClientTransferDataProtoc.getDefaultInstance()))
+        .addLast(new ProtobufDecoder(ServerTransferData.ServerTransferDataProtoc.getDefaultInstance()))
         .addLast(new ProtobufVarint32LengthFieldPrepender())
         .addLast(new ProtobufEncoder())
-        //.addLast(new SecondProtobufCodec())
+        .addLast(new SecondProtobufCodec())
         .addLast(new TransferHandler());
 		
 	}

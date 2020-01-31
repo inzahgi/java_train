@@ -3,8 +3,6 @@ package com.inzahgi.game.client.handler;
 import com.inzahgi.game.client.event.ClientEventListener;
 import com.inzahgi.game.channel.ChannelUtils;
 import com.inzahgi.game.entity.ClientTransferData.ClientTransferDataProtoc;
-import com.inzahgi.game.entity.ControlDataProtoc;
-import com.inzahgi.game.entity.DataProtoc;
 import com.inzahgi.game.enums.ClientEventCode;
 import com.inzahgi.game.enums.ServerEventCode;
 import com.inzahgi.game.print.SimplePrinter;
@@ -19,24 +17,16 @@ public class TransferHandler extends ChannelInboundHandlerAdapter{
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
-		if(msg instanceof DataProtoc.Data){
-			DataProtoc.Data originData = (DataProtoc.Data) msg;
-			switch (originData.getMsgType()){
-				case 1:
-
+		if(msg instanceof ClientTransferDataProtoc) {
+			ClientTransferDataProtoc clientTransferData = (ClientTransferDataProtoc) msg;
+			if(clientTransferData.getInfo() != null && ! clientTransferData.getInfo().isEmpty()) {
+				SimplePrinter.printNotice(clientTransferData.getInfo());
+			}
+			ClientEventCode code = ClientEventCode.valueOf(clientTransferData.getCode());
+			if(code != null) {
+				ClientEventListener.get(code).call(ctx.channel(), clientTransferData.getData());
 			}
 		}
-
-//		if(msg instanceof ClientTransferDataProtoc) {
-//			ClientTransferDataProtoc clientTransferData = (ClientTransferDataProtoc) msg;
-//			if(clientTransferData.getInfo() != null && ! clientTransferData.getInfo().isEmpty()) {
-//				SimplePrinter.printNotice(clientTransferData.getInfo());
-//			}
-//			ClientEventCode code = ClientEventCode.valueOf(clientTransferData.getCode());
-//			if(code != null) {
-//				ClientEventListener.get(code).call(ctx.channel(), clientTransferData.getData());
-//			}
-//		}
 	}
 
 	@Override  
@@ -55,14 +45,6 @@ public class TransferHandler extends ChannelInboundHandlerAdapter{
 			SimplePrinter.printNotice("The network is not good or did not operate for a long time, has been offline");
 			System.exit(0);
 		}
-	}
-
-	private void ctrlProcess(ChannelHandlerContext ctx, ControlDataProtoc.ControlData controlData){
-
-	}
-
-	private void gameProcess(ChannelHandlerContext ctx, ControlDataProtoc.ControlData controlData){
-
 	}
 
 }

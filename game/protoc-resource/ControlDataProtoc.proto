@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+
+
+
+package com.inzahgi.game.entity;
+
+option java_package = "com.inzahgi.game.entity";
+option java_outer_classname = "ControlDataProtoc";
+
+message ControlData{
+	
+	int32 msg_code = 1;
+	
+	bytes data = 2;
+	
+	string playload = 3;
+	
+}
+
+
+

@@ -12,15 +12,24 @@ import com.inzahgi.game.enums.ServerEventCode;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 
-public interface ClientEventListener {
+public abstract class ClientEventListener {
 
-	void call(Channel channel, String data);
+	public abstract void call(Channel channel, String data);
 
-	Map<ClientEventCode, ClientEventListener> LISTENER_MAP = new HashMap<>();
-
-	String LISTENER_PREFIX = "com.inzahgi.game.client.event.ClientEventListener_";
-
-
+	public final static Map<ClientEventCode, ClientEventListener> LISTENER_MAP = new HashMap<>();
+	
+	private final static String LISTENER_PREFIX = "com.inzahgi.game.client.event.ClientEventListener_";
+	
+	protected static List<Poker> lastPokers = null;
+	protected static String lastSellClientNickname = null;
+	protected static String lastSellClientType = null;
+	
+	protected static void initLastSellInfo() {
+		lastPokers = null;
+		lastSellClientNickname = null;
+		lastSellClientType = null;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static ClientEventListener get(ClientEventCode code){
 		ClientEventListener listener = null;
@@ -39,12 +48,12 @@ public interface ClientEventListener {
 		}
 		return listener;
 	}
-
-	default ChannelFuture pushToServer(Channel channel, ServerEventCode code, String datas){
+	
+	protected ChannelFuture pushToServer(Channel channel, ServerEventCode code, String datas){
 		return ChannelUtils.pushToServer(channel, code, datas);
 	}
-
-	default ChannelFuture pushToServer(Channel channel, ServerEventCode code){
+	
+	protected ChannelFuture pushToServer(Channel channel, ServerEventCode code){
 		return pushToServer(channel, code, null);
 	}
 }
