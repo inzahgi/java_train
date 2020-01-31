@@ -1,6 +1,6 @@
 package com.inzahgi.game.enums;
 
-public enum ClientRole{
+public enum PlayerRole{
 
 	PLAYER,
 	

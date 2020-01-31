@@ -1,38 +1,26 @@
 package com.inzahgi.game.entity;
 
-import java.util.List;
-
-import com.inzahgi.game.enums.ClientRole;
 import com.inzahgi.game.enums.ClientStatus;
 import com.inzahgi.game.enums.ClientType;
-
 import io.netty.channel.Channel;
 
-public class ClientSide{
+public class Client {
 
 	private int id;// from channel id
-	
-	private int roomId;
-	
-	private String nickname;
-	
-	private List<Poker> pokers;
-	
-	private ClientStatus status;
-	
-	private ClientRole role;
-	
-	private ClientType type;
-	
-	private ClientSide next;
-	
-	private ClientSide pre;
-	
-	private transient Channel channel;
-	
-	public ClientSide() {}
 
-	public ClientSide(int id, ClientStatus status, Channel channel) {
+	private int roomId;
+
+	private String nickname;
+
+	private ClientStatus status;
+
+	private ClientType clientType;
+
+	private transient Channel channel;
+
+	public Client() {}
+
+	public Client(int id, ClientStatus status, Channel channel) {
 		this.id = id;
 		this.status = status;
 		this.channel = channel;
@@ -40,19 +28,7 @@ public class ClientSide{
 	
 	public void init() {
 		roomId = 0;
-		pokers = null;
 		status = ClientStatus.TO_CHOOSE;
-		type = null;
-		next = null;
-		pre = null;
-	}
-
-	public final ClientRole getRole() {
-		return role;
-	}
-
-	public final void setRole(ClientRole role) {
-		this.role = role;
 	}
 
 	public final String getNickname() {
@@ -79,14 +55,6 @@ public class ClientSide{
 		this.roomId = roomId;
 	}
 
-	public final List<Poker> getPokers() {
-		return pokers;
-	}
-
-	public final void setPokers(List<Poker> pokers) {
-		this.pokers = pokers;
-	}
-
 	public final ClientStatus getStatus() {
 		return status;
 	}
@@ -95,36 +63,12 @@ public class ClientSide{
 		this.status = status;
 	}
 
-	public final ClientType getType() {
-		return type;
-	}
-
-	public final void setType(ClientType type) {
-		this.type = type;
-	}
-
 	public final int getId() {
 		return id;
 	}
 
 	public final void setId(int id) {
 		this.id = id;
-	}
-
-	public final ClientSide getNext() {
-		return next;
-	}
-
-	public final void setNext(ClientSide next) {
-		this.next = next;
-	}
-
-	public final ClientSide getPre() {
-		return pre;
-	}
-
-	public final void setPre(ClientSide pre) {
-		this.pre = pre;
 	}
 
 	@Override
@@ -137,13 +81,16 @@ public class ClientSide{
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if(this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if(obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if(getClass() != obj.getClass()) {
 			return false;
-		ClientSide other = (ClientSide) obj;
+		}
+		Client other = (Client) obj;
 		if (id != other.id)
 			return false;
 		return true;
