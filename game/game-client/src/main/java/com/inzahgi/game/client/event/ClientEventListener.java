@@ -16,13 +16,13 @@ public interface ClientEventListener {
 
 	void call(Channel channel, String data);
 
-	Map<ClientEventCode, ClientEventListener> LISTENER_MAP = new HashMap<>();
+	Map<Integer, ClientEventListener> LISTENER_MAP = new HashMap<>();
 
 	String LISTENER_PREFIX = "com.inzahgi.game.client.event.ClientEventListener_";
 
 
 	@SuppressWarnings("unchecked")
-	public static ClientEventListener get(ClientEventCode code){
+	public static ClientEventListener get(int code){
 		ClientEventListener listener = null;
 		try {
 			if(ClientEventListener.LISTENER_MAP.containsKey(code)){

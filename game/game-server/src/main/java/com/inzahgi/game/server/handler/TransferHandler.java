@@ -1,11 +1,13 @@
 package com.inzahgi.game.server.handler;
 
+import com.google.inject.Inject;
 import com.inzahgi.game.channel.ChannelUtils;
 import com.inzahgi.game.entity.ClientSide;
 import com.inzahgi.game.entity.ServerTransferData;
 import com.inzahgi.game.enums.ClientEventCode;
 import com.inzahgi.game.enums.ClientRole;
 import com.inzahgi.game.enums.ClientStatus;
+import com.inzahgi.game.enums.CtrlEventCode;
 import com.inzahgi.game.enums.ServerEventCode;
 import com.inzahgi.game.print.SimplePrinter;
 import com.inzahgi.game.channel.ChannelUtils;
@@ -17,6 +19,8 @@ import com.inzahgi.game.enums.ClientStatus;
 import com.inzahgi.game.enums.ServerEventCode;
 import com.inzahgi.game.print.SimplePrinter;
 import com.inzahgi.game.server.ServerContains;
+import com.inzahgi.game.server.bean.RoomsSerice;
+import com.inzahgi.game.server.bean.UsersService;
 import com.inzahgi.game.server.event.ServerEventListener;
 
 import io.netty.channel.Channel;
@@ -25,22 +29,41 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 
+import java.net.Inet4Address;
+import java.net.InetSocketAddress;
+
 public class TransferHandler extends ChannelInboundHandlerAdapter{
+
+	@Inject
+	private UsersService usersService;
+
+	@Inject
+	private RoomsSerice roomsSerice;
+
+	public final static String CONNECT_SUCCESS = "connect success!";
+
+	//public final static String CONNECT_FAIL = "connect fail!";
+
 
 	@Override
 	public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
 		Channel ch = ctx.channel();
 		
 		//init client info
-		ClientSide clientSide = new ClientSide(getId(ctx.channel()), ClientStatus.TO_CHOOSE, ch);
-		//clientSide.setNickname(String.valueOf(clientSide.getId()));
-		clientSide.setRole(ClientRole.PLAYER);
+//		ClientSide clientSide = new ClientSide(getId(ctx.channel()), ClientStatus.TO_CHOOSE, ch);
+//		//clientSide.setNickname(String.valueOf(clientSide.getId()));
+//		clientSide.setRole(ClientRole.PLAYER);
+//
+//		ServerContains.CLIENT_SIDE_MAP.put(clientSide.getId(), clientSide);
+
+		InetSocketAddress insocket = (InetSocketAddress) ch.remoteAddress();
+		String clientIP = insocket.getAddress().getHostAddress();
+		int port = insocket.getPort();
+
+		SimplePrinter.serverLog("Has client connect to the server：IP=" + clientIP + "\tport=" + port);
 		
-		ServerContains.CLIENT_SIDE_MAP.put(clientSide.getId(), clientSide);
-		SimplePrinter.serverLog("Has client connect to the server：" + clientSide.getId());
-		
-		ChannelUtils.pushToClient(ch, ClientEventCode.CODE_CLIENT_CONNECT, String.valueOf(clientSide.getId()));
-		ChannelUtils.pushToClient(ch, ClientEventCode.CODE_CLIENT_NICKNAME_SET, null);
+		ChannelUtils.pushToClientForCtrl(ch, CtrlEventCode.CTRL_CONNECT_SUCCESS, CONNECT_SUCCESS.getBytes(), "1");
+		//ChannelUtils.pushToClient(ch, ClientEventCode.CODE_CLIENT_NICKNAME_SET, null);
 	}
 
 	

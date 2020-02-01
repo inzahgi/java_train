@@ -11,6 +11,8 @@ import java.util.Set;
  */
 public enum PokerLevel{
 
+
+
 	LEVEL_3(3, "3", new Character[]{'3'}),
 	
 	LEVEL_4(4, "4", new Character[]{'4'}),
@@ -32,14 +34,15 @@ public enum PokerLevel{
 	LEVEL_Q(12, "Q", new Character[]{'Q', 'q'}),
 	
 	LEVEL_K(13, "K", new Character[]{'K', 'k'}),
-	
+
 	LEVEL_A(14, "A", new Character[]{'A', 'a', '1'}),
-	
+
 	LEVEL_2(15, "2", new Character[]{'2'}),
+
 	
-	LEVEL_SMALL_KING(16, "S", new Character[]{'S', 's'}),
+	LEVEL_SMALL_KING(53, "S", new Character[]{'S', 's'}),
 	
-	LEVEL_BIG_KING(17, "X", new Character[]{'X', 'x'}),
+	LEVEL_BIG_KING(52, "X", new Character[]{'X', 'x'}),
 	;
 	
 	private int level;
@@ -49,10 +52,28 @@ public enum PokerLevel{
 	private Character[] alias;
 	
 	private static Set<Character> aliasSet = new HashSet<>();
+
 	
 	static {
 		for(PokerLevel level: PokerLevel.values()) {
 			PokerLevel.aliasSet.addAll(Arrays.asList(level.getAlias()));
+		}
+	}
+
+	public static PokerLevel getByLevel(int i){
+		switch (i){
+			case 3:	return LEVEL_3;
+			case 4: return LEVEL_4;
+			case 5: return LEVEL_5;
+			case 6: return LEVEL_6;
+			case 7: return LEVEL_7;
+			case 8: return LEVEL_8;
+			case 9: return LEVEL_9;
+			case 10: return LEVEL_10;
+			case 11: return LEVEL_J;
+			case 12: return LEVEL_Q;
+			case 13: return LEVEL_K;
+			default: return null;
 		}
 	}
 	

@@ -17,6 +17,27 @@ public class Poker{
 	public Poker() {
 	}
 
+	public Poker(int i){
+		if(i == 54){
+			this.level = PokerLevel.LEVEL_BIG_KING;
+			this.type = PokerType.BLANK;
+		}else if(i == 53){
+			this.level = PokerLevel.LEVEL_SMALL_KING;
+			this.type = PokerType.BLANK;
+		}else {
+			int k = (i-1) / 13;
+			int j = (i - 13*k)% 14 + 2;
+			this.level = PokerLevel.getByLevel(j);
+			switch (k){
+				case 0:this.type = PokerType.SPADE;break;
+				case 1:this.type = PokerType.HEART;break;
+				case 2:this.type = PokerType.CLUB;break;
+				case 3:this.type = PokerType.DIAMOND;break;
+				default:
+			}
+
+		}
+	}
 	public Poker(PokerLevel level, PokerType type) {
 		this.level = level;
 		this.type = type;

@@ -5,7 +5,9 @@ import com.inzahgi.game.channel.ChannelUtils;
 import com.inzahgi.game.entity.ClientTransferData.ClientTransferDataProtoc;
 import com.inzahgi.game.entity.ControlDataProtoc;
 import com.inzahgi.game.entity.DataProtoc;
+import com.inzahgi.game.entity.GameDataProtoc;
 import com.inzahgi.game.enums.ClientEventCode;
+import com.inzahgi.game.enums.CtrlEventCode;
 import com.inzahgi.game.enums.ServerEventCode;
 import com.inzahgi.game.print.SimplePrinter;
 
@@ -22,21 +24,11 @@ public class TransferHandler extends ChannelInboundHandlerAdapter{
 		if(msg instanceof DataProtoc.Data){
 			DataProtoc.Data originData = (DataProtoc.Data) msg;
 			switch (originData.getMsgType()){
-				case 1:
-
+				case 1:ctrlProcess(ctx, originData.getCtrlMsg());break;
+				case 2:gameProcess(ctx, originData.getGameMsg());break;
+				default:
 			}
 		}
-
-//		if(msg instanceof ClientTransferDataProtoc) {
-//			ClientTransferDataProtoc clientTransferData = (ClientTransferDataProtoc) msg;
-//			if(clientTransferData.getInfo() != null && ! clientTransferData.getInfo().isEmpty()) {
-//				SimplePrinter.printNotice(clientTransferData.getInfo());
-//			}
-//			ClientEventCode code = ClientEventCode.valueOf(clientTransferData.getCode());
-//			if(code != null) {
-//				ClientEventListener.get(code).call(ctx.channel(), clientTransferData.getData());
-//			}
-//		}
 	}
 
 	@Override  
@@ -58,10 +50,14 @@ public class TransferHandler extends ChannelInboundHandlerAdapter{
 	}
 
 	private void ctrlProcess(ChannelHandlerContext ctx, ControlDataProtoc.ControlData controlData){
+		int msgCode = controlData.getMsgCode();
+		CtrlEventCode ctrlEventCode = CtrlEventCode.getByCode(msgCode);
+
+
 
 	}
 
-	private void gameProcess(ChannelHandlerContext ctx, ControlDataProtoc.ControlData controlData){
+	private void gameProcess(ChannelHandlerContext ctx, GameDataProtoc.GameData gameData){
 
 	}
 
