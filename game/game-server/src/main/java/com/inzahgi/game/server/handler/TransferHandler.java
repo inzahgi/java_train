@@ -3,11 +3,14 @@ package com.inzahgi.game.server.handler;
 import com.google.inject.Inject;
 import com.inzahgi.game.channel.ChannelUtils;
 import com.inzahgi.game.entity.ClientSide;
+import com.inzahgi.game.entity.ControlDataProtoc;
+import com.inzahgi.game.entity.DataProtoc;
 import com.inzahgi.game.entity.ServerTransferData;
 import com.inzahgi.game.enums.ClientEventCode;
 import com.inzahgi.game.enums.ClientRole;
 import com.inzahgi.game.enums.ClientStatus;
 import com.inzahgi.game.enums.CtrlEventCode;
+import com.inzahgi.game.enums.MsgType;
 import com.inzahgi.game.enums.ServerEventCode;
 import com.inzahgi.game.print.SimplePrinter;
 import com.inzahgi.game.channel.ChannelUtils;
@@ -31,6 +34,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 
 import java.net.Inet4Address;
 import java.net.InetSocketAddress;
+import java.util.Date;
 
 public class TransferHandler extends ChannelInboundHandlerAdapter{
 
@@ -48,36 +52,37 @@ public class TransferHandler extends ChannelInboundHandlerAdapter{
 	@Override
 	public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
 		Channel ch = ctx.channel();
-		
-		//init client info
-//		ClientSide clientSide = new ClientSide(getId(ctx.channel()), ClientStatus.TO_CHOOSE, ch);
-//		//clientSide.setNickname(String.valueOf(clientSide.getId()));
-//		clientSide.setRole(ClientRole.PLAYER);
-//
-//		ServerContains.CLIENT_SIDE_MAP.put(clientSide.getId(), clientSide);
 
 		InetSocketAddress insocket = (InetSocketAddress) ch.remoteAddress();
 		String clientIP = insocket.getAddress().getHostAddress();
 		int port = insocket.getPort();
 
-		SimplePrinter.serverLog("Has client connect to the server：IP=" + clientIP + "\tport=" + port);
+		StringBuilder sb = new StringBuilder();
+		sb.append(new Date())
+				.append(" Has client connect to the server：IP=")
+				.append(clientIP)
+				.append("\tport=")
+				.append(port);
+
+		SimplePrinter.serverLog(sb.toString());
 		
-		ChannelUtils.pushToClientForCtrl(ch, CtrlEventCode.CTRL_CONNECT_SUCCESS, CONNECT_SUCCESS.getBytes(), "1");
-		//ChannelUtils.pushToClient(ch, ClientEventCode.CODE_CLIENT_NICKNAME_SET, null);
+		ChannelUtils.pushForCtrl(ch, CtrlEventCode.CTRL_CONNECT_RESP, sb.toString().getBytes(), "1");
+
 	}
 
 	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		if(msg instanceof ServerTransferData.ServerTransferDataProtoc) {
-			ServerTransferData.ServerTransferDataProtoc serverTransferData = (ServerTransferData.ServerTransferDataProtoc) msg;
-			ServerEventCode code = ServerEventCode.valueOf(serverTransferData.getCode());
-			if(code != null && code != ServerEventCode.CODE_CLIENT_HEAD_BEAT) {
-				ClientSide client = ServerContains.CLIENT_SIDE_MAP.get(getId(ctx.channel()));
-				SimplePrinter.serverLog(client.getId() + " | " + client.getNickname() + " do:" + code.getMsg());
-				ServerEventListener.get(code).call(client, serverTransferData.getData());
+
+		if(msg instanceof DataProtoc.Data){
+			DataProtoc.Data orginData = (DataProtoc.Data)msg;
+			if(orginData.getMsgType() == MsgType.ONLY_CTRL_DATA.getTypeCode()){
+
+			}else if(orginData.getMsgType() == MsgType.ONLY_GAME_DATA.getTypeCode()){
+
 			}
 		}
+
 	}
 
 	@Override
@@ -124,4 +129,11 @@ public class TransferHandler extends ChannelInboundHandlerAdapter{
 			ServerEventListener.get(ServerEventCode.CODE_CLIENT_OFFLINE).call(client, null);
 		}
     }
+
+    private void processCtrlEvent(ChannelHandlerContext ctx, ControlDataProtoc.ControlData ctrlData){
+		Channel ch = ctx.channel();
+		int code = ctrlData.getMsgCode();
+		String name = CtrlEventCode.getByCode(code).name();
+		ServerEventListener.get(code, name).call();
+	}
 }

@@ -42,26 +42,6 @@ public class GameClient {
 				}
 			}
 		}
-		//没有指定服务器或端口 使用默认的服务器列表
-//		if(serverAddress == null || port == 0){
-//			String serverInfo = StreamUtils.convertToString(new URL("https://raw.githubusercontent.com/ainilili/ratel/master/serverlist.json"));
-//			List<String> serverAddressList = Noson.convert(serverInfo, new NoType<List<String>>() {});
-//			SimplePrinter.printNotice("Please select a server:");
-//			for(int i = 0; i < serverAddressList.size(); i++) {
-//				SimplePrinter.printNotice((i+1) + ". " + serverAddressList.get(i));
-//			}
-//			int serverPick = Integer.parseInt(SimpleWriter.write("option"));
-//			while(serverPick<1 || serverPick>serverAddressList.size()){
-//				try {
-//					SimplePrinter.printNotice("The server address does not exist!");
-//					serverPick = Integer.parseInt(SimpleWriter.write("option"));
-//				}catch(NumberFormatException e){}
-//			}
-//			serverAddress = serverAddressList.get(serverPick-1);
-//			String[] elements = serverAddress.split(":");
-//			serverAddress = elements[0];
-//			port = Integer.parseInt(elements[1]);
-//		}
 
 		EventLoopGroup group = new NioEventLoopGroup();
 		try {

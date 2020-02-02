@@ -26,8 +26,8 @@ public enum  GameEventCode {
         this.msg = msg;
     }
 
-    public static CtrlEventCode getByCode(int code){
-        for( CtrlEventCode c : CtrlEventCode.values()){
+    public static GameEventCode getByCode(int code){
+        for( GameEventCode c : GameEventCode.values()){
             if(c.getCode() == code){
                 return c;
             }

@@ -1,14 +1,18 @@
 package com.inzahgi.game.enums;
 
 public enum  CtrlEventCode {
+    // RESP 表示服务端发送给客户端 客户端处理
+    // REQ  表示客户端发送给服务端 服务端处理
+
     //客户端首次连接 服务端返回连接成功信息
-    CTRL_CONNECT_SUCCESS(1,"客户端连接成功"),
+
+    CTRL_CONNECT_RESP(1,"客户端连接成功"),
     //客户端请求登录
     CTRL_LOGIN_REQ(2,"客户端请求登录"),
     //客户端登录成功 服务端返回用户状态
-    CTRL_LOGIN_SUCCESS_RESP(3,"服务端返回登录状态"),
+    CTRL_LOGIN_RESP(3,"服务端返回登录状态"),
     //客户端登录失败
-    CTRL_LOGIN_FAIL_RESP(4, "客户端登录失败"),
+    //CTRL_LOGIN_FAIL_RESP(4, "客户端登录失败"),
     //客户端选择游戏类型
     CTRL_SELECT_GAME_REQ(5, "客户端选择游戏类型"),
     //服务端返回游戏信息(房间情况)
@@ -51,6 +55,7 @@ public enum  CtrlEventCode {
         }
         return null;
     }
+
 
     public int getCode() {
         return code;

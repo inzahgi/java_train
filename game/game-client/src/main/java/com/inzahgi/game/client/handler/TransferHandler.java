@@ -8,6 +8,7 @@ import com.inzahgi.game.entity.DataProtoc;
 import com.inzahgi.game.entity.GameDataProtoc;
 import com.inzahgi.game.enums.ClientEventCode;
 import com.inzahgi.game.enums.CtrlEventCode;
+import com.inzahgi.game.enums.GameEventCode;
 import com.inzahgi.game.enums.ServerEventCode;
 import com.inzahgi.game.print.SimplePrinter;
 
@@ -51,14 +52,17 @@ public class TransferHandler extends ChannelInboundHandlerAdapter{
 
 	private void ctrlProcess(ChannelHandlerContext ctx, ControlDataProtoc.ControlData controlData){
 		int msgCode = controlData.getMsgCode();
-		CtrlEventCode ctrlEventCode = CtrlEventCode.getByCode(msgCode);
-
-
+		String name = CtrlEventCode.getByCode(msgCode).name();
+		byte[] data = controlData.getData().toByteArray();
+		ClientEventListener.get(msgCode, name).call(ctx.channel(), data);
 
 	}
 
 	private void gameProcess(ChannelHandlerContext ctx, GameDataProtoc.GameData gameData){
-
+		int msgCode = gameData.getMsgCode();
+		String name = GameEventCode.getByCode(msgCode).name();
+		byte[] data = gameData.getData().toByteArray();
+		ClientEventListener.get(msgCode, name).call(ctx.channel(), data);
 	}
 
 }

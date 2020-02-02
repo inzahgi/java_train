@@ -3,7 +3,10 @@ package com.inzahgi.game.utils;
 import com.google.protobuf.ByteString;
 import com.inzahgi.game.entity.ControlDataProtoc;
 import com.inzahgi.game.entity.DataProtoc;
+import com.inzahgi.game.entity.Game;
 import com.inzahgi.game.entity.GameDataProtoc;
+import com.inzahgi.game.enums.CtrlEventCode;
+import com.inzahgi.game.enums.MsgType;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -13,7 +16,8 @@ public class MsgUtils {
 
     private static DataProtoc.Data build(ControlDataProtoc.ControlData controlData,
                                         GameDataProtoc.GameData gameData, String info){
-        return DataProtoc.Data.newBuilder().setMsgId(cnt.getAndIncrement())
+        int typeCode = getMsgType(controlData, gameData);
+        return DataProtoc.Data.newBuilder().setMsgId(cnt.getAndIncrement()).setMsgType(typeCode)
                 .setCtrlMsg(controlData).setGameMsg(gameData).setInfo(info).build();
     }
 
@@ -29,7 +33,16 @@ public class MsgUtils {
         return build(null, gameData, null);
     }
 
+    private static int getMsgType(ControlDataProtoc.ControlData controlData, GameDataProtoc.GameData gameData){
+        if(controlData != null && gameData != null){
+            return MsgType.ONLY_CTRL_DATA.getTypeCode();
+        }
+        if(controlData == null && gameData != null){
+            return MsgType.ONLY_GAME_DATA.getTypeCode();
+        }
+        return 0;
 
+    }
 
 
 }

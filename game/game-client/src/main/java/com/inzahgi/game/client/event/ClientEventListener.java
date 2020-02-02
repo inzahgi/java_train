@@ -5,16 +5,20 @@ import java.util.List;
 import java.util.Map;
 
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.inzahgi.game.channel.ChannelUtils;
 import com.inzahgi.game.entity.Poker;
 import com.inzahgi.game.enums.ClientEventCode;
+import com.inzahgi.game.enums.CtrlEventCode;
+import com.inzahgi.game.enums.GameEventCode;
 import com.inzahgi.game.enums.ServerEventCode;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 
 public interface ClientEventListener {
 
-	void call(Channel channel, String data);
+	void call(Channel channel, byte[] data);
 
 	Map<Integer, ClientEventListener> LISTENER_MAP = new HashMap<>();
 
@@ -22,16 +26,17 @@ public interface ClientEventListener {
 
 
 	@SuppressWarnings("unchecked")
-	public static ClientEventListener get(int code){
+	public static ClientEventListener get(int msgCode, String name){
 		ClientEventListener listener = null;
 		try {
-			if(ClientEventListener.LISTENER_MAP.containsKey(code)){
-				listener = ClientEventListener.LISTENER_MAP.get(code);
+			if(ClientEventListener.LISTENER_MAP.containsKey(msgCode)){
+				listener = ClientEventListener.LISTENER_MAP.get(msgCode);
 			}else{
-				String eventListener = LISTENER_PREFIX + code.name();
+				Preconditions.checkNotNull(name);
+				String eventListener = LISTENER_PREFIX + name;
 				Class<ClientEventListener> listenerClass = (Class<ClientEventListener>) Class.forName(eventListener);
 				listener = listenerClass.newInstance();
-				ClientEventListener.LISTENER_MAP.put(code, listener);
+				ClientEventListener.LISTENER_MAP.put(msgCode, listener);
 			}
 			return listener;
 		}catch(ClassNotFoundException | InstantiationException | IllegalAccessException e) {
@@ -40,11 +45,12 @@ public interface ClientEventListener {
 		return listener;
 	}
 
-	default ChannelFuture pushToServer(Channel channel, ServerEventCode code, String datas){
-		return ChannelUtils.pushToServer(channel, code, datas);
+	default ChannelFuture pushForCtrl(Channel channel, CtrlEventCode code, String datas, String info){
+		return ChannelUtils.pushForCtrl(channel, code, datas.getBytes(), info);
 	}
 
-	default ChannelFuture pushToServer(Channel channel, ServerEventCode code){
-		return pushToServer(channel, code, null);
+	default ChannelFuture pushForGame(Channel channel, GameEventCode code, String datas, String info){
+		return ChannelUtils.pushForGame(channel, code, datas.getBytes(), info);
 	}
+
 }

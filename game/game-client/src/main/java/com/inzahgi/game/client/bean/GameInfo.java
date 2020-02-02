@@ -1,4 +1,4 @@
-package com.inzahgi.game.client.data;
+package com.inzahgi.game.client.bean;
 
 import com.inzahgi.game.entity.Poker;
 import com.inzahgi.game.entity.Room;
@@ -10,7 +10,7 @@ public class GameInfo {
 
     private List<Poker> pokerList;
 
-    private Room
+    private Room room;
 
     private GameInfo(){
 
