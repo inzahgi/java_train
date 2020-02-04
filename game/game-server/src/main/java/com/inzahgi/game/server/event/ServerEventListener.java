@@ -2,6 +2,7 @@ package com.inzahgi.game.server.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.inzahgi.game.channel.ChannelUtils;
@@ -17,12 +18,11 @@ import io.netty.channel.ChannelFuture;
 
 public interface ServerEventListener {
 
-	void call(Channel ch, String data);
+	void call(Channel ch, byte[] data);
 
-
-	public final static Map<Integer, ServerEventListener> LISTENER_MAP = new HashMap<>();
+	Map<Integer, ServerEventListener> LISTENER_MAP = new HashMap<>();
 	
-	final static String LISTENER_PREFIX = "com.inzahgi.game.server.event.ServerEventListener_";
+	String LISTENER_PREFIX = "com.inzahgi.game.server.event.ServerEventListener_";
 	
 	@SuppressWarnings("unchecked")
 	public static ServerEventListener get(int msgCode, String name){
@@ -53,6 +53,12 @@ public interface ServerEventListener {
 
 	default ChannelFuture pushForGame(Channel ch, GameEventCode gameEventCode, String data, String info){
 		return ChannelUtils.pushForGame(ch, gameEventCode, data.getBytes(), info);
+	}
+
+	default void pushAllForGame(List<Channel> chList, GameEventCode gameEventCode, String data, String info){
+		for (Channel ch : chList) {
+			ChannelUtils.pushForGame(ch, gameEventCode, data.getBytes(), info);
+		}
 	}
 	
 }

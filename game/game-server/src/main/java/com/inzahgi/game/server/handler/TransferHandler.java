@@ -111,15 +111,7 @@ public class TransferHandler extends ChannelInboundHandlerAdapter{
         }  
     }  
 	
-    private int getId(Channel channel){
-    	String longId = channel.id().asLongText();
-    	Integer clientId = ServerContains.CHANNEL_ID_MAP.get(longId);
-    	if(null == clientId){
-    		clientId = ServerContains.getClientId();
-    		ServerContains.CHANNEL_ID_MAP.put(longId, clientId);
-    	}
-    	return clientId;
-    }
+
     
     private void clientOfflineEvent(Channel channel){
     	int clientId = getId(channel);
