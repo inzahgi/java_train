@@ -2,6 +2,7 @@ package com.inzahgi.game.server.event;
 
 import com.google.inject.Inject;
 import com.inzahgi.game.channel.ChannelUtils;
+import com.inzahgi.game.entity.Client;
 import com.inzahgi.game.enums.CtrlEventCode;
 import com.inzahgi.game.enums.GameEventCode;
 import com.inzahgi.game.print.SimplePrinter;
@@ -9,6 +10,7 @@ import com.inzahgi.game.server.bean.UsersService;
 import com.inzahgi.game.utils.FlowUtils;
 import com.inzahgi.game.utils.UrlUtils;
 import io.netty.channel.Channel;
+
 
 
 public class ServerEventListener_CTRL_LOGIN_REQ implements ServerEventListener{
@@ -22,10 +24,9 @@ public class ServerEventListener_CTRL_LOGIN_REQ implements ServerEventListener{
 		String address = UrlUtils.getRemoteAddress(ch);
 		SimplePrinter.serverLog(address, input);
 
-
+		Client client = usersService.login(ch, input);
 		CtrlEventCode nextCode = FlowUtils.getNext(CtrlEventCode.CTRL_LOGIN_REQ);
-
-
+		pushForCtrl(ch, nextCode, , "login success!");
 
 	}
 }
