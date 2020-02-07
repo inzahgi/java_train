@@ -1,5 +1,6 @@
 package com.inzahgi.game.server.event;
 
+import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.inzahgi.game.channel.ChannelUtils;
 import com.inzahgi.game.entity.Client;
@@ -25,8 +26,10 @@ public class ServerEventListener_CTRL_LOGIN_REQ implements ServerEventListener{
 		SimplePrinter.serverLog(address, input);
 
 		Client client = usersService.login(ch, input);
+		Gson gson = new Gson();
+		String outStr = gson.toJson(client);
 		CtrlEventCode nextCode = FlowUtils.getNext(CtrlEventCode.CTRL_LOGIN_REQ);
-		pushForCtrl(ch, nextCode, , "login success!");
+		pushForCtrl(ch, nextCode, outStr, "login success!");
 
 	}
 }
