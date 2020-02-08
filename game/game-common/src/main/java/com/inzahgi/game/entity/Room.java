@@ -31,6 +31,10 @@ public class Room{
 	public Room() {
 	}
 
+	public boolean addPlayer(Player player){
+		return playerList.add(player);
+	}
+
 	public int getId() {
 		return id;
 	}

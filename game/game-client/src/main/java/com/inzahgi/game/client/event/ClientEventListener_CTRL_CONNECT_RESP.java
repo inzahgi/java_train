@@ -31,6 +31,6 @@ public class ClientEventListener_CTRL_CONNECT_RESP implements ClientEventListene
 		String input = console.write(MSG);
 		userInfo.setNickName(input);
 		CtrlEventCode ctrlEventCode = FlowUtils.getNext(CtrlEventCode.CTRL_CONNECT_RESP);
-		pushForCtrl(ch, ctrlEventCode, input);
+		pushForCtrl(ch, ctrlEventCode, input, "client send login");
 	}
 }
