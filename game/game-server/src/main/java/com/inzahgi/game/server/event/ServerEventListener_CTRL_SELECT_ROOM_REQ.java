@@ -14,6 +14,7 @@ import io.netty.channel.Channel;
 
 import java.util.List;
 
+import static com.inzahgi.game.enums.CtrlEventCode.CTRL_JOIN_ROOM_RESP;
 import static com.inzahgi.game.enums.CtrlEventCode.CTRL_SHOW_GAME_HALL_RESP;
 
 
@@ -31,14 +32,21 @@ public class ServerEventListener_CTRL_SELECT_ROOM_REQ implements ServerEventList
 		String address = UrlUtils.getRemoteAddress(ch);
 		SimplePrinter.serverLog(address, input);
 
-		//Gson gson = new Gson();
-		//String outStr = gson.toJson();
+		Gson gson = new Gson();
 		Client client = usersService.getOwn(ch);
 		Preconditions.checkNotNull(ch);
 		Player player = new Player(client.getId(), client.getNickname(), false, false);
-		roomsSerice.addRoom(Integer.valueOf(input), player);
+		Room room = roomsSerice.addRoom(Integer.valueOf(input), player);
+		String outStr = gson.toJson(room);
 		//CtrlEventCode nextCode = FlowUtils.getNext(CtrlEventCode.CTRL_SELECT_GAME_REQ);
-		pushForCtrl(ch, CTRL_SHOW_GAME_HALL_RESP, outStr, "server show room list!");
+		pushForCtrl(ch, CTRL_JOIN_ROOM_RESP, outStr, "server show room list!");
+
+	}
+
+	private boolean isShouldStartGame(Room room, int clientId){
+
+	}
+	private void startGame(Room room){
 
 	}
 }

@@ -22,11 +22,11 @@ public enum  CtrlEventCode {
     //服务端返回客户端的房间信息
     CTRL_JOIN_ROOM_RESP(8, "服务端返回客户端的房间信息"),
     //客户端退出房间
-    CTRL_EXIT_ROOM_REQ(9, ""),
+    CTRL_EXIT_ROOM_REQ(9, "退出房间"),
     //客户端退出游戏
-    CTRL_EXIT_GAME_REQ(10, ""),
+    CTRL_EXIT_GAME_REQ(10, "推出游戏"),
     //服务端发送开始游戏
-    CTRL_START_GAME_RESP(11, ""),
+    CTRL_START_GAME_RESP(11, "开始游戏"),
     //客户端掉线，服务端自动托管
     CTRL_USER_LOGOUT_RESP(12,""),
     //客户端超时，服务端托管

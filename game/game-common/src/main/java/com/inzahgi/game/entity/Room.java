@@ -35,6 +35,15 @@ public class Room{
 		return playerList.add(player);
 	}
 
+	public boolean isInRoom(int clientId){
+		for(Player p : playerList){
+			if(p.getClientId() == clientId){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public int getId() {
 		return id;
 	}

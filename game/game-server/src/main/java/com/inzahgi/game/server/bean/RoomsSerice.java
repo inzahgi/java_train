@@ -40,16 +40,23 @@ public class RoomsSerice {
         return resList;
     }
 
-    public boolean addRoom(Integer roomNo, Player player){
-        if(roomNo.intValue() == 0){
+    public Room addRoom(Integer roomNo, Player player){
+
+        Room room = null;
+        if(roomNo.equals(0)){
             int id = roomCnt.getAndIncrement();
-            Room room = new Room();
+            room = new Room();
             room.setId(id);
             room.addPlayer(player);
             map.put(id, room);
+        }else if(map.containsKey(roomNo)){
+            Room roomTmp = map.get(roomNo);
+            if(roomTmp.getPlayerList().size() < 3) {
+                roomTmp.addPlayer(player);
+                //room = roomTmp;
+            }
         }
-        if(map.containsKey(roomNo)){
 
-        }
+        return room;
     }
 }
