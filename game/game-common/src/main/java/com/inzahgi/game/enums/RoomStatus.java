@@ -2,13 +2,16 @@ package com.inzahgi.game.enums;
 
 public enum RoomStatus{
 
+	//initial room
 	BLANK("空闲"),
-	
+	// have player
 	WAIT("等待"),
-	
-	STARTING("开始"),
-	
-	
+	//
+	STARTING("等开始"),
+
+	PLAY("等开始"),
+
+
 	;
 	
 	private String msg;

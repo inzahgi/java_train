@@ -33,6 +33,10 @@ public class UsersService {
         return userMap.get(id);
     }
 
+    public Client getClientById(int id){
+        return userMap.get(id);
+    }
+
     private int getId(Channel channel){
         String longId = channel.id().asLongText();
         Integer clientId = ServerContains.CHANNEL_ID_MAP.get(longId);

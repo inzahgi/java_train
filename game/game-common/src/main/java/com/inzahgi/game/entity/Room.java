@@ -16,6 +16,8 @@ public class Room{
 	//人人 --- 人机
 	private RoomType type;
 
+	private int gameType = -1;
+
 	private int lastPlayIndex = -1;
 
 	private int curPlayerIndex = -1;
@@ -28,13 +30,25 @@ public class Room{
 	
 	private long createTime;
 	
-	public Room() {
+	public Room(int gameType) {
+		this.gameType = gameType;
 	}
 
 	public boolean addPlayer(Player player){
-		return playerList.add(player);
+		if(playerList.add(player)){
+			changeStatus();
+			return true;
+		}
+		return false;
 	}
 
+	private void changeStatus(){
+		if(gameType == 1){
+			if(playerList.size() == 3 && RoomStatus.WAIT.equals(status )){
+				status = RoomStatus.STARTING;
+			}
+		}
+	}
 	public boolean isInRoom(int clientId){
 		for(Player p : playerList){
 			if(p.getClientId() == clientId){

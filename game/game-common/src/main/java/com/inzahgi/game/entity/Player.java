@@ -2,13 +2,13 @@ package com.inzahgi.game.entity;
 
 public class Player {
 
-    public int clientId;
+    private int clientId;
 
-    public String nickName;
+    private String nickName;
 
-    public boolean isRobot;
+    private boolean isRobot;
 
-    public boolean isTrusteeship;
+    private boolean isTrusteeship;
 
     public Player(int clientId, String nickName, boolean isRobot, boolean isTrusteeship) {
         this.clientId = clientId;
