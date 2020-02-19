@@ -18,11 +18,12 @@ public class Frame {
 
 
     public interface TYPE{
-        int NAME_REQ = 0;
-        int NAME_RESP = 1;
-        int FILE_REQ = 2;
-        int FILE_RESP = 3;
-        int FINISH = 4;
+        int INFO = 0;
+        int NAME_REQ = 1;
+        int NAME_RESP = 2;
+        int FILE_REQ = 3;
+        int FILE_RESP = 4;
+        int FINISH = 5;
         int INVAILD = 1000;
     }
 

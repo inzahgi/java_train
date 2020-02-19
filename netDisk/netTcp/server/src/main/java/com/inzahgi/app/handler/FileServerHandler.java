@@ -18,7 +18,8 @@ public class FileServerHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         //super.channelActive(ctx);
-        ctx.writeAndFlush("HELLO: connect success!!");
+        Frame frame = new Frame(Frame.TYPE.INFO, 0, 0, "HELLO: connect success!!",null);
+       ctx.writeAndFlush(JSON.toJSONString(frame));
     }
 
     @Override
@@ -27,6 +28,8 @@ public class FileServerHandler extends SimpleChannelInboundHandler<String> {
 
         switch (frame.getCode()){
             case Frame.TYPE.NAME_REQ:
+                frame.setCode(Frame.TYPE.NAME_RESP);
+                ctx.writeAndFlush(JSON.toJSONString(frame));
                 break;
             case Frame.TYPE.NAME_RESP:
                 checkFile(ctx, frame);
