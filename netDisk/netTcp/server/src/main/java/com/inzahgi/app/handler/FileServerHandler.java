@@ -2,6 +2,7 @@ package com.inzahgi.app.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.inzahgi.app.entity.Frame;
+import com.inzahgi.app.util.FileSimulateUtil;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,12 +19,14 @@ public class FileServerHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         //super.channelActive(ctx);
+        System.out.println("line ");
         Frame frame = new Frame(Frame.TYPE.INFO, 0, 0, "HELLO: connect success!!",null);
        ctx.writeAndFlush(JSON.toJSONString(frame));
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String s) throws Exception {
+        System.out.println("line = 28 " + s);
         Frame frame = JSON.parseObject(s, Frame.class);
 
         switch (frame.getCode()){
@@ -35,9 +38,9 @@ public class FileServerHandler extends SimpleChannelInboundHandler<String> {
                 checkFile(ctx, frame);
                 break;
             case Frame.TYPE.FILE_REQ:
+                writeFile(ctx, frame);
                 break;
             case Frame.TYPE.FILE_RESP:
-                writeFile(ctx, frame);
                 break;
             case Frame.TYPE.INVAILD:
                 break;
@@ -72,27 +75,39 @@ public class FileServerHandler extends SimpleChannelInboundHandler<String> {
 
     }
 
-    private void writeFile(ChannelHandlerContext ctx, Frame frame) throws Exception{
-        RandomAccessFile raf = null;
-        long length = -1;
-        try{
-            raf = new RandomAccessFile(frame.getName(), "rw");
-            length = raf.length();
-        }catch (Exception e){
-            ctx.writeAndFlush("ERR: " + e.getClass().getSimpleName() + " : " + e.getMessage() + "\n");
-            return;
-        }finally {
-            if(length < 0 && raf != null){
-                raf.close();
-            }
-        }
-
-        raf.write(frame.getData());
-        ctx.write("OK : " + raf.length() + "\n");
-//        if(ctx.pipeline().get(SslHandler.class) == null){
-//            ctx.write(new DefaultFileRegion(raf.getChannel(), 0, length));
-//        }else{
-//            ctx.writeAndFlush("\n");
+//    private void writeFile(ChannelHandlerContext ctx, Frame frame) throws Exception{
+//        RandomAccessFile raf = null;
+//        long length = -1;
+//        try{
+//            raf = new RandomAccessFile(frame.getName(), "rw");
+//            length = raf.length();
+//        }catch (Exception e){
+//            ctx.writeAndFlush("ERR: " + e.getClass().getSimpleName() + " : " + e.getMessage() + "\n");
+//            return;
+//        }finally {
+//            if(length < 0 && raf != null){
+//                raf.close();
+//            }
 //        }
+//
+//        raf.write(frame.getData());
+//        Frame respF = new Frame(Frame.TYPE.FILE_RESP, frame.getLength(), frame.getStart(), "OK", null);
+//        ctx.writeAndFlush(respF);
+//        //respF.setData(null);
+//        //respF.setCode(Frame.TYPE.FILE_RESP);
+//        //ctx.write("OK : " + raf.length() + "\n");
+////        if(ctx.pipeline().get(SslHandler.class) == null){
+////            ctx.write(new DefaultFileRegion(raf.getChannel(), 0, length));
+////        }else{
+////            ctx.writeAndFlush("\n");
+////        }
+//    }
+
+
+
+    private void writeFile(ChannelHandlerContext ctx, Frame frame) throws Exception {
+        FileSimulateUtil.write(frame.getData(), (int)frame.getStart(), (int)frame.getLength());
+        Frame respF = new Frame(Frame.TYPE.FILE_RESP, frame.getLength(), frame.getStart(), "OK", null);
+        ctx.writeAndFlush(respF);
     }
 }

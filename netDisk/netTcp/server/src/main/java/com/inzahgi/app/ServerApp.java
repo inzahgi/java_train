@@ -2,15 +2,16 @@ package com.inzahgi.app;
 
 import com.inzahgi.app.handler.FileServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.sctp.nio.NioSctpServerChannel;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
@@ -48,7 +49,7 @@ public class ServerApp {
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
-                    .channel(NioSctpServerChannel.class)
+                    .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 100)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -59,8 +60,9 @@ public class ServerApp {
                                 p.addLast(sslCtx.newHandler(ch.alloc()));
                             }
                             p.addLast(
+                                    new LengthFieldBasedFrameDecoder(8192, 0, 4),
+                                    new LengthFieldPrepender(4),
                                     new StringEncoder(CharsetUtil.UTF_8),
-                                    new LineBasedFrameDecoder(8192),
                                     new StringDecoder(CharsetUtil.UTF_8),
                                     new FileServerHandler());
                         }

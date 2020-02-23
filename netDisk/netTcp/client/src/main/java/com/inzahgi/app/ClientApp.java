@@ -15,6 +15,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.sctp.nio.NioSctpServerChannel;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
@@ -54,7 +57,7 @@ public class ClientApp {
         try {
             Bootstrap b = new Bootstrap();
             b.group( workerGroup)
-                    .channel(NioSctpServerChannel.class)
+                    .channel(NioSocketChannel.class)
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
@@ -63,8 +66,9 @@ public class ClientApp {
                                 p.addLast(sslCtx.newHandler(ch.alloc()));
                             }
                             p.addLast(
+                                    new LengthFieldBasedFrameDecoder(8192, 0, 4),
+                                    new LengthFieldPrepender(4),
                                     new StringEncoder(CharsetUtil.UTF_8),
-                                    new LineBasedFrameDecoder(8192),
                                     new StringDecoder(CharsetUtil.UTF_8),
                                     new FileClientHandler());
                         }
