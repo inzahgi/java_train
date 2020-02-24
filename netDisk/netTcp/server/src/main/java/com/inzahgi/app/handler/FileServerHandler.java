@@ -20,8 +20,8 @@ public class FileServerHandler extends SimpleChannelInboundHandler<String> {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         //super.channelActive(ctx);
         System.out.println("line ");
-        Frame frame = new Frame(Frame.TYPE.INFO, 0, 0, "HELLO: connect success!!",null);
-       ctx.writeAndFlush(JSON.toJSONString(frame));
+       // Frame frame = new Frame(Frame.TYPE.INFO, 0, 0, "HELLO: connect success!!",null);
+       //ctx.writeAndFlush(JSON.toJSONString(frame));
     }
 
     @Override
@@ -108,6 +108,6 @@ public class FileServerHandler extends SimpleChannelInboundHandler<String> {
     private void writeFile(ChannelHandlerContext ctx, Frame frame) throws Exception {
         FileSimulateUtil.write(frame.getData(), (int)frame.getStart(), (int)frame.getLength());
         Frame respF = new Frame(Frame.TYPE.FILE_RESP, frame.getLength(), frame.getStart(), "OK", null);
-        ctx.writeAndFlush(respF);
+        ctx.writeAndFlush(JSON.toJSONString(respF));
     }
 }

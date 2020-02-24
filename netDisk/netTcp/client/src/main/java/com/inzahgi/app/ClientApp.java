@@ -67,7 +67,7 @@ public class ClientApp {
                             }
                             p.addLast(
                                     new LengthFieldBasedFrameDecoder(8192, 0, 4),
-                                    new LengthFieldPrepender(4),
+                                    new LengthFieldPrepender(2),
                                     new StringEncoder(CharsetUtil.UTF_8),
                                     new StringDecoder(CharsetUtil.UTF_8),
                                     new FileClientHandler());
