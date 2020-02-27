@@ -1,6 +1,12 @@
 package com.inzahgi.app;
 
+import com.alibaba.fastjson.JSON;
+import com.inzahgi.app.entity.Frame;
+import com.inzahgi.app.handler.ByteToFrameDecoder;
 import com.inzahgi.app.handler.FileClientHandler;
+import com.inzahgi.app.handler.FrameToByteEncoder;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
@@ -19,12 +25,10 @@ public class App
     {
         System.out.println( "Hello World!" );
 
-        EmbeddedChannel clientChannel = new EmbeddedChannel(
-                new LengthFieldBasedFrameDecoder(8192, 0, 4),
-                new LengthFieldPrepender(4),
-                new StringEncoder(CharsetUtil.UTF_8),
-                new StringDecoder(CharsetUtil.UTF_8),
-                new FileClientHandler()
-        );
+
+
     }
+
+
+
 }

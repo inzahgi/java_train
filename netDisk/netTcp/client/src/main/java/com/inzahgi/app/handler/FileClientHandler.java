@@ -12,13 +12,12 @@ import io.netty.handler.ssl.SslHandler;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-public class FileClientHandler extends SimpleChannelInboundHandler<String> {
+public class FileClientHandler extends SimpleChannelInboundHandler<Frame> {
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, String s) throws Exception {
-        System.out.println("line = 20 " + s);
-        Frame frame = JSON.parseObject(s, Frame.class);
+    protected void channelRead0(ChannelHandlerContext ctx, Frame frame) throws Exception {
+        System.out.println("line = 20 " + frame.toString());
 
         switch (frame.getCode()){
             case Frame.TYPE.INFO:

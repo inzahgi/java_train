@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Type;
 
-public class FileServerHandler extends SimpleChannelInboundHandler<String> {
+public class FileServerHandler extends SimpleChannelInboundHandler<Frame> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -25,9 +25,8 @@ public class FileServerHandler extends SimpleChannelInboundHandler<String> {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, String s) throws Exception {
-        System.out.println("line = 28 " + s);
-        Frame frame = JSON.parseObject(s, Frame.class);
+    protected void channelRead0(ChannelHandlerContext ctx, Frame frame) throws Exception {
+        System.out.println("line = 28 " + frame.toString());
 
         switch (frame.getCode()){
             case Frame.TYPE.NAME_REQ:
