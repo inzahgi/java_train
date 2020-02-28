@@ -31,7 +31,7 @@ public class FileServerHandler extends SimpleChannelInboundHandler<Frame> {
         switch (frame.getCode()){
             case Frame.TYPE.NAME_REQ:
                 frame.setCode(Frame.TYPE.NAME_RESP);
-                ctx.writeAndFlush(JSON.toJSONString(frame));
+                ctx.writeAndFlush(frame);
                 break;
             case Frame.TYPE.NAME_RESP:
                 checkFile(ctx, frame);
@@ -70,7 +70,7 @@ public class FileServerHandler extends SimpleChannelInboundHandler<Frame> {
             newFrame.setLength(0);
             newFrame.setStart(0);
         }
-        ctx.writeAndFlush(JSON.toJSONString(newFrame));
+        ctx.writeAndFlush(newFrame);
 
     }
 
@@ -107,6 +107,6 @@ public class FileServerHandler extends SimpleChannelInboundHandler<Frame> {
     private void writeFile(ChannelHandlerContext ctx, Frame frame) throws Exception {
         FileSimulateUtil.write(frame.getData(), (int)frame.getStart(), (int)frame.getLength());
         Frame respF = new Frame(Frame.TYPE.FILE_RESP, frame.getLength(), frame.getStart(), "OK", null);
-        ctx.writeAndFlush(JSON.toJSONString(respF));
+        ctx.writeAndFlush(respF);
     }
 }

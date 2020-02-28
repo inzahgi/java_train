@@ -103,7 +103,7 @@ public class FileClientHandler extends SimpleChannelInboundHandler<Frame> {
 
         buf = FileSimulateUtil.read((int)frame.getStart(), bufLen);
         frame.setData(buf);
-        ctx.writeAndFlush(JSON.toJSONString(buf));
+        ctx.writeAndFlush(buf);
         }
 
 }

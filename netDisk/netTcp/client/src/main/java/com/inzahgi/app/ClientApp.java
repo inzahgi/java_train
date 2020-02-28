@@ -2,7 +2,9 @@ package com.inzahgi.app;
 
 import com.alibaba.fastjson.JSON;
 import com.inzahgi.app.entity.Frame;
+import com.inzahgi.app.handler.ByteToFrameDecoder;
 import com.inzahgi.app.handler.FileClientHandler;
+import com.inzahgi.app.handler.FrameToByteEncoder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -66,17 +68,15 @@ public class ClientApp {
                                 p.addLast(sslCtx.newHandler(ch.alloc()));
                             }
                             p.addLast(
-                                    new LengthFieldBasedFrameDecoder(8192, 0, 4),
-                                    new LengthFieldPrepender(2),
-                                    new StringEncoder(CharsetUtil.UTF_8),
-                                    new StringDecoder(CharsetUtil.UTF_8),
+                                    new ByteToFrameDecoder(),
+                                    new FrameToByteEncoder(),
                                     new FileClientHandler());
                         }
                     });
 
             ChannelFuture f = b.connect(HOST, PORT).sync();
             Frame frame = new Frame(Frame.TYPE.NAME_REQ,  0, 0, "1.txt", null);
-            f.channel().writeAndFlush(JSON.toJSONString(frame));
+            f.channel().writeAndFlush(frame);
             f.channel().closeFuture().sync();
         } finally {
             workerGroup.shutdownGracefully();

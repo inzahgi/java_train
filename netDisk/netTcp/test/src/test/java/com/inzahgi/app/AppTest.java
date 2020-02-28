@@ -29,7 +29,7 @@ public class AppTest
 
 
     @Test
-    public void codecTest(){
+    public void codecReqTest(){
 
         EmbeddedChannel clientChannel = new EmbeddedChannel(
                 new ByteToFrameDecoder(),
@@ -57,6 +57,36 @@ public class AppTest
         buf = buf.resetReaderIndex();
         serverChannel.writeInbound(buf);
 
+    }
+
+
+    @Test
+    public void codecRespTest(){
+        EmbeddedChannel clientChannel = new EmbeddedChannel(
+                new ByteToFrameDecoder(),
+                new FrameToByteEncoder(),
+                new FileServerHandler()
+        );
+
+
+        Frame frame = new Frame(Frame.TYPE.INVAILD, 5, 1, "1.txt", new byte[]{0x11, 0x12});
+        System.out.println("out = " + JSON.toJSONString(frame));
+        clientChannel.writeOutbound(frame);
+        clientChannel.flushOutbound();
+        //printOutBuf(clientChannel);
+
+
+        EmbeddedChannel serverChannel = new EmbeddedChannel(
+                new ByteToFrameDecoder(),
+                new FrameToByteEncoder(),
+                new FileClientHandler()
+        );
+
+        ByteBuf buf = clientChannel.readOutbound();
+        buf = buf.markReaderIndex();
+        System.out.println(ByteBufUtil.prettyHexDump(buf));
+        buf = buf.resetReaderIndex();
+        serverChannel.writeInbound(buf);
     }
 
 

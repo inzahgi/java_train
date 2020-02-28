@@ -17,7 +17,7 @@ public class FrameToByteEncoder extends MessageToByteEncoder<Frame>  {
         }
         byte[] nameAr = msg.getName().getBytes(CharsetUtil.UTF_8);
         //读取消息的长度
-        int dataLength = 4 + 8 +8 + nameAr.length;
+        int dataLength = 4 + 8 +8 + nameAr.length + 8;
         if(msg.getData() != null){
             dataLength += msg.getData().length;
         }

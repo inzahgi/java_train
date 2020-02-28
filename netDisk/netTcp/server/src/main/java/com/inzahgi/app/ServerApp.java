@@ -1,6 +1,8 @@
 package com.inzahgi.app;
 
+import com.inzahgi.app.handler.ByteToFrameDecoder;
 import com.inzahgi.app.handler.FileServerHandler;
+import com.inzahgi.app.handler.FrameToByteEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -60,10 +62,8 @@ public class ServerApp {
                                 p.addLast(sslCtx.newHandler(ch.alloc()));
                             }
                             p.addLast(
-                                    new LengthFieldBasedFrameDecoder(8192, 0, 4),
-                                    new LengthFieldPrepender(2),
-                                    new StringEncoder(CharsetUtil.UTF_8),
-                                    new StringDecoder(CharsetUtil.UTF_8),
+                                    new ByteToFrameDecoder(),
+                                    new FrameToByteEncoder(),
                                     new FileServerHandler());
                         }
                     });
