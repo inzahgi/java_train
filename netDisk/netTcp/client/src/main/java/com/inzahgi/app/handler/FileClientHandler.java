@@ -30,9 +30,12 @@ public class FileClientHandler extends SimpleChannelInboundHandler<Frame> {
             case Frame.TYPE.FILE_REQ:
                 break;
             case Frame.TYPE.FILE_RESP:
+                sendFile(ctx, frame);
 
                 break;
             case Frame.TYPE.INVAILD:
+                System.out.println("invaild req close channel!!");
+                ctx.channel().close();
                 break;
             default:
         }
@@ -94,16 +97,25 @@ public class FileClientHandler extends SimpleChannelInboundHandler<Frame> {
 
     public void sendFile(ChannelHandlerContext ctx, Frame frame){
 
+        if(frame.getLength() == frame.getStart() && frame.getLength() != 0){
+            finishFile(ctx, frame);
+        }
         Frame newF = new Frame(frame);
+        newF.setLength(10240L);
         newF.setCode(Frame.TYPE.FILE_REQ);
 
-
-        int bufLen = 1024*1024;
+        int bufLen = 16;
         byte[] buf = null;
 
         buf = FileSimulateUtil.read((int)frame.getStart(), bufLen);
-        frame.setData(buf);
-        ctx.writeAndFlush(buf);
-        }
+        newF.setData(buf);
+        ctx.writeAndFlush(newF);
+    }
+
+    private void finishFile(ChannelHandlerContext ctx, Frame frame){
+        Frame newF = new Frame(frame);
+        newF.setCode(Frame.TYPE.FINISH);
+        ctx.writeAndFlush(newF).channel().close();
+    }
 
 }

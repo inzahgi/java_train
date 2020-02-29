@@ -85,7 +85,13 @@ public class Frame {
 
     @Override
     public String toString(){
-       return JSON.toJSONString(this);
+       return new StringBuilder(1024)
+               .append("{code = ").append(code)
+               .append("\tlength = ").append(length)
+               .append("\tstart = ").append(start)
+               .append("\tname = ").append(name)
+               .append("\t data_len = ").append(data == null ? 0: data.length)
+               .append("}").toString();
     }
 
 }

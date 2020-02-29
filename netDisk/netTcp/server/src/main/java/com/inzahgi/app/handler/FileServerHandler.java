@@ -3,16 +3,24 @@ package com.inzahgi.app.handler;
 import com.alibaba.fastjson.JSON;
 import com.inzahgi.app.entity.Frame;
 import com.inzahgi.app.util.FileSimulateUtil;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelProgressivePromise;
+import io.netty.channel.ChannelPromise;
 import io.netty.channel.DefaultFileRegion;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.ssl.SslHandler;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Type;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class FileServerHandler extends SimpleChannelInboundHandler<Frame> {
 
@@ -64,7 +72,8 @@ public class FileServerHandler extends SimpleChannelInboundHandler<Frame> {
         File file = new File(frame.getName());
         if(file.exists()){
             if(file.length() != frame.getLength()){
-                newFrame.setLength(file.length());
+                //newFrame.setLength(file.length());
+                newFrame.setStart(file.length());
             }
         }else {
             newFrame.setLength(0);
@@ -105,8 +114,29 @@ public class FileServerHandler extends SimpleChannelInboundHandler<Frame> {
 
 
     private void writeFile(ChannelHandlerContext ctx, Frame frame) throws Exception {
+
+        if(frame.getStart() >= frame.getLength()){
+            invailSend(ctx, frame);
+        }
         FileSimulateUtil.write(frame.getData(), (int)frame.getStart(), (int)frame.getLength());
-        Frame respF = new Frame(Frame.TYPE.FILE_RESP, frame.getLength(), frame.getStart(), "OK", null);
+        Frame respF = new Frame(Frame.TYPE.FILE_RESP, frame.getLength(), frame.getStart() + frame.getData().length, "OK", null);
         ctx.writeAndFlush(respF);
+    }
+
+    private void invailSend(ChannelHandlerContext ctx, Frame frame){
+
+        Frame newf = new Frame(frame);
+        newf.setCode(Frame.TYPE.INVAILD);
+        ChannelFuture f = ctx.writeAndFlush(newf);
+        f.addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                if(channelFuture.isSuccess()){
+                    channelFuture.channel().close();
+                }
+            }
+        });
+
+
     }
 }
